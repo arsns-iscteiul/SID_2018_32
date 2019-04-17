@@ -41,7 +41,7 @@ public class Paho {
         		",cell:" + String.valueOf(cell) + ",sens:" + sensor;
         int qos             = 0;
         String broker       = "wss://iot.eclipse.org:443/ws";
-        String clientId     = "js-utility-vVIMT";
+        String clientId     = "user";
         MemoryPersistence persistence = new MemoryPersistence();
 
         try {
