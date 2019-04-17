@@ -1,32 +1,13 @@
 package mongo;
 
-//Importações para Servidor
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-//Importações para JsonParser
-//import org.codehaus.jackson.JsonGenerationException;
-//import org.codehaus.jackson.JsonParseException;
-//import org.codehaus.jackson.map.JsonMappingException;
-//import org.codehaus.jackson.map.ObjectMapper;
-//Importações para Sybase
-import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-//import sybase.jdbc4.sqlanywhere.*;
-//Importações Java
-import java.io.File;
-import java.io.IOException;
-import java.io.FileWriter;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.*;
-import java.util.Date;
 public class Paho {
 	
 	public static void main(String[] args) {

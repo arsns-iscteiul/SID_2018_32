@@ -1,6 +1,5 @@
 package mongo;
 
-
 //Importações para Servidor
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -26,48 +25,54 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.util.JSON;
 
-
 public class InsertIntoMongo {
-	
+
 	public static void main(String[] args) {
-		   try {
-			   
-			   MongoClient mongoClient = new MongoClient( );
-			   mongoClient.getDatabaseNames().forEach(System.out::println);
-			   DB db = mongoClient.getDB("sensores");
-				DBCollection collection = db.getCollection("sensor");
+		try {
 
-	    MqttClient client;
-	    MqttConnectOptions conn;
+			MongoClient mongoClient = new MongoClient();
+			mongoClient.getDatabaseNames().forEach(System.out::println);
+			DB db = mongoClient.getDB("sensores");
+			DBCollection collection = db.getCollection("sensor");
 
-	    try {
-	        client = new MqttClient("wss://iot.eclipse.org:443/ws", "user");
-	        client.connect();
-	        client.setCallback(new MqttCallback() {
-	            public void connectionLost(Throwable cause) {}
+			MqttClient client;
 
-	            public void messageArrived(String topic,
-	                    MqttMessage message)
-	                            throws Exception {
-	                System.out.println(message.toString());
-	                DBObject dbObject = (DBObject)JSON.parse(message.toString());
-	    			
-	            	collection.insert(dbObject);
+			try {
+				client = new MqttClient("wss://iot.eclipse.org:443/ws", "user123");
+				MqttConnectOptions options = new MqttConnectOptions();
+				options.setAutomaticReconnect(true);
+				options.setCleanSession(true);
+				options.setConnectionTimeout(10);
+				client.connect(options);
+				client.subscribe("iscte_sid_2016_S1", (topic, msg) ->{
+					System.out.println("Payload Triggered:\n");
+					byte[] payload = msg.getPayload();
+					System.out.println(msg.toString());
+				});
+				
+				client.setCallback(new MqttCallback() {
+					public void connectionLost(Throwable cause) {}
 
-	            }
+					public void messageArrived(String topic, MqttMessage message) throws Exception {
+						System.out.println("Message triggered:\n");
+						System.out.println(message.toString());
+						DBObject dbObject = (DBObject) JSON.parse(message.toString());
 
-	            public void deliveryComplete(IMqttDeliveryToken token) {}
-	        });
+						collection.insert(dbObject);
 
-	        client.subscribe("iscte_sid_2016_S1");
+					}
 
-	    } catch (MqttException e) {
-	        e.printStackTrace();
-	    }
-		  } catch (MongoException e) {
+					public void deliveryComplete(IMqttDeliveryToken token) {
+					}
+				});
+
+			} catch (MqttException e) {
 				e.printStackTrace();
+			}
+		} catch (MongoException e) {
+			e.printStackTrace();
 		}
-	    
+
 	}
 
 }
