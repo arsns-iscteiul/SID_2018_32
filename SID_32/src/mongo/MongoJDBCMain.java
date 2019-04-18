@@ -62,6 +62,7 @@ public class MongoJDBCMain {
 		
 		DBCursor cursor = collection.find();
 		while(cursor.hasNext()) {
+		
 			DBObject theObj = cursor.next();
 			String content = theObj.toString();
 			System.out.println(content);
@@ -79,6 +80,7 @@ public class MongoJDBCMain {
 			id = id.replace("}", "");
 			id = id.substring(1);
 			id = id.substring(0, id.length() - 1);
+			// falta um if() para verificar se o foiExportado esta a um
 			  String query1 = " insert into medicao_luminosidade (Data_Hora_Medicao, Valor_Medicao_Luminosidade)"
 				        + " values (?, ?)";
 
