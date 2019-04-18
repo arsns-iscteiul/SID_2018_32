@@ -1,5 +1,7 @@
 package mongo;
 
+import java.util.ArrayList;
+
 import org.bson.BsonArray;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -21,6 +23,9 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	MqttClient client;
 	DB db;
 	DBCollection collection;
+	
+	ArrayList<SensorInfo> sens =new ArrayList<>();
+	
 //	BasicDBList dbList;
 	public InsertToMongoTesteRita() {
 		MongoClient mongoClient = new MongoClient();
@@ -76,6 +81,10 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
+				String[] s = message.toString().split(",");
+				sens.add(new SensorInfo(s));
+				
+				
 				 saveMessage(message);
 				 System.out.println(message); 
 
@@ -83,8 +92,9 @@ public class InsertToMongoTesteRita implements MqttCallback{
 		
 	}
 	
+	
 	public void saveMessage (MqttMessage msg){
-		//nova tentativa	
+		//nova
 		
 		System.out.println(msg.toString() + "   oi");
 //		BsonArray parse = BsonArray.parse(msg.toString());
@@ -104,6 +114,8 @@ public class InsertToMongoTesteRita implements MqttCallback{
 //		while (cursorDocJSON.hasNext()) {
 //			System.out.println(cursorDocJSON.next());
 //		}
+//	String json = "{'tmp' : 21.0, 'hum' : 64.8, 'dat' : '2019-04-18' , 'tim' : '19:40:02',"
+//			+ "'cell' : 3138, 'sens' : 'wifi', 'foiExportado' : 0}";
 
 	}
 	public boolean checkMsgFormat (String msg) {
