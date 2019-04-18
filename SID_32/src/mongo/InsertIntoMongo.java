@@ -1,6 +1,6 @@
 package mongo;
 
-//Importações para Servidor
+//Importaï¿½ï¿½es para Servidor
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -34,7 +34,9 @@ public class InsertIntoMongo {
 			mongoClient.getDatabaseNames().forEach(System.out::println);
 			DB db = mongoClient.getDB("sensores");
 			DBCollection collection = db.getCollection("sensor");
-
+			
+		
+			
 			MqttClient client;
 
 			try {
@@ -48,6 +50,19 @@ public class InsertIntoMongo {
 					System.out.println("Payload Triggered:\n");
 					byte[] payload = msg.getPayload();
 					System.out.println(msg.toString());
+					//falta garantir que a msg.toString vem no formato abaixo
+					String json = "{'tmp' : 21.0, 'hum' : 64.8, 'dat' : '2019-04-17' , 'tim' : '19:40:02',"
+							+ "'cell' : 3138, 'sens' : 'wifi', 'foiExportado' : 0}";
+
+					DBObject dbObject = (DBObject)JSON.parse(json);
+					collection.insert(dbObject);
+					DBCursor cursorDocJSON = collection.find();
+					while (cursorDocJSON.hasNext()) {
+						System.out.println(cursorDocJSON.next());
+					}
+
+						
+		
 				});
 				
 				client.setCallback(new MqttCallback() {
@@ -56,9 +71,7 @@ public class InsertIntoMongo {
 					public void messageArrived(String topic, MqttMessage message) throws Exception {
 						System.out.println("Message triggered:\n");
 						System.out.println(message.toString());
-						DBObject dbObject = (DBObject) JSON.parse(message.toString());
-
-						collection.insert(dbObject);
+						
 
 					}
 

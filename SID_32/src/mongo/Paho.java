@@ -19,7 +19,7 @@ public class Paho {
         String data = String.valueOf(LocalDate.now());
         String tim = String.valueOf(LocalDateTime.now());
         String content      = "{tmp:" + String.valueOf(temp) + ",hum:" + String.valueOf(hum) +",dat:" + data +",tim:"+ tim + 
-        		",cell:" + String.valueOf(cell) + ",sens:" + sensor;
+        		",cell:" + String.valueOf(cell) + ",sens:" + sensor + "}";
         int qos             = 0;
         String broker       = "wss://iot.eclipse.org:443/ws";
         String clientId     = "user";
