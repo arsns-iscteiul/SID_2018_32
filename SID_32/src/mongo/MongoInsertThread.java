@@ -1,20 +1,20 @@
 package mongo;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Queue;
 
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import org.bson.Document;
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
+import com.mongodb.MongoWriteException;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.util.JSON;
+import com.mongodb.client.MongoDatabase;
 
 public class MongoInsertThread extends Thread {
 
-	private DB db;
-	private DBCollection collection;
+	private MongoDatabase db;
+	private MongoCollection<Document> collection;
 	private InsertToMongoTesteAB1 mqttClient;
 
 	public MongoInsertThread(InsertToMongoTesteAB1 a) {
@@ -26,13 +26,13 @@ public class MongoInsertThread extends Thread {
 			System.out.println(dbsCursor.next());
 		}
 
-		db = mongoClient.getDB("sensores");
+		db = mongoClient.getDatabase("sensores");
 		collection = db.getCollection("sensor");
 	}
 
 	public void run() {
 		while (true) {
-			LinkedBlockingQueue<String> s = (LinkedBlockingQueue<String>) mqttClient.pollMessage();
+			Queue<String> s = mqttClient.pollMessage();
 			System.out.println(s);
 			if (s == null) {
 				System.out.println("queue is empty, imma gonna sleep");
@@ -43,17 +43,16 @@ public class MongoInsertThread extends Thread {
 				}
 			} else {
 				try {
-//					while(!s.isEmpty()) {
-//						DBObject dbObject = (DBObject) JSON.parse((String) s.poll());
-//						collection.insert(dbObject);
-//					}
-					// or
-					DBObject[] dbObjects = (DBObject[]) s.toArray()[s.size()];
-					collection.insert(dbObjects);
+					Object[] arrayOfS = (Object[]) s.toArray();
+					for (int i = 0; i != arrayOfS.length; i++) {
+						collection.insertOne(new Document("Mensagem" + collection.countDocuments(), arrayOfS[i])); // Discutir**
+						System.out.println(collection.countDocuments());
+
+					}
 
 					// Foi possivel inserir por isso vamos remover da outra lista
-					 mqttClient.jobDone(s);
-					 
+					mqttClient.jobDone(s);
+
 				} catch (MongoException e) { // não for possivel inserir
 					e.printStackTrace();
 				}

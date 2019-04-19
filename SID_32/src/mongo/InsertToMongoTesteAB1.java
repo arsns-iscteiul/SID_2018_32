@@ -2,6 +2,7 @@ package mongo;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -128,7 +129,7 @@ public class InsertToMongoTesteAB1 implements MqttCallback{
 
 
 
-	public void jobDone(LinkedBlockingQueue<String> s) {
+	public void jobDone(Queue<String> s) {
 		System.out.println("Job done" + msgs.size());
 		msgs.removeAll(s); // removes all the messages that existed on the other list (exported one)
 		System.out.println("FINISHED" + msgs.size());
