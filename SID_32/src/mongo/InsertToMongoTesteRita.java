@@ -85,7 +85,7 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	
 	
 	public void saveMessage (String msg){
-		sens.add(msg);
+		msgs.offer(msg);
 		
 		
 		//nova
