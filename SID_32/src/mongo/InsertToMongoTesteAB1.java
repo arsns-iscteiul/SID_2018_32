@@ -2,9 +2,9 @@ package mongo;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import org.bson.BsonArray;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -12,28 +12,19 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.util.JSON;
-
-public class InsertToMongoTesteRita implements MqttCallback{
+public class InsertToMongoTesteAB1 implements MqttCallback{
 	private MqttClient client;
 //	private DB db;
 //	private DBCollection collection;
 	
 	//ArrayList<SensorInfo> sens =new ArrayList<>();
-	private ArrayList<String> sens =new ArrayList<>();
-	private Queue<String> msgs;
+	private BlockingQueue<String> msgs;
 	
 //	BasicDBList dbList;
-	public InsertToMongoTesteRita() {
-		msgs = new LinkedList<String>();
+	public InsertToMongoTesteAB1() {
+		msgs = new LinkedBlockingQueue<String>();
 		MongoInsertThread t = new MongoInsertThread(this);
+		testeMqtt();
 		t.start();
 	}
 	
@@ -48,8 +39,8 @@ public class InsertToMongoTesteRita implements MqttCallback{
 			options.setCleanSession(true);
 			options.setConnectionTimeout(10);
 			client.connect(options);
-			
-		    client.setCallback(this);
+			client.setCallback(this);
+		    
 		    client.subscribe("iscte_sid_2016_S1");
 		} catch (MqttException e) {
 			// TODO Auto-generated catch block
@@ -72,12 +63,12 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
-			String s = message.toString();
-			System.out.println(s+" -mensagem recebida2");
-			System.out.println(checkMsgFormat(s));
-			if (checkMsgFormat(s)){
-					s.replaceAll("\\}", ",\"exported\":0}");					
-					saveMessage(s);
+			String messageText = message.toString();
+			System.out.println(messageText+" -mensagem recebida2");
+			saveMessage(messageText);
+			if (checkMsgFormat(messageText)){
+					messageText.replaceAll("\\}", ",\"exported\":0}");					
+					saveMessage(messageText);
 				}
 
 		
@@ -85,7 +76,7 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	
 	
 	public void saveMessage (String msg){
-		sens.add(msg);
+		msgs.offer(msg);
 		
 		
 		//nova
@@ -112,11 +103,10 @@ public class InsertToMongoTesteRita implements MqttCallback{
 
 	}
 	
-	public String pollMessage() {
-		if (msgs.isEmpty()){
-			return null;
-		}
-		return msgs.poll();
+	public BlockingQueue<String> pollMessage() {
+		if (!msgs.isEmpty())
+			return msgs;
+		return null;
 	}
 	public boolean checkMsgFormat (String msg) {
 
@@ -133,7 +123,15 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	
 
 	public static void main(String[] args) {	
-		new InsertToMongoTesteRita().testeMqtt();
+		new InsertToMongoTesteAB1();
+	}
+
+
+
+	public void jobDone(LinkedBlockingQueue<String> s) {
+		System.out.println("Job done" + msgs.size());
+		msgs.removeAll(s); // removes all the messages that existed on the other list (exported one)
+		System.out.println("FINISHED" + msgs.size());
 	}
 	
 }
