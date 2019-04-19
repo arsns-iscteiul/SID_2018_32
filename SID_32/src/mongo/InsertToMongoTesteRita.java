@@ -1,6 +1,8 @@
 package mongo;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import org.bson.BsonArray;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -20,34 +22,22 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
 
 public class InsertToMongoTesteRita implements MqttCallback{
-	MqttClient client;
-	DB db;
-	DBCollection collection;
+	private MqttClient client;
+//	private DB db;
+//	private DBCollection collection;
 	
 	//ArrayList<SensorInfo> sens =new ArrayList<>();
-	ArrayList<String> sens =new ArrayList<>();
+	private ArrayList<String> sens =new ArrayList<>();
+	private Queue<String> msgs;
 	
 //	BasicDBList dbList;
 	public InsertToMongoTesteRita() {
-		MongoClient mongoClient = new MongoClient();
-		
-		MongoCursor<String> dbsCursor = mongoClient.listDatabaseNames().iterator();
-		while(dbsCursor.hasNext()) {
-		    System.out.println(dbsCursor.next());
-		}
-		
-		db = mongoClient.getDB("sensores");
-		collection = db.getCollection("sensor");
-	//	dbList = new BasicDBList();
+		msgs = new LinkedList<String>();
+		MongoInsertThread t = new MongoInsertThread(this);
+		t.start();
 	}
 	
 	
-	public static void main(String[] args) {
-		
-		new InsertToMongoTesteRita().testeMqtt();
-		
-		
-	}
 	
 	public void testeMqtt(){
 		try {
@@ -83,23 +73,24 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
 			String s = message.toString();
-			System.out.println(s);
+			System.out.println(s+" -mensagem recebida2");
 			System.out.println(checkMsgFormat(s));
 			if (checkMsgFormat(s)){
-					s.replaceAll("\\}", ",\"exported\":0}");
-					saveMessage(message);
+					s.replaceAll("\\}", ",\"exported\":0}");					
+					saveMessage(s);
 				}
-				 System.out.println(message); 
 
-		 
 		
 	}
 	
 	
-	public void saveMessage (MqttMessage msg){
+	public void saveMessage (String msg){
+		sens.add(msg);
+		
+		
 		//nova
 		
-		System.out.println(msg.toString() + "   oi");
+		System.out.println(msg.toString() + "   - mensagem guardada na queue");
 //		BsonArray parse = BsonArray.parse(msg.toString());
 //		System.out.println( "       estou aqui");
 //		BasicDBList dbList =new BasicDBList();
@@ -120,6 +111,13 @@ public class InsertToMongoTesteRita implements MqttCallback{
 //			+ "'cell' : 3138, 'sens' : 'wifi', 'foiExportado' : 0}";
 
 	}
+	
+	public String pollMessage() {
+		if (msgs.isEmpty()){
+			return null;
+		}
+		return msgs.poll();
+	}
 	public boolean checkMsgFormat (String msg) {
 
 		return msg.matches("\\{(\"tmp\"(\\s+)?:(\\s+)?\\d+.\\d+,(\\s+)?)"
@@ -132,4 +130,10 @@ public class InsertToMongoTesteRita implements MqttCallback{
 			
 				
 	}
+	
+
+	public static void main(String[] args) {	
+		new InsertToMongoTesteRita().testeMqtt();
+	}
+	
 }
