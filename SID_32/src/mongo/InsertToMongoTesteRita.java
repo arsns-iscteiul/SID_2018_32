@@ -24,7 +24,8 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	DB db;
 	DBCollection collection;
 	
-	ArrayList<SensorInfo> sens =new ArrayList<>();
+	//ArrayList<SensorInfo> sens =new ArrayList<>();
+	ArrayList<String> sens =new ArrayList<>();
 	
 //	BasicDBList dbList;
 	public InsertToMongoTesteRita() {
@@ -81,11 +82,13 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
-				String[] s = message.toString().split(",");
-				sens.add(new SensorInfo(s));
-				
-				
-				 saveMessage(message);
+			String s = message.toString();
+			System.out.println(s);
+			System.out.println(checkMsgFormat(s));
+			if (checkMsgFormat(s)){
+					s.replaceAll("\\}", ",\"exported\":0}");
+					saveMessage(message);
+				}
 				 System.out.println(message); 
 
 		 
@@ -108,7 +111,6 @@ public class InsertToMongoTesteRita implements MqttCallback{
 		//antigo
 		
 	//DBObject dbObject = (DBObject)JSON.parse(msg.toString());
-	System.out.println("cheguei aquiiiiiiiiiiiiiiiiiii");
 	//	collection.insert(dbObject);
 //		DBCursor cursorDocJSON = collection.find();
 //		while (cursorDocJSON.hasNext()) {
@@ -125,8 +127,8 @@ public class InsertToMongoTesteRita implements MqttCallback{
 				+ "\"dat\"(\\s+)?:(\\s+)?\"\\d+-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])\",(\\s+)?"
 				+ "\"tim\"(\\s+)?:(\\s+)?\"(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])\",(\\s+)?"
 				+ "\"cell\"(\\s+)?:(\\s+)?\\d+,(\\s+)?"
-				+ "\"sens\"(\\s+)?:(\\s+)?\"\\w+\",(\\s+)?"
-				+ "\"exported\"(\\s+)?:(\\s+)?[01](\\s+)?\\}");
+				+ "\"sens\"(\\s+)?:(\\s+)?\"\\w+\"(\\s+)?\\}");
+			//	+ "\"exported\"(\\s+)?:(\\s+)?[01](\\s+)?\\}");
 			
 				
 	}

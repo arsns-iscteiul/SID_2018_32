@@ -54,7 +54,11 @@ public class InsertIntoMongo {
 					String json = "{'tmp' : 21.0, 'hum' : 64.8, 'dat' : '2019-04-17' , 'tim' : '19:40:02',"
 							+ "'cell' : 3138, 'sens' : 'wifi', 'foiExportado' : 0}";
 
-					DBObject dbObject = (DBObject)JSON.parse(json);
+					String json2 = "{\"tmp\" : 31.0, \"hum\" : 74.8, \"dat\" : \"2019-04-19\" , \"tim\" : \"19:40:02\","
+							+ "\"cell\" : 3138, \"sens\" : \"wifi\", \"foiExportado\" : 0}";
+					String tmp = "{\"tmp\":21.0,\"hum\":64.8,\"dat\":\"2019-04-01\",\"tim\":\"10:40:01\",\"cell\":3138,\"sens\":\"wifi\",\"exported\":0}";
+					
+					DBObject dbObject = (DBObject)JSON.parse(tmp);
 					collection.insert(dbObject);
 					DBCursor cursorDocJSON = collection.find();
 					while (cursorDocJSON.hasNext()) {
