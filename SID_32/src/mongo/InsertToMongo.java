@@ -21,7 +21,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
 
-public class InsertToMongoTesteRita implements MqttCallback{
+public class InsertToMongo implements MqttCallback{
 	private MqttClient client;
 //	private DB db;
 //	private DBCollection collection;
@@ -31,7 +31,7 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	private Queue<String> msgs;
 	
 //	BasicDBList dbList;
-	public InsertToMongoTesteRita() {
+	public InsertToMongo() {
 		msgs = new LinkedList<String>();
 		MongoInsertThread t = new MongoInsertThread(this);
 		t.start();
@@ -133,7 +133,7 @@ public class InsertToMongoTesteRita implements MqttCallback{
 	
 
 	public static void main(String[] args) {	
-		new InsertToMongoTesteRita().testeMqtt();
+		new InsertToMongo().testeMqtt();
 	}
 	
 }

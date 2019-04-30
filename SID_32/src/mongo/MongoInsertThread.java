@@ -11,9 +11,9 @@ public class MongoInsertThread extends Thread{
 	
 	private DB db;
 	private DBCollection collection;
-	private InsertToMongoTesteRita mqttClient;
+	private InsertToMongo mqttClient;
 	
-	public MongoInsertThread (InsertToMongoTesteRita a){
+	public MongoInsertThread (InsertToMongo a){
 		mqttClient = a;
 		MongoClient mongoClient = new MongoClient();
 		
