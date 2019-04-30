@@ -29,7 +29,7 @@ public class MongoInsertThread extends Thread{
 	public void run (){	
 		try {
 			while (true){
-				System.out.println("oi sou uma thread");
+				System.out.println("thread is running");
 				String s = mqttClient.pollMessage();
 				System.out.println(s);
 				System.out.println(s == null  + "------------------------------------- " + s);

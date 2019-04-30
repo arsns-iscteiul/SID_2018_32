@@ -20,11 +20,11 @@ public class Paho {
         String tim = String.valueOf(LocalDateTime.now());
 //        String content      = "{tmp:" + String.valueOf(temp) + ",hum:" + String.valueOf(hum) +",dat:" + data +",tim:"+ tim + 
 //        		",cell:" + String.valueOf(cell) + ",sens:" + sensor + "}";
-        String content = "{\"tmp\":21.0,\"hum\":64.8,\"dat\":\"2019-04-01\",\"tim\":\"10:40:01\",\"cell\":3138,\"sens\":\"wifi\"}";
+        String content = "{\"tmp\":21.0,\"hum\":64.8,\"dat\":\"2019-04-30\",\"tim\":\"10:40:01\",\"cell\":3138,\"sens\":\"wifi\"}";
 		
         int qos             = 0;
-        String broker       = "wss://iot.eclipse.org:443/ws";
-        String clientId     = "user";
+        String broker       = "tcp://broker.mqtt-dashboard.com:1883";
+        String clientId     = "/sid_lab_2019";
         MemoryPersistence persistence = new MemoryPersistence();
 
         try {
