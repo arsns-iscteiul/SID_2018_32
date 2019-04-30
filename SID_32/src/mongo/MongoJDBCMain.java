@@ -24,6 +24,8 @@ public class MongoJDBCMain {
 	static double LSTemperatura;
 	static double LILuminosidade;
 	static double LSLuminosidade;
+	static double valorXtemperatura;
+	static double valorXluminosidade;
 	
 	public static void main(String[] args) throws SQLException {
 		
@@ -199,7 +201,11 @@ public class MongoJDBCMain {
 								      // execute the preparedstatement
 								      preparedStmt3.execute();
 								      
-					  	}	  	
+					  	}	
+					  	//alerta Amarelo temperatura
+					  
+					  //alerta Amarelo Luminosidade
+					  
 					  	
 			}
 					  	
@@ -238,6 +244,8 @@ public class MongoJDBCMain {
 	         LSTemperatura = rs.getDouble("Limite_Superior_Temperatura");
 	         LILuminosidade = rs.getDouble("Limite_Inferior_Luminosidade");
 	         LSLuminosidade = rs.getDouble("Limite_Superior_Luminosidade");
+	         valorXtemperatura= (LSTemperatura- LITemperatura)/2;
+	         valorXluminosidade= (LSLuminosidade -LILuminosidade)/2;
 
 	         //Display values
 	         System.out.print("LITemperatura: " +  LITemperatura);
