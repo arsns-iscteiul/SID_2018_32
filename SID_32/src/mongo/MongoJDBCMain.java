@@ -159,7 +159,7 @@ public class MongoJDBCMain {
 								      preparedStmt3.setString (5, "O valor da luminosidade aproxima-se criticamente dos limites");
 								      preparedStmt3.setDouble(6,  LILuminosidade);
 								      preparedStmt3.setDouble(7, LSLuminosidade);
-
+   
 								      // execute the preparedstatement
 								      preparedStmt3.execute();
 								      
