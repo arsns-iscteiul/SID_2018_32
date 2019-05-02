@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" layoutX="32.0" layoutY="132.0" prefHeight="248.0" prefWidth="380.0" spacing="40.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+         <children>
+            <HBox alignment="BASELINE_CENTER" spacing="10.0">
+               <children>
+                  <Label text="YOUR LAB.">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label text="making results">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <VBox alignment="CENTER" layoutX="28.0" layoutY="12.0" spacing="10.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+               <children>
+                  <Label text="Welcome back, please login to your account">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <HBox id="container" alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="300.0" spacing="10.0">
+                     <children>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../media/icons/email_black_20px.png" />
+                           </image>
+                        </ImageView>
+                        <TextField id="field" alignment="TOP_LEFT" prefHeight="25.0" prefWidth="200.0" promptText="email" />
+                     </children>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </HBox>
+                  <HBox id="container" alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="300.0" spacing="10.0">
+                     <children>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../media/icons/password_black_20px.png" />
+                           </image>
+                        </ImageView>
+                        <PasswordField id="field" fx:id="password_hide_field" prefHeight="25.0" prefWidth="200.0" promptText="password" />
+                        <TextField id="field" fx:id="password_show_field" prefHeight="25.0" prefWidth="200.0" promptText="password" />
+                        <ToggleButton id="password_viewer_btn" fx:id="password_viewer_btn" alignment="CENTER_RIGHT" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../media/icons/notvisible_gray_20px.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ToggleButton>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </HBox>
+                  <Button id="login_btn" fx:id="login_btn" alignment="CENTER" maxWidth="300.0" mnemonicParsing="false" onAction="#login" prefWidth="300.0" text="Login" textAlignment="CENTER" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Hyperlink alignment="CENTER" text="Forgot your password?" textAlignment="CENTER" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

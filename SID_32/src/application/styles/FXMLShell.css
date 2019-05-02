@@ -1,0 +1,60 @@
+#shell {
+	-fx-background-color: transparent;
+	-fx-margin: 20;
+	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 8, 0, 0, 0);
+}
+
+#shell_maximized {
+	-fx-background-color: #000000;
+	-fx-margin: 0;
+}
+
+#root {
+	-fx-background-color: #ffffff;
+}
+
+#top {
+	-fx-background-color: linear-gradient(to right, #11998e 40%, #38ef7d 100%);
+}
+
+#close_btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0;
+    -fx-graphic: url("/application/media/icons/close_white_20px.png");
+}
+
+#close_btn:hover {
+    -fx-background-color: #ff3b30;
+    -fx-graphic: url("/application/media/icons/close_black_20px.png");
+}
+
+#maximize_btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0;
+    -fx-graphic: url("/application/media/icons/maximize_white_20px.png");
+}
+
+#maximize_btn:hover {
+	-fx-background-color: #ffffff;
+    -fx-graphic: url("/application/media/icons/maximize_black_20px.png");
+}
+
+#maximize_btn:selected {
+    -fx-graphic: url("/application/media/icons/restore_white_20px.png");
+}
+
+#maximize_btn:selected:hover {
+	-fx-background-color: #ffffff;
+    -fx-graphic: url("/application/media/icons/restore_black_20px.png");
+}
+
+#minimize_btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0;
+    -fx-graphic: url("/application/media/icons/minimize_white_20px.png");
+}
+
+#minimize_btn:hover {
+    -fx-background-color: #ffffff;
+    -fx-graphic: url("/application/media/icons/minimize_black_20px.png");
+}

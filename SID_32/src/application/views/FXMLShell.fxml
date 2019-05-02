@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="shell" fx:id="shell" pickOnBounds="false"
+	prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<AnchorPane id="root" fx:id="root" layoutX="2.0"
+			layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity"
+			minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false"
+			AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0"
+			AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+			<children>
+				<AnchorPane id="top" fx:id="top" maxHeight="26.0"
+					minHeight="26.0" onMouseDragged="#setOnMouseDragged_DragableStage"
+					onMousePressed="#setOnMousePressed_DragableStage"
+					pickOnBounds="false" prefHeight="26.0" AnchorPane.leftAnchor="0.0"
+					AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					<children>
+						<HBox alignment="TOP_RIGHT" AnchorPane.rightAnchor="0.0"
+							AnchorPane.topAnchor="0.0">
+							<children>
+								<Button id="minimize_btn" layoutX="738.0" layoutY="10.0"
+									mnemonicParsing="false" onAction="#minimize">
+									<graphic>
+										<ImageView fitHeight="20.0" fitWidth="20.0"
+											pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@../media/icons/minimize_white_20px.png" />
+											</image>
+										</ImageView>
+									</graphic>
+									<cursor>
+										<Cursor fx:constant="HAND" />
+									</cursor>
+								</Button>
+								<ToggleButton id="maximize_btn"
+									fx:id="maximize_btn" mnemonicParsing="false"
+									onAction="#maximize">
+									<graphic>
+										<ImageView fitHeight="20.0" fitWidth="20.0"
+											pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@../media/icons/maximize_white_20px.png" />
+											</image>
+										</ImageView>
+									</graphic>
+									<cursor>
+										<Cursor fx:constant="HAND" />
+									</cursor>
+								</ToggleButton>
+								<Button id="close_btn" fx:id="close_btn"
+									mnemonicParsing="false" onAction="#close">
+									<graphic>
+										<ImageView fitHeight="20.0" fitWidth="20.0"
+											pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@../media/icons/close_white_20px.png" />
+											</image>
+										</ImageView>
+									</graphic>
+									<cursor>
+										<Cursor fx:constant="HAND" />
+									</cursor>
+								</Button>
+							</children>
+						</HBox>
+					</children>
+				</AnchorPane>
+				<AnchorPane fx:id="display" pickOnBounds="false"
+					AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+					AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
+			</children>
+		</AnchorPane>
+	</children>
+</AnchorPane>

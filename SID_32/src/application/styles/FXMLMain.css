@@ -1,0 +1,19 @@
+#left {
+	-fx-background-color: #252525;
+}
+
+#add_cultura_btn {
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
+	-fx-background-radius: 60.0;
+    -fx-graphic: url("/application/media/icons/add_white_20px.png");
+    -fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
+}
+
+.list-view .list-cell:even {
+	-fx-background-color: blue;
+	-fx-text-fill: black;
+}
+.list-view .list-cell:odd {
+	-fx-background-color: blue;
+	-fx-text-fill: black;
+}

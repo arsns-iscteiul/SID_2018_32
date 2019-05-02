@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<BorderPane pickOnBounds="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+			<left>
+				<AnchorPane id="left" fx:id="left" pickOnBounds="false" prefHeight="480.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+					<children>
+						<VBox alignment="CENTER" layoutX="82.0" layoutY="47.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+							<children>
+								<Circle fill="WHITE" radius="60.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+								<Label text="Investigador" textFill="WHITE" />
+                        <Button mnemonicParsing="false" onAction="#logout" text="Logout" />
+							</children>
+						</VBox>
+						<VBox alignment="TOP_CENTER" layoutX="67.0" layoutY="231.0" prefHeight="249.0" prefWidth="188.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="231.0">
+							<children>
+								<Button id="add_cultura_btn" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Cultura" textFill="WHITE">
+									<graphic>
+										<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@../media/icons/add_white_20px.png" />
+											</image>
+										</ImageView>
+									</graphic>
+									<cursor>
+										<Cursor fx:constant="HAND" />
+									</cursor>
+								</Button>
+                        <ListView prefHeight="200.0" prefWidth="200.0" />
+							</children>
+							<padding>
+								<Insets top="10.0" />
+							</padding>
+						</VBox>
+					</children>
+				</AnchorPane>
+			</left>
+			<center>
+				<AnchorPane pickOnBounds="false" prefHeight="480.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+			</center>
+		</BorderPane>
+	</children>
+</AnchorPane>
