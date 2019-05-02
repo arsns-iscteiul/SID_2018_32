@@ -75,26 +75,31 @@ public class MongoJDBCMain {
 		
 		DBCursor cursor = collection.find();
 		while(cursor.hasNext()) {
-			DBObject theObj = cursor.next();
+			BasicDBObject theObj = (BasicDBObject) cursor.next();
 			String content = theObj.toString();
+			String DataHora = (theObj).getString("dat") + " " +(theObj).getString("tim");
 			System.out.println(content);
-			String[] tokens = content.split(",|:");
-			String DataHora = tokens[8] +  tokens[10] + ":" + tokens[11] + ":" +tokens[12];
+			//String[] tokens = content.split(",|:");
+			//String DataHora = tokens[8] +  tokens[10] + ":" + tokens[11] + ":" +tokens[12];
 			System.out.println(DataHora);
-			String luminosidade = tokens[14];
-			String temperatura = tokens[4];
-			luminosidade = luminosidade.replace(" ", "");
-			temperatura = temperatura.replace(" ", "");
+			//String luminosidade = tokens[14];
+			//String temperatura = tokens[4];
+			//luminosidade = luminosidade.replace(" ", "");
+			//temperatura = temperatura.replace(" ", "");
+			int luminosidade = Integer.parseInt((theObj).getString("cell"));
+			double temperatura = Double.parseDouble((theObj).getString("tmp"));
 			System.out.println(luminosidade);
-			String id =tokens[2];
-			id = id.replace(" ", "");
-			id = id.replace("}", "");
-			id = id.substring(1);
-			id = id.substring(0, id.length() - 1);
-			String foiExportado = tokens[18];
+			String id = (theObj).getString("_id");
+			//String id =tokens[2];
+			//id = id.replace(" ", "");
+			//id = id.replace("}", "");
+			//id = id.substring(1);
+			//id = id.substring(0, id.length() - 1);
+			int foiExportado = Integer.parseInt((theObj).getString("foiExportado"));
+			//String foiExportado = tokens[18];
 			System.out.println(foiExportado);
 			// se ainda nao foi exportado, foiExportado=0
-			if(foiExportado.contains("0")) {
+			if(foiExportado==0) {
 				
 				//criar a medicacao_luminosidade
 			  String query1 = " insert into medicao_luminosidade (Data_Hora_Medicao, Valor_Medicao_Luminosidade)"
@@ -103,7 +108,7 @@ public class MongoJDBCMain {
 				      // create the mysql insert preparedstatement
 				      PreparedStatement preparedStmt1 = connection.prepareStatement(query1);
 				      preparedStmt1.setString (1, DataHora);
-				      preparedStmt1.setDouble(2, Double.parseDouble(luminosidade));
+				      preparedStmt1.setDouble(2, luminosidade);
 
 				      // execute the preparedstatement
 				      preparedStmt1.execute();
@@ -114,7 +119,7 @@ public class MongoJDBCMain {
 					      // create the mysql insert preparedstatement
 					      PreparedStatement preparedStmt2 = connection.prepareStatement(query2);
 					      preparedStmt2.setString (1, DataHora);
-					      preparedStmt2.setDouble(2,  Double.parseDouble(temperatura));
+					      preparedStmt2.setDouble(2,  temperatura);
 
 					      // execute the preparedstatement
 					      preparedStmt2.execute();
@@ -124,12 +129,12 @@ public class MongoJDBCMain {
 					  	newDocument.append("$set", new BasicDBObject().append("foiExportado", 1));
 					  	BasicDBObject searchQuery = new BasicDBObject().append("_id", new ObjectId(id));
 					  	collection.update(searchQuery, newDocument);
-					  	System.out.println("Valor da temperatura:" +(Double.parseDouble(temperatura)));
+					  	System.out.println("Valor da temperatura:" +temperatura);
 					  	System.out.println("Valor do if:" +(LITemperatura + LITemperatura*0.4));
 					  	
 					  	//decidir se cria o alerta
 					  	//alerta Vermelho Temperatura
-					  	if( (Double.parseDouble(temperatura) <= (LITemperatura + LITemperatura*0.4)) || (Double.parseDouble(temperatura) >= LSTemperatura*0.9) ){
+					  	if( (temperatura <= (LITemperatura + LITemperatura*0.4)) || (temperatura >= LSTemperatura*0.9) ){
 					  		System.out.println("devia entrar aqui");
 					  		
 					  		 String alertaVermelhoTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
