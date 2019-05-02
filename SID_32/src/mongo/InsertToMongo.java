@@ -3,6 +3,8 @@ package mongo;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.bson.BsonArray;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -28,11 +30,11 @@ public class InsertToMongo implements MqttCallback{
 	
 	//ArrayList<SensorInfo> sens =new ArrayList<>();
 	private ArrayList<String> sens =new ArrayList<>();
-	private Queue<String> msgs;
+	private BlockingQueue<String> msgs;
 	
 //	BasicDBList dbList;
 	public InsertToMongo() {
-		msgs = new LinkedList<String>();
+		msgs = new LinkedBlockingQueue<String>();
 		MongoInsertThread t = new MongoInsertThread(this);
 		t.start();
 	}
@@ -85,10 +87,11 @@ public class InsertToMongo implements MqttCallback{
 	}
 	
 	
-	public void saveMessage (String msg){
+	public synchronized void saveMessage (String msg){
 		msgs.offer(msg);
+		notifyAll();
 			//nova		
-		System.out.println(msg.toString() + "   - mensagem guardada na queue");
+		System.out.println( "   - mensagem guardada na queue");
 //		BsonArray parse = BsonArray.parse(msg.toString());
 //		System.out.println( "       estou aqui");
 //		BasicDBList dbList =new BasicDBList();
@@ -110,9 +113,15 @@ public class InsertToMongo implements MqttCallback{
 
 	}
 	
-	public String pollMessage() {
+	public synchronized String pollMessage() {
 		if (msgs.isEmpty()){
-			return null;
+			try {
+				System.out.println("não há mensagens, esperando");
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return msgs.poll();
 	}

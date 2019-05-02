@@ -27,26 +27,26 @@ public class MongoInsertThread extends Thread{
 	}
 	
 	public void run (){	
-		try {
+	//	try {
 			while (true){
 				System.out.println("thread is running");
 				String s = mqttClient.pollMessage();
-				System.out.println(s);
-				System.out.println(s == null  + "------------------------------------- " + s);
+				//System.out.println( "chegou");
+			/*	System.out.println(s == null  + "------------------------------------- " + s);
 				if (s ==null ){
 					System.out.println("queue is empty, imma gonna sleep");
-					sleep(10000);
+				//	sleep(10000);
 				}else{
-					System.out.println("vou guardar" + s);
+*/					System.out.println("vou guardar no mongo");
 					DBObject dbObject = (DBObject)JSON.parse(s);
 					collection.insert(dbObject);
-				}
+	//			}
 		
 			}
-		} catch (InterruptedException e) {
+	/*	} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}*/	
 		
 	}
 }
