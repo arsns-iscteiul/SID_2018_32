@@ -50,7 +50,7 @@ public class InsertToMongo implements MqttCallback{
 			client.connect(options);
 			
 		    client.setCallback(this);
-		    client.subscribe("iscte_sid_2016_S1");
+		    client.subscribe("/sid_lab_2019_2");
 		} catch (MqttException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,7 +76,9 @@ public class InsertToMongo implements MqttCallback{
 			System.out.println(s+" -mensagem recebida2");
 			System.out.println(checkMsgFormat(s));
 			if (checkMsgFormat(s)){
-					s.replaceAll("\\}", ",\"exported\":0}");		
+					s=s.replace("}", ",\"exported\":0}");
+					s=s.replace("\"sens\"", ",\"sens\"");
+				//	s.replaceAll("\\}", ",\"exported\":0}");		
 					System.out.println(s + " formato checkado, esta e a nova msg");
 					saveMessage(s);
 				}		
@@ -116,11 +118,11 @@ public class InsertToMongo implements MqttCallback{
 	}
 	
 	public boolean checkMsgFormat (String msg) {
-		return msg.matches("\\{(\"tmp\"(\\s+)?:(\\s+)?\\d+.\\d+,(\\s+)?)"
-				+ "\"hum\"(\\s+)?:(\\s+)?\\d+.\\d+,(\\s+)?"
-				+ "\"dat\"(\\s+)?:(\\s+)?\"\\d+-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])\",(\\s+)?"
-				+ "\"tim\"(\\s+)?:(\\s+)?\"(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])\",(\\s+)?"
-				+ "\"cell\"(\\s+)?:(\\s+)?\\d+,(\\s+)?"
+		return msg.matches("\\{(\"tmp\"(\\s+)?:(\\s+)?\"\\d+.\\d+\",(\\s+)?)"
+				+ "\"hum\"(\\s+)?:(\\s+)?\"\\d+.\\d+\",(\\s+)?"
+				+ "\"dat\"(\\s+)?:(\\s+)?\"(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/\\d+\",(\\s+)?"
+				+ "\"tim\"(\\s+)?:(\\s+)?\"(0?[0-9]|1[0-9]|2[0-3]):([0-9]|[1-5][0-9]):([0-9]|[1-5][0-9])\"(\\s+)?"
+				+ "(,\"cell\"(\\s+)?:(\\s+)?\"\\d+\"(\\s+)?)?"
 				+ "\"sens\"(\\s+)?:(\\s+)?\"\\w+\"(\\s+)?\\}");
 			//	+ "\"exported\"(\\s+)?:(\\s+)?[01](\\s+)?\\}");	
 				
