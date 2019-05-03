@@ -26,6 +26,17 @@ public class MongoJDBCMain {
 	static double LSLuminosidade;
 	static double valorXtemperatura;
 	static double valorXluminosidade;
+	static double valorAntigoTemperatura;
+	static double valorAntigoLuminosidade;
+	static double valorAnomaloTemperatura;
+	static double valorAnomaloLuminosidade;
+	static boolean alertaAmareloTemperatura=false;
+	static boolean alertaAmareloLuminosidade=false;
+	static boolean alertaLaranjaTemperatura=false;
+	static boolean alertaLaranjaLuminosidade=false;
+	static boolean alertaVermelhoTemperatura=false;
+	static boolean alertaVermelhoLuminosidade=false;
+	static int count =0;
 	
 	public static void main(String[] args) throws SQLException {
 		
@@ -84,12 +95,13 @@ public class MongoJDBCMain {
 			double temperatura = Double.parseDouble((theObj).getString("tmp"));
 			System.out.println(luminosidade);
 			String id = (theObj).getString("_id");
-			int foiExportado = Integer.parseInt((theObj).getString("foiExportado"));
+			int foiExportado = Integer.parseInt((theObj).getString("exported"));
 			System.out.println(id);
 			// se ainda nao foi exportado, foiExportado=0
 			if(foiExportado==0) {
 				
 				//criar a medicacao_luminosidade
+				if(luminosidade !=0) {
 			  String query1 = " insert into medicao_luminosidade (Data_Hora_Medicao, Valor_Medicao_Luminosidade)"
 				        + " values (?, ?)";
 
@@ -100,7 +112,7 @@ public class MongoJDBCMain {
 
 				      // execute the preparedstatement
 				      preparedStmt1.execute();
-
+				}
 				    //criar a medicacao_temperatura
 			      String query2 = " insert into medicao_temperatura (Data_Hora_Medicao, Valor_Medicao_Temperatura)"
 					        + " values (?, ?)";
@@ -114,7 +126,7 @@ public class MongoJDBCMain {
 					      
 					      //colocar foiExportado=1
 					      BasicDBObject newDocument = new BasicDBObject();
-					  	newDocument.append("$set", new BasicDBObject().append("foiExportado", 1));
+					  	newDocument.append("$set", new BasicDBObject().append("exported", 1));
 					  	BasicDBObject searchQuery = new BasicDBObject().append("_id", new ObjectId(id));
 					  	collection.update(searchQuery, newDocument);
 					  	System.out.println("Valor da temperatura:" +temperatura);
@@ -122,9 +134,8 @@ public class MongoJDBCMain {
 					  	
 					  	//decidir se cria o alerta
 					  	//alerta Vermelho Temperatura
-					  	if( (temperatura <= (LITemperatura + LITemperatura*0.4)) || (temperatura >= LSTemperatura*0.9) ){
-					  		System.out.println("devia entrar aqui");
-					  		
+					  	if( (temperatura <= (LITemperatura + LITemperatura*0.4)) || (temperatura >= LSTemperatura*0.9)){
+					  		alertaVermelhoTemperatura=true;
 					  		 String alertaVermelhoTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 								        + " values (?, ?, ?, ?, ?, ?, ?)";
 								      // create the mysql insert preparedstatement
@@ -140,10 +151,13 @@ public class MongoJDBCMain {
 								      // execute the preparedstatement
 								      preparedStmt3.execute();
 								      
+					  	}else {
+					  		alertaVermelhoTemperatura=false;
 					  	}
 					  //alerta Vermelho Luminosidade
 					  	if( (luminosidade <= (LILuminosidade + LILuminosidade*0.4)) || (luminosidade >= LSLuminosidade*0.9) ){
-					  		 String alertaVermelhoLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+					  		alertaVermelhoLuminosidade=true;
+					  		String alertaVermelhoLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 								        + " values (?, ?, ?, ?, ?, ?, ?)";
 								      // create the mysql insert preparedstatement
 								      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaVermelhoLuminosidade);
@@ -158,10 +172,13 @@ public class MongoJDBCMain {
 								      // execute the preparedstatement
 								      preparedStmt3.execute();
 								      
+					  	}else{
+					  		alertaVermelhoLuminosidade=false;
 					  	}
 					  //alerta Laranja Temperatura
 					  	if( (temperatura <= (LITemperatura + LITemperatura*0.8)) &&  (temperatura > (LITemperatura + LITemperatura*0.4)) || (temperatura >= (LSTemperatura*0.8) && temperatura < LSTemperatura*0.9) ){
-					  		 String alertaLaranjaTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+					  		alertaLaranjaTemperatura=true; 
+					  		String alertaLaranjaTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 								        + " values (?, ?, ?, ?, ?, ?, ?)";
 								      // create the mysql insert preparedstatement
 								      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaLaranjaTemperatura);
@@ -176,10 +193,13 @@ public class MongoJDBCMain {
 								      // execute the preparedstatement
 								      preparedStmt3.execute();
 								      
+					  	}else {
+					  		alertaLaranjaTemperatura=false; 
 					  	}
 					  //alerta Laranja Luminosidade
 					  	if( (luminosidade <= (LILuminosidade + LILuminosidade*0.8)) &&  (luminosidade > (LILuminosidade + LILuminosidade*0.4)) || (luminosidade >= (LSLuminosidade*0.8) && luminosidade < LSLuminosidade*0.9) ){
-					  		 String alertaLaranjaLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+					  		alertaLaranjaLuminosidade=true; 
+					  		String alertaLaranjaLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 								        + " values (?, ?, ?, ?, ?, ?, ?)";
 								      // create the mysql insert preparedstatement
 								      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaLaranjaLuminosidade);
@@ -194,13 +214,82 @@ public class MongoJDBCMain {
 								      // execute the preparedstatement
 								      preparedStmt3.execute();
 								      
-					  	}	
+					  	}else{
+					  		alertaLaranjaLuminosidade=false; 
+					  	}
 					  	//alerta Amarelo temperatura
-					  
+						  	if(Math.abs(temperatura - valorAntigoTemperatura) > valorXtemperatura && alertaAmareloTemperatura==false && alertaVermelhoTemperatura==false && alertaLaranjaTemperatura==false) {
+						  		alertaAmareloTemperatura=true;
+						  		valorAnomaloTemperatura=temperatura;
+						  	}
+					  	
+					  	if(alertaAmareloTemperatura==true && valorAntigoTemperatura!=0) {
+					  		count++;
+					  		if(count==2) {
+						  		if(Math.abs(temperatura -valorAntigoTemperatura) >valorXtemperatura){
+						  			 String alertaAmareloTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+										        + " values (?, ?, ?, ?, ?, ?, ?)";
+										      // create the mysql insert preparedstatement
+										      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaAmareloTemperatura);
+										      preparedStmt3.setString(1, "temp");
+										      preparedStmt3.setString(2,  "Amarelo");
+										      preparedStmt3.setString (3, DataHora);
+										      preparedStmt3.setDouble(4,  temperatura);
+										      preparedStmt3.setString (5, "Ocorreu um pico de temperatura");
+										      preparedStmt3.setDouble(6,  LITemperatura);
+										      preparedStmt3.setDouble(7, LSTemperatura);
+	
+										      // execute the preparedstatement
+										      preparedStmt3.execute();
+						  		}else {
+						  			alertaAmareloTemperatura =false;
+						  			count=0;
+						  		}
+					  		}
+					  	}else {
+					  		valorAntigoTemperatura=temperatura;
+					  	}
+						
 					  //alerta Amarelo Luminosidade
+					  	
+					  	if(Math.abs(temperatura - valorAntigoTemperatura) > valorXtemperatura && alertaAmareloTemperatura==false && alertaVermelhoTemperatura==false && alertaLaranjaTemperatura==false) {
+					  		alertaAmareloTemperatura=true;
+					  		valorAnomaloTemperatura=temperatura;
+					  	}
+				  	
+				  	if(alertaAmareloLuminosidade==true && valorAntigoLuminosidade!=0) {
+				  		count++;
+				  		if(count==2) {
+					  		if(Math.abs(luminosidade -valorAntigoLuminosidade) >valorXluminosidade){
+					  			 String alertaAmareloLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+									        + " values (?, ?, ?, ?, ?, ?, ?)";
+									      // create the mysql insert preparedstatement
+									      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaAmareloLuminosidade);
+									      preparedStmt3.setString(1, "lum");
+									      preparedStmt3.setString(2,  "Amarelo");
+									      preparedStmt3.setString (3, DataHora);
+									      preparedStmt3.setDouble(4,  luminosidade);
+									      preparedStmt3.setString (5, "Ocorreu um pico de luminosidade");
+									      preparedStmt3.setDouble(6,  LILuminosidade);
+									      preparedStmt3.setDouble(7, LSLuminosidade);
+
+									      // execute the preparedstatement
+									      preparedStmt3.execute();
+					  		}else {
+					  			alertaAmareloLuminosidade =false;
+					  			count=0;
+					  		}
+				  		}
+				  	}else {
+				  		valorAntigoLuminosidade=luminosidade;
+				  	}
 					  
 					  	
 			}
+			
+			
+			
+			
 					  	
 		  }
 		
