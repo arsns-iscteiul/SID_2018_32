@@ -57,55 +57,57 @@ public class BD_GUI_Connector {
 	}
 
 	public LinkedList<String> getAllTables() throws SQLException {
-		DatabaseMetaData meta = connection.getMetaData();
-		ResultSet s = meta.getTables(null, null, "", null);
+		ResultSet resultSet = connection.getMetaData().getTables(null, null, "", null);
 		LinkedList<String> tableNames = new LinkedList<>();
-		while(s.next()) {
-			tableNames.add(s.getString(3));
+		while (resultSet.next()) {
+			tableNames.add(resultSet.getString(3));
 		}
 		return tableNames;
-		
+
 	}
 
-	public LinkedList<String> getTable(String tableName) throws SQLException {
-		String query = "SELECT * FROM " + tableName;
-		Statement s = connection.createStatement();
-		ResultSet rs =  s.executeQuery(query);
+	public LinkedList<String> getTableContentNames(String tableName) throws SQLException {
+		ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM " + tableName);
 		LinkedList<String> list = new LinkedList<String>();
-		while(rs.next()){
-			list.add(rs.getObject(2).toString());
+		while (resultSet.next()) {
+			list.add(resultSet.getString(1));
 		}
 		return list;
-		
 	}
 
-	public void addRegisterToTable(String table, String fields[]) { // Fields necessita de estar ordenado pelos campos
-																	// da tabela respetiva
-		try {
-			
-			ResultSetMetaData meta = connection.createStatement().executeQuery("SELECT * FROM " + table).getMetaData();
-			
-			
-			String query = "INSERT INTO " + table + " (";
-			String query2 = " VALUES (";
-			
-			for (int i = 0; i != fields.length - 1; i++) {
-				query = query + meta.getColumnName(i+1) + ", ";
-				query2 = query2 + fields[i] + ", ";
-			}
-			
-			
-			query = query + meta.getColumnName(fields.length) + ")";
-			query2 = query2 + fields[fields.length - 1] + ")";
-			query = query + query2;
-			System.out.println(query);
-			connection.createStatement().executeUpdate(query);
-			
+	public void addRegisterToTable(String table, String fields[], String operation) throws SQLException {
+		// Fields need to be ordered by the columns of a given table
+		// The exception is thrown when some1 who isn't allowed to add data tries to
 
-		} catch (SQLException e) {
-			e.printStackTrace();
+		String sp = "EXEC <" + table + "[" + operation + "]> ";
+		for(int i = 0; i!= fields.length-1; i++) {
+			sp += "?,";
 		}
+		sp += "?";
+		
+		PreparedStatement sqlString = connection.prepareStatement(sp);
+		sqlString.setEscapeProcessing(true);
+		setParam(sqlString.getParameterMetaData(), sqlString, fields);
 
+	}
+
+	private void setParam(ParameterMetaData paramMeta, PreparedStatement sqlString, String fields[])
+			throws SQLException {
+
+		int paramSize = paramMeta.getParameterCount();
+
+		for (int i = 0; i != paramSize; i++) {
+			String type = paramMeta.getParameterTypeName(i);
+
+			switch (type) {
+			case "VARCHAR":
+				sqlString.setString(i + 1, fields[i]);
+				break;
+			// Case for each types. Although we only use string and integer.
+			default:
+				sqlString.setInt(i + 1, Integer.parseInt(fields[i]));
+			}
+		}
 	}
 
 	public String getUsername() {
@@ -118,15 +120,15 @@ public class BD_GUI_Connector {
 
 	public static void main(String args[]) throws InterruptedException, SQLException {
 		BD_GUI_Connector b = new BD_GUI_Connector();
-		String s[] = { "27", "\"iudsa\"", "\"Teste2\"", "6", "1" };
+//		String s[] = { "iudsa", "Teste2", "6", "1" };
+//		String s[] = {"oasdoajdia", "jasid@algo.pt", "Cat-0", "pwd"};
 		b.login("root", "1221");
-		Thread.currentThread().sleep(2000);
-		LinkedList<String> list = b.getTable("cultura");
-		for(int i =0; i!= list.size(); i++) {
-			System.out.println(list.get(i));
-		}
-		//b.addRegisterToTable("cultura", s);
-
+		Thread.currentThread().sleep(1000);
+//		LinkedList<String> list = b.getTableContentNames("tipo_cultura");
+//		for (int i = 0; i != list.size(); i++) {
+//			System.out.println(list.get(i));
+//		}
+//		b.addRegisterToTable("investigador", s , "INSERT");
 	}
 
 }
