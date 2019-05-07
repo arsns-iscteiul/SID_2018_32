@@ -30,7 +30,7 @@ public class FXMLLoginController extends FXMLController implements Initializable
 	private ToggleButton password_viewer_btn;
 	@FXML
 	private Label wrong_credentials_warning_label;
-	
+
 	public FXMLLoginController(FXMLShellController fxmlShellController, BD_GUI_Connector bd_gui_connector) {
 		this.fxmlShellController = fxmlShellController;
 		this.bd_gui_connector = bd_gui_connector;

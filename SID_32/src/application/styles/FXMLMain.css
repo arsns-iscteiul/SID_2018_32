@@ -5,7 +5,6 @@
 #add_cultura_btn {
 	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
 	-fx-background-radius: 60.0;
-    -fx-graphic: url("/application/media/icons/add_white_20px.png");
     -fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
 }
 
@@ -23,4 +22,17 @@
 	-fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
 	-fx-text-fill: white;
 	-fx-margin: 10.0;
+}
+
+#info_pane {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 8.0;
+}
+
+#info_pane:hover {
+	-fx-effect: dropshadow(gaussian, #afafaf, 40.0, 0.0, 0.0, 14.0);
+}
+
+#monitorized_variables_label {
+	-fx-graphic: url("/application/media/icons/testtube_orange_32px.png");
 }

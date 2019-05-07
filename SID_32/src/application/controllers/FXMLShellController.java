@@ -22,9 +22,9 @@ import javafx.stage.Stage;
 import main.BD_GUI_Connector;
 
 public class FXMLShellController extends FXMLController implements Initializable {
-	
+
 	private BD_GUI_Connector bd_gui_connector = null;
-	
+
 	private double stageX = 0;
 	private double stageY = 0;
 	private double sceneXOffset = 0;
@@ -84,7 +84,7 @@ public class FXMLShellController extends FXMLController implements Initializable
 		top.setClip(top_clip);
 		top.toFront();
 	}
-	
+
 	@FXML
 	private void setOnMousePressed_DragableStage(MouseEvent event) {
 		sceneXOffset = event.getSceneX();
