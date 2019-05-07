@@ -12,24 +12,45 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane pickOnBounds="false"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<BorderPane pickOnBounds="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		<BorderPane pickOnBounds="false"
+			AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<left>
-				<AnchorPane id="left" fx:id="left" pickOnBounds="false" prefHeight="480.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+				<AnchorPane id="left" fx:id="left" pickOnBounds="false"
+					prefHeight="480.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 					<children>
-						<VBox alignment="CENTER" layoutX="82.0" layoutY="47.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+						<VBox alignment="CENTER" layoutX="82.0" layoutY="47.0"
+							spacing="10.0" AnchorPane.leftAnchor="0.0"
+							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
 							<children>
-								<Circle fill="WHITE" radius="60.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+								<Button id="profile_image_btn" mnemonicParsing="false"
+									onAction="#logout">
+									<graphic>
+										<ImageView fitHeight="96.0" fitWidth="96.0"
+											pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@../media/icons/profile_white_96px.png" />
+											</image>
+										</ImageView>
+									</graphic>
+								</Button>
 								<Label text="Investigador" textFill="WHITE" />
-								<Button mnemonicParsing="false" onAction="#logout" text="Logout" />
 							</children>
 						</VBox>
-						<VBox alignment="TOP_CENTER" layoutX="67.0" layoutY="231.0" prefHeight="249.0" prefWidth="188.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="231.0">
+						<VBox alignment="TOP_CENTER" layoutX="67.0" layoutY="231.0"
+							prefHeight="249.0" prefWidth="188.0" spacing="10.0"
+							AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="180.0">
 							<children>
-								<Button id="add_cultura_btn" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Cultura" textFill="WHITE">
+								<Button id="add_cultura_btn" mnemonicParsing="false"
+									prefHeight="25.0" prefWidth="122.0" text="Cultura"
+									textFill="WHITE">
 									<graphic>
-										<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+										<ImageView fitHeight="20.0" fitWidth="20.0"
+											pickOnBounds="true" preserveRatio="true">
 											<image>
 												<Image url="@../media/icons/add_white_20px.png" />
 											</image>
@@ -39,7 +60,8 @@
 										<Cursor fx:constant="HAND" />
 									</cursor>
 								</Button>
-								<ListView id="cultura_listview" fx:id="cultura_listview" pickOnBounds="false">
+								<ListView id="cultura_listview"
+									fx:id="cultura_listview" pickOnBounds="false">
 									<cursor>
 										<Cursor fx:constant="HAND" />
 									</cursor>
@@ -53,87 +75,113 @@
 				</AnchorPane>
 			</left>
 			<center>
-				<AnchorPane pickOnBounds="false" prefHeight="480.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+				<AnchorPane pickOnBounds="false" prefHeight="480.0"
+					prefWidth="600.0" BorderPane.alignment="CENTER">
 					<children>
-                  <VBox layoutX="40.0" layoutY="30.0" spacing="10.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
-                     <children>
-      						<Label id="cultura_name_label" fx:id="cultura_name_label" layoutX="31.0" layoutY="27.0" text="cultura_name_label" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="30.0">
-      							<font>
-      								<Font name="System Bold" size="18.0" />
-      							</font>
-      						</Label>
-      						<Label layoutX="30.0" layoutY="73.0" text="Analytics Overview" AnchorPane.leftAnchor="40.0">
-      							<font>
-      								<Font name="System Bold" size="18.0" />
-      							</font>
-      						</Label>
-      						<HBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="106.0" spacing="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
-      							<children>
-      								<BorderPane id="info_pane" fx:id="temperature_info_pane" onMouseEntered="#setOnMouseEntered_temperature_info_pane" onMouseExited="#setOnMouseExited_temperature_info_pane" prefHeight="150.0" prefWidth="150.0">
-      									<top>
-      										<ImageView pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-      											<image>
-      												<Image url="@../media/icons/temperature_green_64px.png" />
-      											</image>
-      										</ImageView>
-      									</top>
-      									<bottom>
-      										<Label text="Average Temperature" BorderPane.alignment="CENTER">
-      											<BorderPane.margin>
-      												<Insets />
-      											</BorderPane.margin>
-      										</Label>
-      									</bottom>
-      									<center>
-      										<Label text="15ºC" BorderPane.alignment="CENTER">
-      											<font>
-      												<Font name="System Bold" size="18.0" />
-      											</font>
-      										</Label>
-      									</center>
-      									<HBox.margin>
-      										<Insets />
-      									</HBox.margin>
-      									<padding>
-      										<Insets bottom="8.0" />
-      									</padding>
-      								</BorderPane>
-      								<BorderPane id="info_pane" fx:id="luminosity_info_pane" layoutX="10.0" layoutY="10.0" onMouseEntered="#setOnMouseEntered_luminosity_info_pane" onMouseExited="#setOnMouseExited_luminosity_info_pane" prefHeight="150.0" prefWidth="150.0">
-      									<bottom>
-      										<Label text="Average Luminosity" BorderPane.alignment="CENTER">
-      											<BorderPane.margin>
-      												<Insets />
-      											</BorderPane.margin>
-      										</Label>
-      									</bottom>
-      									<center>
-      										<Label text="0.5%" BorderPane.alignment="CENTER">
-      											<font>
-      												<Font name="System Bold" size="18.0" />
-      											</font>
-      										</Label>
-      									</center>
-      									<padding>
-      										<Insets bottom="8.0" />
-      									</padding>
-      									<top>
-      										<ImageView pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-      											<image>
-      												<Image url="@../media/icons/illumination_yellow_64px.png" />
-      											</image>
-      										</ImageView>
-      									</top>
-      								</BorderPane>
-      							</children>
-      						</HBox>
-                        <Label layoutX="10.0" layoutY="47.0" text="Monitored Variables">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                        <HBox fx:id="monitorized_variables_hbox" alignment="CENTER_LEFT" spacing="10.0" />
-                     </children>
-                  </VBox>
+						<VBox layoutX="40.0" layoutY="30.0" spacing="20.0"
+							AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0"
+							AnchorPane.topAnchor="30.0">
+							<children>
+								<Label id="cultura_name_label" fx:id="cultura_name_label"
+									layoutX="31.0" layoutY="27.0" text="cultura_name_label"
+									AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="30.0">
+									<font>
+										<Font name="System Bold" size="18.0" />
+									</font>
+								</Label>
+								<Label layoutX="30.0" layoutY="73.0"
+									text="Analytics Overview" AnchorPane.leftAnchor="40.0">
+									<font>
+										<Font name="System Bold" size="18.0" />
+									</font>
+								</Label>
+								<HBox alignment="CENTER_LEFT" layoutX="40.0"
+									layoutY="106.0" spacing="40.0" AnchorPane.leftAnchor="40.0"
+									AnchorPane.rightAnchor="40.0">
+									<children>
+										<BorderPane id="info_pane"
+											fx:id="temperature_info_pane"
+											onMouseEntered="#setOnMouseEntered_temperature_info_pane"
+											onMouseExited="#setOnMouseExited_temperature_info_pane"
+											prefHeight="150.0" prefWidth="150.0">
+											<top>
+												<ImageView pickOnBounds="true"
+													preserveRatio="true" BorderPane.alignment="CENTER">
+													<image>
+														<Image
+															url="@../media/icons/temperature_green_64px.png" />
+													</image>
+												</ImageView>
+											</top>
+											<bottom>
+												<Label text="Average Temperature"
+													BorderPane.alignment="CENTER">
+													<BorderPane.margin>
+														<Insets />
+													</BorderPane.margin>
+												</Label>
+											</bottom>
+											<center>
+												<Label text="15ºC" BorderPane.alignment="CENTER">
+													<font>
+														<Font name="System Bold" size="18.0" />
+													</font>
+												</Label>
+											</center>
+											<HBox.margin>
+												<Insets />
+											</HBox.margin>
+											<padding>
+												<Insets bottom="8.0" />
+											</padding>
+										</BorderPane>
+										<BorderPane id="info_pane"
+											fx:id="luminosity_info_pane" layoutX="10.0" layoutY="10.0"
+											onMouseEntered="#setOnMouseEntered_luminosity_info_pane"
+											onMouseExited="#setOnMouseExited_luminosity_info_pane"
+											prefHeight="150.0" prefWidth="150.0">
+											<bottom>
+												<Label text="Average Luminosity"
+													BorderPane.alignment="CENTER">
+													<BorderPane.margin>
+														<Insets />
+													</BorderPane.margin>
+												</Label>
+											</bottom>
+											<center>
+												<Label text="0.5%" BorderPane.alignment="CENTER">
+													<font>
+														<Font name="System Bold" size="18.0" />
+													</font>
+												</Label>
+											</center>
+											<padding>
+												<Insets bottom="8.0" />
+											</padding>
+											<top>
+												<ImageView pickOnBounds="true"
+													preserveRatio="true" BorderPane.alignment="CENTER">
+													<image>
+														<Image
+															url="@../media/icons/illumination_yellow_64px.png" />
+													</image>
+												</ImageView>
+											</top>
+										</BorderPane>
+									</children>
+								</HBox>
+								<Label layoutX="10.0" layoutY="47.0"
+									text="Monitored Variables">
+									<font>
+										<Font name="System Bold" size="18.0" />
+									</font>
+								</Label>
+								<TableView fx:id="table_view" prefHeight="200.0"
+									prefWidth="200.0" />
+								<HBox fx:id="monitorized_variables_hbox"
+									alignment="CENTER_LEFT" spacing="10.0" />
+							</children>
+						</VBox>
 					</children>
 				</AnchorPane>
 			</center>
