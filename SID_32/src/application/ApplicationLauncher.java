@@ -22,7 +22,6 @@ public class ApplicationLauncher extends Application {
 	    Parent shell = shell_loader.load();
 		shell.getStylesheets().add(getClass().getResource("/application/styles/FXMLShell.css").toExternalForm());
 		
-		
 		stage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
 		Scene scene = new Scene(shell);
 		scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
