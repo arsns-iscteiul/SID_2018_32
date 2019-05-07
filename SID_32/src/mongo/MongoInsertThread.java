@@ -4,6 +4,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
 
@@ -15,7 +16,8 @@ public class MongoInsertThread extends Thread{
 	
 	public MongoInsertThread (InsertToMongo a){
 		mqttClient = a;
-		MongoClient mongoClient = new MongoClient();
+		MongoClient mongoClient = new MongoClient(
+				new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
 		
 		MongoCursor<String> dbsCursor = mongoClient.listDatabaseNames().iterator();
 		while(dbsCursor.hasNext()) {
