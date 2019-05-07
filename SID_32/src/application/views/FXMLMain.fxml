@@ -38,7 +38,10 @@
 										<Cursor fx:constant="HAND" />
 									</cursor>
 								</Button>
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ListView id="cultura_listview" fx:id="cultura_listview" prefHeight="200.0" prefWidth="200.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></ListView>
 							</children>
 							<padding>
 								<Insets top="10.0" />
