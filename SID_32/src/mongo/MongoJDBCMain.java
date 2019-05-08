@@ -38,7 +38,7 @@ public class MongoJDBCMain {
 	static boolean alertaVermelhoLuminosidade=false;
 	static int count =0;
 	
-	public static void main(String[] args) throws SQLException {
+	public void export() throws SQLException {
 		
 		try {
 		//ligar-se ao mongo
