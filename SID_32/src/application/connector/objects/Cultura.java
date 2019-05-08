@@ -1,4 +1,4 @@
-package application.controllers;
+package application.connector.objects;
 
 public class Cultura {
 
@@ -55,6 +55,11 @@ public class Cultura {
 
 	public void setInvestigador_fk(String investigador_fk) {
 		this.investigador_fk = investigador_fk;
+	}
+
+	@Override
+	public String toString() {
+		return this.nome_cultura;
 	}
 
 }

@@ -2,6 +2,14 @@
 	-fx-background-color: #252525;
 }
 
+#center_scrollpane {
+	-fx-background-color: #ffffff;
+}
+
+#center_scrollpane > .viewport, .corner {
+	-fx-background-color: transparent;
+}
+
 #profile_image_btn {
 	-fx-background-color: transparent;
 }
@@ -37,6 +45,21 @@
 	-fx-effect: dropshadow(gaussian, #afafaf, 40.0, 0.0, 0.0, 14.0);
 }
 
-#monitorized_variables_label {
-	-fx-graphic: url("/application/media/icons/testtube_orange_32px.png");
+/* <VARIABLES> */
+#pH {
+	-fx-graphic: url("/application/media/icons/variablepH_pink_32px.png");
 }
+
+#CO2 {
+	-fx-graphic: url("/application/media/icons/variableCO2_orange_32px.png");
+}
+
+#H2O {
+	-fx-graphic: url("/application/media/icons/variableH2O_blue_32px.png");
+}
+
+#O2 {
+	-fx-graphic: url("/application/media/icons/variableO2_lightblue_32px.png");
+}
+
+/* <VARIABLES/> */

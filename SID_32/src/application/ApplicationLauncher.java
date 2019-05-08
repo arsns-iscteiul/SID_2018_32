@@ -1,5 +1,6 @@
 package application;
 
+import application.connector.Connector;
 import application.controllers.FXMLShellController;
 import application.support.StageResizeHelper;
 import javafx.application.Application;
@@ -7,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.BD_GUI_Connector;
 
 public class ApplicationLauncher extends Application {
 
@@ -17,14 +17,14 @@ public class ApplicationLauncher extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		BD_GUI_Connector bd_gui_connector = new BD_GUI_Connector();
-		
+		Connector connector = new Connector();
+
 		FXMLLoader shell_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLShell.fxml"));
-		FXMLShellController shell_controller = new FXMLShellController(bd_gui_connector);
+		FXMLShellController shell_controller = new FXMLShellController(connector);
 		shell_loader.setController(shell_controller);
-	    Parent shell = shell_loader.load();
+		Parent shell = shell_loader.load();
 		shell.getStylesheets().add(getClass().getResource("/application/styles/FXMLShell.css").toExternalForm());
-		
+
 		stage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
 		Scene scene = new Scene(shell);
 		scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
@@ -32,5 +32,5 @@ public class ApplicationLauncher extends Application {
 		StageResizeHelper.addResizeListener(stage);
 		stage.show();
 	}
-	
+
 }

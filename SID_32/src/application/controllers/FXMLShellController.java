@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.connector.Connector;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,11 +20,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import main.BD_GUI_Connector;
 
 public class FXMLShellController extends FXMLController implements Initializable {
 
-	private BD_GUI_Connector bd_gui_connector = null;
+	private Connector connector = null;
 
 	private double stageX = 0;
 	private double stageY = 0;
@@ -45,15 +45,15 @@ public class FXMLShellController extends FXMLController implements Initializable
 	@FXML
 	public AnchorPane display;
 
-	public FXMLShellController(BD_GUI_Connector bd_gui_connector) {
-		this.bd_gui_connector = bd_gui_connector;
+	public FXMLShellController(Connector connector) {
+		this.connector = connector;
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		doClips();
 		FXMLLoader login_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLLogin.fxml"));
-		FXMLLoginController login_controller = new FXMLLoginController(this, bd_gui_connector);
+		FXMLLoginController login_controller = new FXMLLoginController(this, connector);
 		try {
 			setDisplay("Login", login_loader, login_controller, true);
 		} catch (IOException e) {

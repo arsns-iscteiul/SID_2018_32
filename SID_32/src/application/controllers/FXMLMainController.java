@@ -3,9 +3,12 @@ package application.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.ResourceBundle;
 
+import application.connector.Connector;
+import application.connector.objects.Cultura;
+import application.connector.objects.Medicao;
+import application.connector.objects.Variavel;
 import javafx.animation.ScaleTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,7 +18,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -25,17 +34,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
-import main.BD_GUI_Connector;
 
 public class FXMLMainController extends FXMLController implements Initializable {
 
 	private FXMLShellController fxmlShellController = null;
-	private BD_GUI_Connector bd_gui_connector = null;
+	private Connector connector = null;
 
-	private ObservableList<String> cultura_observablelist = FXCollections.observableArrayList();
+	private ObservableList<Cultura> cultura_observablelist = FXCollections.observableArrayList();
 
 	@FXML
-	private ListView<String> cultura_listview;
+	private ListView<Cultura> cultura_listview;
 	@FXML
 	private Label cultura_name_label;
 	@FXML
@@ -43,28 +51,30 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	@FXML
 	private HBox monitorized_variables_hbox;
 	@FXML
-	private TableView<Cultura> table_view;
+	private LineChart<String, String> line_chart;
+	@FXML
+	private TableView<Medicao> table_view;
 
-	public FXMLMainController(FXMLShellController fxmlShellController, BD_GUI_Connector bd_gui_connector) {
+	public FXMLMainController(FXMLShellController fxmlShellController, Connector connector) {
 		this.fxmlShellController = fxmlShellController;
-		this.bd_gui_connector = bd_gui_connector;
+		this.connector = connector;
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		buildLeftPane();
+		buildLineChart();
 		buildTableView();
 	}
 
 	private void buildLeftPane() {
-		cultura_listview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
+		cultura_listview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Cultura>() {
+			public void changed(ObservableValue<? extends Cultura> ov, Cultura old_val, Cultura new_val) {
 				refreshCentralPane(cultura_listview.getSelectionModel().getSelectedItem());
 			}
 		});
 		try {
-			LinkedList<String> culturas = bd_gui_connector.getTableColumn("cultura", "nome_cultura");
-			cultura_observablelist.addAll(culturas);
+			cultura_observablelist.addAll(connector.getCulturas());
 			cultura_listview.getItems().addAll(cultura_observablelist);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -72,17 +82,24 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		}
 	}
 
+	private void buildLineChart() {
+		final CategoryAxis xAxis = new CategoryAxis();
+		final NumberAxis yAxis = new NumberAxis();
+		xAxis.setLabel("Time");
+		yAxis.setLabel("Measurement");
+	}
+
 	@SuppressWarnings("unchecked")
 	private void buildTableView() {
-		TableColumn<Cultura, String> culturaIdCol = new TableColumn<Cultura, String>("Id");
-		TableColumn<Cultura, String> culturaNomeCol = new TableColumn<Cultura, String>("Name");
-		TableColumn<Cultura, String> culturaDescricaoCol = new TableColumn<Cultura, String>("Description");
-		TableColumn<Cultura, String> culturaTipoCol = new TableColumn<Cultura, String>("Type");
+		TableColumn<Medicao, String> culturaIdCol = new TableColumn<Medicao, String>("Id");
+		TableColumn<Medicao, String> culturaNomeCol = new TableColumn<Medicao, String>("Data e Hora");
+		TableColumn<Medicao, String> culturaDescricaoCol = new TableColumn<Medicao, String>("Valor");
+		TableColumn<Medicao, String> culturaTipoCol = new TableColumn<Medicao, String>("Variavel");
 
-		culturaIdCol.setCellValueFactory(new PropertyValueFactory<>("id_cultura"));
-		culturaNomeCol.setCellValueFactory(new PropertyValueFactory<>("nome_cultura"));
-		culturaDescricaoCol.setCellValueFactory(new PropertyValueFactory<>("descricao_cultura"));
-		culturaTipoCol.setCellValueFactory(new PropertyValueFactory<>("tipo_cultura"));
+		culturaIdCol.setCellValueFactory(new PropertyValueFactory<>("id_medicao"));
+		culturaNomeCol.setCellValueFactory(new PropertyValueFactory<>("data_hora_medicao"));
+		culturaDescricaoCol.setCellValueFactory(new PropertyValueFactory<>("valor_medicao"));
+		culturaTipoCol.setCellValueFactory(new PropertyValueFactory<>("variavel_medida_fk"));
 
 		table_view.getColumns().addAll(culturaIdCol, culturaNomeCol, culturaDescricaoCol);
 	}
@@ -90,45 +107,50 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	@FXML
 	public void logout(ActionEvent event) throws IOException {
 		FXMLLoader login_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLLogin.fxml"));
-		FXMLLoginController login_controller = new FXMLLoginController(fxmlShellController, bd_gui_connector);
+		FXMLLoginController login_controller = new FXMLLoginController(fxmlShellController, connector);
 		fxmlShellController.setDisplay("Login", login_loader, login_controller, true);
 	}
 
-	private void refreshCentralPane(String cultura_selected) {
-		refreshCulturaNameLabel(cultura_selected);
-		refreshMonitorizedVariablesHBox(cultura_selected);
-		refreshTableView();
+	private void refreshCentralPane(Cultura cultura_selected) {
+		refreshCulturaNameLabel(cultura_selected.getNome_cultura());
+		refreshMonitorizedVariablesHBox(cultura_selected.getId_cultura());
+		refreshLineChart(cultura_selected.getId_cultura(), cultura_selected.getNome_cultura());
+		refreshTableView(cultura_selected.getId_cultura());
 	}
 
-	private void refreshCulturaNameLabel(String cultura_selected) {
-		cultura_name_label.setText(cultura_selected);
+	private void refreshCulturaNameLabel(String cultura_selected_name) {
+		cultura_name_label.setText(cultura_selected_name);
 	}
 
-	private void refreshMonitorizedVariablesHBox(String cultura_selected) {
+	private void refreshMonitorizedVariablesHBox(String cultura_selected_id) {
+		monitorized_variables_hbox.getChildren().clear();
 		try {
-			String[] a = cultura_selected.split("-");
-			String id = a[1];
-			System.out.println(id);
-			LinkedList<String>[] table = bd_gui_connector.allTableData("variavel_medida");
-			for (int i = 0; i != table.length; i++) {
-				for (String s : table[1]) {
-					System.out.println(s);
-					if (s.equals(id)) {
-						monitorized_variables_hbox.getChildren().add(new Label("TEM"));
-					}
-				}
+			for (Variavel variavel : connector.getVariaveisDaCultura(cultura_selected_id)) {
+				Label variavel_label = new Label(variavel.getNome_variavel());
+				variavel_label.setContentDisplay(ContentDisplay.TOP);
+				variavel_label.setCursor(Cursor.HAND);
+				variavel_label.setId(variavel.getNome_variavel());
+				monitorized_variables_hbox.getChildren().add(variavel_label);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("nao deu");
 		}
+		if (monitorized_variables_hbox.getChildren().isEmpty()) {
+			monitorized_variables_hbox.getChildren()
+					.add(new Label("You have no variables being monitorized in this culture"));
+		}
+
 	}
 
-	@SuppressWarnings("unchecked")
-	private void refreshTableView() {
+	private void refreshTableView(String cultura_selected_id) {
 		clearTableView();
-		ObservableList<Cultura> list = getCulturaList();
-		table_view.setItems(list);
+		try {
+			ObservableList<Medicao> medicoes = FXCollections.observableArrayList(connector.getMedicoesDaCultura(cultura_selected_id));
+			table_view.setItems(medicoes);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void clearTableView() {
@@ -137,36 +159,29 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		}
 	}
 
-	private ObservableList<Cultura> getCulturaList() {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void refreshLineChart(String cultura_selected_id, String cultura_selected_name) {
+		line_chart.getData().clear();
+		try {
+			XYChart.Series series = new XYChart.Series();
+			for (Medicao medicao : connector.getMedicoesDaCultura(cultura_selected_id)) {
+				series.getData().add(
+						new XYChart.Data(medicao.getData_hora_medicao(), Integer.parseInt(medicao.getId_medicao())));
+			}
+			line_chart.getData().add(series);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-		Cultura c1 = new Cultura("1", "Tomates",
-				"O tomate é o fruto do tomateiro (Solanum lycopersicum; Solanaceae). Da sua família, fazem também parte as berinjelas, as pimentas e os pimentões, além de algumas espécies não comestíveis. A palavra portuguesa tomate vem do castelhano tomate, derivada do náuatle (língua asteca) tomatl. Esta apareceu pela primeira vez na imprensa em 1595.",
-				"Plantae", "1");
-		Cultura c2 = new Cultura("2", "Maçã",
-				"A maçã é o pseudofruto pomáceo da macieira (Malus domestica), árvore da família Rosaceae. É um dos pseudofrutos de árvore mais cultivados, e o mais conhecido dos muitos membros do género Malus que são usados ​​pelos seres humanos. As maçãs crescem em pequenas árvores, de folha caducifólia que florescem na Primavera e produzem fruto no Outono. A árvore é originária da Ásia Ocidental, onde o seu ancestral selvagem, Malus sieversii, ainda é encontrado atualmente. As maçãs têm sido cultivadas há milhares de anos na Ásia e Europa, tendo sido trazidas para a América do Norte pelos colonizadores europeus. As maçãs têm estado presentes na mitologia e religiões de muitas culturas, incluindo as tradições nórdica, grega e cristã. Em 2010, o genoma da fruta foi descodificado, levando a uma nova compreensão no controle de doenças e na reprodução seletiva durante a produção da maçã.",
-				"Plantae", "2");
-
-		ObservableList<Cultura> list = FXCollections.observableArrayList(c1, c2);
-		return list;
 	}
 
 	@FXML
-	public void setOnMouseEntered_temperature_info_pane(MouseEvent event) {
+	public void setOnMouseEntered_info_pane(MouseEvent event) {
 		playScaleTransition((Node) event.getSource(), 0.1, Duration.millis(120));
 	}
 
 	@FXML
-	public void setOnMouseExited_temperature_info_pane(MouseEvent event) {
-		playScaleTransition((Node) event.getSource(), -0.1, Duration.millis(120));
-	}
-
-	@FXML
-	public void setOnMouseEntered_luminosity_info_pane(MouseEvent event) {
-		playScaleTransition((Node) event.getSource(), 0.1, Duration.millis(120));
-	}
-
-	@FXML
-	public void setOnMouseExited_luminosity_info_pane(MouseEvent event) {
+	public void setOnMouseExited_info_pane(MouseEvent event) {
 		playScaleTransition((Node) event.getSource(), -0.1, Duration.millis(120));
 	}
 
@@ -176,7 +191,6 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		scaleTransition.setNode(node);
 		scaleTransition.setByY(scale);
 		scaleTransition.setByX(scale);
-		scaleTransition.autoReverseProperty().set(true);
 		scaleTransition.play();
 	}
 }
