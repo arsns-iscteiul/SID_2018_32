@@ -11,7 +11,7 @@ public class ExportingThread extends Thread{
 			try { 
 				sleep(7000);
 				exporter.export();
-			} catch (InterruptedException | SQLException e) {
+			} catch (InterruptedException | SQLException e) { 
 				e.printStackTrace();  
 			}
 		}
