@@ -6,6 +6,7 @@ public class Medicao {
 	private String data_hora_medicao;
 	private String valor_medicao;
 	private String variavel_medida_fk;
+	private String more_info;
 
 	public Medicao(String id_medicao, String data_hora_medicao, String valor_medicao, String variavel_medida_fk) {
 		this.id_medicao = id_medicao;
@@ -44,5 +45,13 @@ public class Medicao {
 
 	public void setVariavel_medida_fk(String variavel_medida_fk) {
 		this.variavel_medida_fk = variavel_medida_fk;
+	}
+
+	public String getMore_info() {
+		return more_info;
+	}
+
+	public void setMore_info(String more_info) {
+		this.more_info = more_info;
 	}
 }

@@ -3,6 +3,7 @@ package application.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import application.connector.Connector;
@@ -145,7 +146,8 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private void refreshTableView(String cultura_selected_id) {
 		clearTableView();
 		try {
-			ObservableList<Medicao> medicoes = FXCollections.observableArrayList(connector.getMedicoesDaCultura(cultura_selected_id));
+			ObservableList<Medicao> medicoes = FXCollections
+					.observableArrayList(connector.getMedicoesDaCultura(cultura_selected_id));
 			table_view.setItems(medicoes);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -163,16 +165,22 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private void refreshLineChart(String cultura_selected_id, String cultura_selected_name) {
 		line_chart.getData().clear();
 		try {
-			XYChart.Series series = new XYChart.Series();
-			for (Medicao medicao : connector.getMedicoesDaCultura(cultura_selected_id)) {
-				series.getData().add(
-						new XYChart.Data(medicao.getData_hora_medicao(), Integer.parseInt(medicao.getId_medicao())));
+			for (LinkedList<Medicao> list_medicoes : connector.getMedicoesDaCulturaByVariable(cultura_selected_id)) {
+				XYChart.Series series = new XYChart.Series();
+				series.setName(list_medicoes.getFirst().getMore_info());
+				for (Medicao medicao : connector.getMedicoesDaCultura(cultura_selected_id)) {
+					series.getData().add(new XYChart.Data(medicao.getData_hora_medicao(),
+
+							Integer.parseInt(medicao.getId_medicao())));
+				}
+				line_chart.getData().add(series);
+
+				Node line = series.getNode().lookup(".chart-series-line");
+				line.setId(list_medicoes.getFirst().getMore_info() + "_stroke_color");
 			}
-			line_chart.getData().add(series);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@FXML

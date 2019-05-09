@@ -354,4 +354,36 @@ public class Connector {
 		return list;
 	}
 
+	/**
+	 * This function returns all Medicao objects in database which are being
+	 * measured by a Cultura, given it's id, separated by variable
+	 *
+	 * @return array of lists of Medicao objects separated by variable
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<LinkedList<Medicao>> getMedicoesDaCulturaByVariable(String cultura_id) throws SQLException {
+		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
+		LinkedList<String> variaveis_medidas_ids = new LinkedList<>();
+		for (VariavelMedida vm : getVariaveisMedidas()) {
+			if (vm.getCultura_fk().equalsIgnoreCase(cultura_id)) {
+				variaveis_medidas_ids.add(vm.getVariavel_fk());
+			}
+		}
+
+		for (Variavel v : getVariaveisDaCultura(cultura_id)) {
+			LinkedList<Medicao> list_medicaoes = new LinkedList<>();
+			for (Medicao m : getMedicoes()) {
+				if (variaveis_medidas_ids.contains(m.getVariavel_medida_fk())
+						&& variaveis_medidas_ids.contains(v.getId_variavel())) {
+					m.setMore_info(v.getNome_variavel());
+					list_medicaoes.add(m);
+				}
+			}
+			list.add(list_medicaoes);
+		}
+		System.out.println(list.size());
+		return list;
+	}
+
 }
