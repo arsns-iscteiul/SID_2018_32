@@ -7,6 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import org.bson.types.ObjectId;
 
@@ -37,6 +44,7 @@ public class MongoJDBCMain {
 	static boolean alertaVermelhoTemperatura=false;
 	static boolean alertaVermelhoLuminosidade=false;
 	static int count =0;
+	static int time=20; 
 	
 	public static void main(String[] args) throws SQLException {
 		
@@ -89,6 +97,29 @@ public class MongoJDBCMain {
 			BasicDBObject theObj = (BasicDBObject) cursor.next();
 			String content = theObj.toString();
 			String DataHora = (theObj).getString("dat") + " " +(theObj).getString("tim");
+			String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+			Date parsedDate;
+			
+			try {
+				parsedDate = sdf.parse(DataHora);
+				System.out.println("PasedDAte:" + parsedDate);
+			SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			System.out.println("Print:" +print.format(parsedDate));
+			// verificar se a data é valida
+			//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+	          //  Date date;
+	            //try {
+					//date = formatter.parse(DataHora);
+		            if(!timeStamp.contains(print.format(parsedDate).toString())) {
+						System.out.println("timestamp:" +timeStamp);
+						System.out.println("erro na data");
+						DataHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+					}
+				
+
+			
 			System.out.println(content);
 			System.out.println(DataHora);
 			int luminosidade = Integer.parseInt((theObj).getString("cell"));
@@ -99,7 +130,6 @@ public class MongoJDBCMain {
 			System.out.println(id);
 			// se ainda nao foi exportado, foiExportado=0
 			if(foiExportado==0) {
-				
 				//criar a medicacao_luminosidade
 				if(luminosidade !=0) {
 			  String query1 = " insert into medicao_luminosidade (Data_Hora_Medicao, Valor_Medicao_Luminosidade)"
@@ -107,7 +137,7 @@ public class MongoJDBCMain {
 
 				      // create the mysql insert preparedstatement
 				      PreparedStatement preparedStmt1 = connection.prepareStatement(query1);
-				      preparedStmt1.setString (1, DataHora);
+				      preparedStmt1.setString (1,  print.format(parsedDate));
 				      preparedStmt1.setDouble(2, luminosidade);
 
 				      // execute the preparedstatement
@@ -118,7 +148,7 @@ public class MongoJDBCMain {
 					        + " values (?, ?)";
 					      // create the mysql insert preparedstatement
 					      PreparedStatement preparedStmt2 = connection.prepareStatement(query2);
-					      preparedStmt2.setString (1, DataHora);
+					      preparedStmt2.setString (1,  print.format(parsedDate));
 					      preparedStmt2.setDouble(2,  temperatura);
 
 					      // execute the preparedstatement
@@ -133,8 +163,10 @@ public class MongoJDBCMain {
 					  	System.out.println("Valor do if:" +(LITemperatura + LITemperatura*0.4));
 					  	
 					  	//decidir se cria o alerta
+					  	String existeAlertaVermelhoTemp = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='temp' AND datahoraalerta > DATE_ADD( \""+ print.format(parsedDate)+"\" , interval 1 minute)";
+					  	 ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
 					  	//alerta Vermelho Temperatura
-					  	if( (temperatura <= (LITemperatura + LITemperatura*0.4)) || (temperatura >= LSTemperatura*0.9)){
+					  	if(rsVermelhoTemp.next()==false && ((temperatura <= (LITemperatura + LITemperatura*0.4)) || (temperatura >= LSTemperatura*0.9))){
 					  		alertaVermelhoTemperatura=true;
 					  		 String alertaVermelhoTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 								        + " values (?, ?, ?, ?, ?, ?, ?)";
@@ -142,6 +174,7 @@ public class MongoJDBCMain {
 								      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaVermelhoTemperatura);
 								      preparedStmt3.setString(1, "temp");
 								      preparedStmt3.setString(2,  "vermelho");
+								      preparedStmt3.setString(3, print.format(parsedDate));
 								      preparedStmt3.setString (3, DataHora);
 								      preparedStmt3.setDouble(4,  temperatura);
 								      preparedStmt3.setString (5, "O valor da temperatura aproxima-se criticamente dos limites");
@@ -155,7 +188,9 @@ public class MongoJDBCMain {
 					  		alertaVermelhoTemperatura=false;
 					  	}
 					  //alerta Vermelho Luminosidade
-					  	if( (luminosidade <= (LILuminosidade + LILuminosidade*0.4)) || (luminosidade >= LSLuminosidade*0.9) ){
+					  	String existeAlertaVermelhoLum = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='lum' AND datahoraalerta > DATE_ADD( \""+ print.format(parsedDate)+"\" , interval 1 minute)";
+					  	 ResultSet rsVermelhoLum = stmt.executeQuery(existeAlertaVermelhoLum);
+					  	if( rsVermelhoLum.next()==false &&(luminosidade <= (LILuminosidade + LILuminosidade*0.4)) || (luminosidade >= LSLuminosidade*0.9) ){
 					  		alertaVermelhoLuminosidade=true;
 					  		String alertaVermelhoLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 								        + " values (?, ?, ?, ?, ?, ?, ?)";
@@ -163,7 +198,7 @@ public class MongoJDBCMain {
 								      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaVermelhoLuminosidade);
 								      preparedStmt3.setString(1, "lum");
 								      preparedStmt3.setString(2,  "vermelho");
-								      preparedStmt3.setString (3, DataHora);
+								      preparedStmt3.setString(3, print.format(parsedDate));
 								      preparedStmt3.setDouble(4,  luminosidade);
 								      preparedStmt3.setString (5, "O valor da luminosidade aproxima-se criticamente dos limites");
 								      preparedStmt3.setDouble(6,  LILuminosidade);
@@ -176,7 +211,9 @@ public class MongoJDBCMain {
 					  		alertaVermelhoLuminosidade=false;
 					  	}
 					  //alerta Laranja Temperatura
-					  	if( (temperatura <= (LITemperatura + LITemperatura*0.8)) &&  (temperatura > (LITemperatura + LITemperatura*0.4)) || (temperatura >= (LSTemperatura*0.8) && temperatura < LSTemperatura*0.9) ){
+					  	String existeAlertaLaranjaTemp = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='temp' AND datahoraalerta > DATE_ADD( \""+ print.format(parsedDate)+"\" , interval 1 minute)";
+					  	 ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
+					  	if(rsLaranjaTemp.next()==false && (temperatura <= (LITemperatura + LITemperatura*0.8)) &&  (temperatura > (LITemperatura + LITemperatura*0.4)) || (temperatura >= (LSTemperatura*0.8) && temperatura < LSTemperatura*0.9) ){
 					  		alertaLaranjaTemperatura=true; 
 					  		String alertaLaranjaTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 								        + " values (?, ?, ?, ?, ?, ?, ?)";
@@ -184,7 +221,7 @@ public class MongoJDBCMain {
 								      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaLaranjaTemperatura);
 								      preparedStmt3.setString(1, "temp");
 								      preparedStmt3.setString(2,  "laranja");
-								      preparedStmt3.setString (3, DataHora);
+								      preparedStmt3.setString(3, print.format(parsedDate));
 								      preparedStmt3.setDouble(4,  temperatura);
 								      preparedStmt3.setString (5, "O valor da temperatura aproxima-se dos limites");
 								      preparedStmt3.setDouble(6,  LITemperatura);
@@ -197,7 +234,9 @@ public class MongoJDBCMain {
 					  		alertaLaranjaTemperatura=false; 
 					  	}
 					  //alerta Laranja Luminosidade
-					  	if( (luminosidade <= (LILuminosidade + LILuminosidade*0.8)) &&  (luminosidade > (LILuminosidade + LILuminosidade*0.4)) || (luminosidade >= (LSLuminosidade*0.8) && luminosidade < LSLuminosidade*0.9) ){
+					 	String existeAlertaLaranjaLum = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='lum' AND datahoraalerta > DATE_ADD( \""+ print.format(parsedDate)+"\" , interval 1 minute)";
+					  	 ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
+					  	if(rsLaranjaLum.next()==false &&(luminosidade <= (LILuminosidade + LILuminosidade*0.8)) &&  (luminosidade > (LILuminosidade + LILuminosidade*0.4)) || (luminosidade >= (LSLuminosidade*0.8) && luminosidade < LSLuminosidade*0.9) ){
 					  		alertaLaranjaLuminosidade=true; 
 					  		String alertaLaranjaLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 								        + " values (?, ?, ?, ?, ?, ?, ?)";
@@ -205,7 +244,7 @@ public class MongoJDBCMain {
 								      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaLaranjaLuminosidade);
 								      preparedStmt3.setString(1, "lum");
 								      preparedStmt3.setString(2,  "laranja");
-								      preparedStmt3.setString (3, DataHora);
+								      preparedStmt3.setString(3, print.format(parsedDate));
 								      preparedStmt3.setDouble(4, luminosidade);
 								      preparedStmt3.setString (5, "O valor da luminosidade aproxima-se dos limites");
 								      preparedStmt3.setDouble(6,  LILuminosidade);
@@ -233,7 +272,7 @@ public class MongoJDBCMain {
 										      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaAmareloTemperatura);
 										      preparedStmt3.setString(1, "temp");
 										      preparedStmt3.setString(2,  "Amarelo");
-										      preparedStmt3.setString (3, DataHora);
+										      preparedStmt3.setString(3, print.format(parsedDate));
 										      preparedStmt3.setDouble(4,  temperatura);
 										      preparedStmt3.setString (5, "Ocorreu um pico de temperatura");
 										      preparedStmt3.setDouble(6,  LITemperatura);
@@ -267,7 +306,7 @@ public class MongoJDBCMain {
 									      PreparedStatement preparedStmt3 = connection.prepareStatement(alertaAmareloLuminosidade);
 									      preparedStmt3.setString(1, "lum");
 									      preparedStmt3.setString(2,  "Amarelo");
-									      preparedStmt3.setString (3, DataHora);
+									      preparedStmt3.setString(3, print.format(parsedDate));
 									      preparedStmt3.setDouble(4,  luminosidade);
 									      preparedStmt3.setString (5, "Ocorreu um pico de luminosidade");
 									      preparedStmt3.setDouble(6,  LILuminosidade);
@@ -287,11 +326,15 @@ public class MongoJDBCMain {
 					  	
 			}
 			
-			
+	            } catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			
 			
 					  	
 		  }
+	            
 		
 		} else {
 		System.out.println("ERROR: Unable to make a database connection!");
