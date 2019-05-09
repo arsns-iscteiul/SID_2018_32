@@ -20,6 +20,10 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
 }
 
+#add_simple_btn{
+	-fx-background-color: transparent;
+}
+
 #cultura_listview {
 	-fx-background-color: transparent;
 }

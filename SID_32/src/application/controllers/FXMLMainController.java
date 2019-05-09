@@ -10,6 +10,9 @@ import application.connector.Connector;
 import application.connector.objects.Cultura;
 import application.connector.objects.Medicao;
 import application.connector.objects.Variavel;
+import application.controllers.popups.FXMLPopUpAddVariableToMonitorizeController;
+import application.controllers.popups.FXMLPopUpShellController;
+import application.support.StageResizeHelper;
 import javafx.animation.ScaleTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,6 +24,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -34,6 +39,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class FXMLMainController extends FXMLController implements Initializable {
@@ -64,6 +71,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		buildLeftPane();
+		buildWelcomingPane();
 		buildLineChart();
 		buildTableView();
 	}
@@ -81,6 +89,10 @@ public class FXMLMainController extends FXMLController implements Initializable 
 			e.printStackTrace();
 			System.out.println("NAO DEU :'(");
 		}
+	}
+
+	private void buildWelcomingPane() {
+
 	}
 
 	private void buildLineChart() {
@@ -200,5 +212,42 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		scaleTransition.setByY(scale);
 		scaleTransition.setByX(scale);
 		scaleTransition.play();
+	}
+
+	@FXML
+	private void addVariableToMonitorize() {
+		FXMLLoader popup_add_variable_to_monitorize_loader = new FXMLLoader(
+				getClass().getResource("/application/views/popups/FXMLPopUpAddVariableToMonitorize.fxml"));
+		FXMLPopUpAddVariableToMonitorizeController popup_add_variable_to_monitorize_controller = new FXMLPopUpAddVariableToMonitorizeController(
+				connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura());
+		buildPopPup("Add variable to monitorize", "PopUpAddVariableToMonitorize",
+				popup_add_variable_to_monitorize_loader, popup_add_variable_to_monitorize_controller);
+	}
+
+	private void buildPopPup(String title_name, String fxml_name, FXMLLoader fxml_loader,
+			FXMLController fxml_controller) {
+		try {
+			FXMLLoader popup_shell_loader = new FXMLLoader(
+					getClass().getResource("/application/views/popups/FXMLPopUpShell.fxml"));
+			FXMLPopUpShellController popup_shell_controller = new FXMLPopUpShellController(connector, title_name);
+			popup_shell_loader.setController(popup_shell_controller);
+
+			Parent popup_shell = popup_shell_loader.load();
+			popup_shell.getStylesheets()
+					.add(getClass().getResource("/application/styles/popups/FXMLPopUpShell.css").toExternalForm());
+
+			Stage popup_stage = new Stage();
+			popup_stage.initModality(Modality.APPLICATION_MODAL);
+			popup_stage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
+			Scene scene = new Scene(popup_shell);
+			scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+			popup_stage.setScene(scene);
+			StageResizeHelper.addResizeListener(popup_stage);
+			popup_stage.show();
+
+			popup_shell_controller.setDisplay(fxml_name, fxml_loader, fxml_controller);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -1,0 +1,23 @@
+
+#variavel_to_add_listview {
+	-fx-background-color: transparent;
+}
+
+#variavel_to_add_listview .list-cell {
+	-fx-background-color: transparent;
+	-fx-text-fill: #000000;
+}
+
+#variavel_to_add_listview .list-cell:selected {
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
+	-fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
+	-fx-background-radius: 60.0;
+	-fx-text-fill: #ffffff;
+	-fx-margin: 10.0;
+}
+
+#ok_btn {
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
+}
