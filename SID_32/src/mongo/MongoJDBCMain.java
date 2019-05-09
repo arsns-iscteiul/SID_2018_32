@@ -259,7 +259,7 @@ public class MongoJDBCMain {
 				  	
 				  	if(alertaAmareloLuminosidade==true && valorAntigoLuminosidade!=0) {
 				  		count++;
-				  		if(count==2) { 
+				  		if(count==2) {  
 					  		if(Math.abs(luminosidade -valorAntigoLuminosidade) >valorXluminosidade){
 					  			 String alertaAmareloLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
 									        + " values (?, ?, ?, ?, ?, ?, ?)";
