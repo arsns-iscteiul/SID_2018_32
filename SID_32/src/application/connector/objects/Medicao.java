@@ -1,6 +1,6 @@
 package application.connector.objects;
 
-public class Medicao {
+public class Medicao{
 
 	private String id_medicao;
 	private String data_hora_medicao;
