@@ -9,7 +9,10 @@ import java.util.ResourceBundle;
 import application.connector.Connector;
 import application.connector.objects.Cultura;
 import application.connector.objects.Medicao;
+import application.connector.objects.MedicaoLuminosidade;
+import application.connector.objects.MedicaoTemperatura;
 import application.connector.objects.Variavel;
+import application.controllers.popups.FXMLPopUpAddManualMeasurementController;
 import application.controllers.popups.FXMLPopUpAddVariableToMonitorizeController;
 import application.controllers.popups.FXMLPopUpShellController;
 import application.support.StageResizeHelper;
@@ -37,7 +40,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -55,7 +57,9 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	@FXML
 	private Label cultura_name_label;
 	@FXML
-	private BorderPane info_pane;
+	private Label temperature_label;
+	@FXML
+	private Label luminosity_label;
 	@FXML
 	private HBox monitorized_variables_hbox;
 	@FXML
@@ -126,6 +130,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 
 	private void refreshCentralPane(Cultura cultura_selected) {
 		refreshCulturaNameLabel(cultura_selected.getNome_cultura());
+		refreshSensorsHBox();
 		refreshMonitorizedVariablesHBox(cultura_selected.getId_cultura());
 		refreshLineChart(cultura_selected.getId_cultura(), cultura_selected.getNome_cultura());
 		refreshTableView(cultura_selected.getId_cultura());
@@ -133,6 +138,34 @@ public class FXMLMainController extends FXMLController implements Initializable 
 
 	private void refreshCulturaNameLabel(String cultura_selected_name) {
 		cultura_name_label.setText(cultura_selected_name);
+	}
+
+	private void refreshSensorsHBox() {
+		try {
+			LinkedList<MedicaoTemperatura> medicoes_temperatura = connector.getMedicoesTemperatura();
+			LinkedList<MedicaoLuminosidade> medicoes_luminosidade = connector.getMedicoesLuminosidade();
+
+			temperature_label.setText(medicoes_temperatura.getLast().getValor_medicao_temperatura());
+			luminosity_label.setText(medicoes_luminosidade.getLast().getValor_medicao_luminosidade());
+
+			if (Double.parseDouble(
+					medicoes_temperatura.get(medicoes_temperatura.size() - 1).getValor_medicao_temperatura()) <= Double
+							.parseDouble(medicoes_temperatura.getLast().getValor_medicao_temperatura())) {
+				temperature_label.setId("up");
+			} else {
+				temperature_label.setId("down");
+			}
+			if (Double.parseDouble(medicoes_luminosidade.get(medicoes_luminosidade.size() - 1)
+					.getValor_medicao_luminosidade()) <= Double
+							.parseDouble(medicoes_luminosidade.getLast().getValor_medicao_luminosidade())) {
+				luminosity_label.setId("up");
+			} else {
+				luminosity_label.setId("down");
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
 	}
 
 	private void refreshMonitorizedVariablesHBox(String cultura_selected_id) {
@@ -222,6 +255,16 @@ public class FXMLMainController extends FXMLController implements Initializable 
 				connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura());
 		buildPopPup("Add variable to monitorize", "PopUpAddVariableToMonitorize",
 				popup_add_variable_to_monitorize_loader, popup_add_variable_to_monitorize_controller);
+	}
+
+	@FXML
+	private void addManualMeasurement() {
+		FXMLLoader popup_add_manual_measurement_loader = new FXMLLoader(
+				getClass().getResource("/application/views/popups/FXMLPopUpAddManualMeasurement.fxml"));
+		FXMLPopUpAddManualMeasurementController popup_add_manual_measurement_controller = new FXMLPopUpAddManualMeasurementController(
+				connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura());
+		buildPopPup("Add manual mesurement", "PopUpAddManualMeasurement", popup_add_manual_measurement_loader,
+				popup_add_manual_measurement_controller);
 	}
 
 	private void buildPopPup(String title_name, String fxml_name, FXMLLoader fxml_loader,

@@ -10,6 +10,8 @@ import java.util.LinkedList;
 
 import application.connector.objects.Cultura;
 import application.connector.objects.Medicao;
+import application.connector.objects.MedicaoLuminosidade;
+import application.connector.objects.MedicaoTemperatura;
 import application.connector.objects.Variavel;
 import application.connector.objects.VariavelMedida;
 
@@ -302,6 +304,30 @@ public class Connector {
 			String valor_medicao = variaveis[2].get(i);
 			String variavel_medida_fk = variaveis[3].get(i);
 			list.add(new Medicao(id_medicao, data_hora_medicao, valor_medicao, variavel_medida_fk));
+		}
+		return list;
+	}
+
+	public LinkedList<MedicaoTemperatura> getMedicoesTemperatura() throws SQLException {
+		LinkedList<String>[] medicoes_temperatura = allTableData("medicao_temperatura");
+		LinkedList<MedicaoTemperatura> list = new LinkedList<>();
+		for (int i = 0; i != medicoes_temperatura[0].size(); i++) {
+			String id_medicao_temperatura = medicoes_temperatura[0].get(i);
+			String data_hora_medicao = medicoes_temperatura[1].get(i);
+			String valor_medicao_temperatura = medicoes_temperatura[2].get(i);
+			list.add(new MedicaoTemperatura(id_medicao_temperatura, data_hora_medicao, valor_medicao_temperatura));
+		}
+		return list;
+	}
+
+	public LinkedList<MedicaoLuminosidade> getMedicoesLuminosidade() throws SQLException {
+		LinkedList<String>[] medicoes_luminosidade = allTableData("medicao_luminosidade");
+		LinkedList<MedicaoLuminosidade> list = new LinkedList<>();
+		for (int i = 0; i != medicoes_luminosidade[0].size(); i++) {
+			String id_medicao_luminosidade = medicoes_luminosidade[0].get(i);
+			String data_hora_medicao = medicoes_luminosidade[1].get(i);
+			String valor_medicao_luminosidade = medicoes_luminosidade[2].get(i);
+			list.add(new MedicaoLuminosidade(id_medicao_luminosidade, data_hora_medicao, valor_medicao_luminosidade));
 		}
 		return list;
 	}

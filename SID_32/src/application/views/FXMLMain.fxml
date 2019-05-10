@@ -87,14 +87,14 @@
 														</ImageView>
 													</top>
 													<bottom>
-														<Label text="Average Temperature" BorderPane.alignment="CENTER">
+														<Label text="Last Temperature Mesured" BorderPane.alignment="CENTER">
 															<BorderPane.margin>
 																<Insets />
 															</BorderPane.margin>
 														</Label>
 													</bottom>
 													<center>
-														<Label text="15ºC" BorderPane.alignment="CENTER">
+														<Label fx:id="temperature_label" text="15ºC" BorderPane.alignment="CENTER">
 															<font>
 																<Font name="System Bold" size="18.0" />
 															</font>
@@ -116,14 +116,14 @@
 												</BorderPane>
 												<BorderPane id="info_pane" layoutX="10.0" layoutY="10.0" minHeight="150.0" minWidth="150.0" onMouseEntered="#setOnMouseEntered_info_pane" onMouseExited="#setOnMouseExited_info_pane" prefHeight="150.0" prefWidth="150.0">
 													<bottom>
-														<Label text="Average Luminosity" BorderPane.alignment="CENTER">
+														<Label text="Last Luminosity Mesured" BorderPane.alignment="CENTER">
 															<BorderPane.margin>
 																<Insets />
 															</BorderPane.margin>
 														</Label>
 													</bottom>
 													<center>
-														<Label text="0.5%" BorderPane.alignment="CENTER">
+														<Label fx:id="luminosity_label" text="0.5%" BorderPane.alignment="CENTER">
 															<font>
 																<Font name="System Bold" size="18.0" />
 															</font>
@@ -198,7 +198,7 @@
 														<Font name="System Bold" size="18.0" />
 													</font>
 												</Label>
-												<Button id="add_simple_btn" alignment="CENTER_RIGHT" mnemonicParsing="false" textFill="WHITE">
+												<Button id="add_simple_btn" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#addManualMeasurement" textFill="WHITE">
 													<cursor>
 														<Cursor fx:constant="HAND" />
 													</cursor>

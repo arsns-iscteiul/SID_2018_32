@@ -49,6 +49,14 @@
 	-fx-effect: dropshadow(gaussian, #afafaf, 40.0, 0.0, 0.0, 14.0);
 }
 
+#up {
+	-fx-graphic: url("/application/media/icons/doubleup_black_20px.png");
+}
+
+#down {
+	-fx-graphic: url("/application/media/icons/doubledown_black_20px.png");
+}
+
 /* <VARIABLES> */
 #pH {
 	-fx-graphic: url("/application/media/icons/variablepH_pink_32px.png");
