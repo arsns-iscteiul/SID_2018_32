@@ -9,11 +9,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.bson.types.ObjectId;
 
@@ -21,18 +27,18 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
 public class MongoJDBCMain {
-	
+
 	static double LITemperatura;
 	static double LSTemperatura;
 	static double LILuminosidade;
 	static double LSLuminosidade;
 	static double valorXtemperatura;
 	static double valorXluminosidade;
+<<<<<<< HEAD
 	static double valorAntigoTemperatura;
 	static double valorAntigoLuminosidade;
 	static double valorAnomaloTemperatura;
@@ -62,47 +68,41 @@ public class MongoJDBCMain {
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet result = null;
+=======
+	static double valorAntigoTemperatura =0;
+	static double valorAntigoLuminosidade=0;
+	static double valorAnomaloTemperatura=0;
+	static double valorAnomaloLuminosidade=0;
+	static boolean alertaAmareloTemperatura = false;
+	static boolean alertaAmareloLuminosidade = false;
+	static boolean alertaLaranjaTemperatura = false;
+	static boolean alertaLaranjaLuminosidade = false;
+	static boolean alertaVermelhoTemperatura = false;
+	static boolean alertaVermelhoLuminosidade = false;
+	static boolean pico = false;
+	static int count = 0;
+	static int time = 20000;
+
+	public static void main(String[] args) throws SQLException {
+>>>>>>> branch 'master' of https://github.com/arsns-iscteiul/SID_2018_32.git
 
 		try {
-		Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-		System.out.println("ERROR: Unable to load SQLServer JDBC Driver");
-		e.printStackTrace();
-		return;
-		}
-		System.out.println("MainDB JDBC Driver has been registered...");
+			// ligar-se ao mongo
+			MongoClient mongoClient = new MongoClient();
+			mongoClient.getDatabaseNames().forEach(System.out::println);
+			DB db = mongoClient.getDB("sensores");
+			DBCollection collection = db.getCollection("sensor");
 
-		System.out.println("Trying to get a connection to the database...");
-		try {
-		connection = DriverManager.getConnection(database_url, username, password);
-		} catch (SQLException e) {
-		System.out.println("ERROR: Unable to establish a connection with the database!");
-		e.printStackTrace();
-		return;
-		}
+			// ligar-se à base de dados Main
+			String database_url = "jdbc:mysql://localhost:3307/main";
+			String username = "root";
+			String password = "teste123";
+			Connection connection = null;
+			Statement statement = null;
+			ResultSet result = null;
 
-		if (connection != null) {
-		DatabaseMetaData metadata = connection.getMetaData();
-		System.out.println("Connection to the database has been established...");
-		System.out.println("JDBC Driver Name : " + metadata.getDriverName());
-		System.out.println("JDBC Driver Version : " + metadata.getDriverVersion());
-		
-		//depois de ligação feita com sucesso vai buscar os limites do sistema
-		 Statement stmt = null;
-		  stmt = connection.createStatement();
-		  ObterLimites(stmt);
-		
-		DBCursor cursor = collection.find();
-		while(cursor.hasNext()) {
-			BasicDBObject theObj = (BasicDBObject) cursor.next();
-			String content = theObj.toString();
-			String DataHora = (theObj).getString("dat") + " " +(theObj).getString("tim");
-			String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
-			Date parsedDate;
-			
 			try {
+<<<<<<< HEAD
 				parsedDate = sdf.parse(DataHora);
 				System.out.println("PasedDAte:" + parsedDate);
 			SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -324,62 +324,500 @@ public class MongoJDBCMain {
 				  	}
 					  
 					  	
+=======
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				System.out.println("ERROR: Unable to load SQLServer JDBC Driver");
+				e.printStackTrace();
+				return;
+>>>>>>> branch 'master' of https://github.com/arsns-iscteiul/SID_2018_32.git
 			}
-			
-	            } catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			System.out.println("MainDB JDBC Driver has been registered...");
+
+			System.out.println("Trying to get a connection to the database...");
+			try {
+				connection = DriverManager.getConnection(database_url, username, password);
+			} catch (SQLException e) {
+				System.out.println("ERROR: Unable to establish a connection with the database!");
+				e.printStackTrace();
+				return;
+			}
+
+			if (connection != null) {
+				DatabaseMetaData metadata = connection.getMetaData();
+				System.out.println("Connection to the database has been established...");
+				System.out.println("JDBC Driver Name : " + metadata.getDriverName());
+				System.out.println("JDBC Driver Version : " + metadata.getDriverVersion());
+
+				// depois de ligação feita com sucesso vai buscar os limites do sistema
+				Statement stmt = null;
+				stmt = connection.createStatement();
+				ObterLimites(stmt);
+
+				DBCursor cursor = collection.find();
+				while (cursor.hasNext()) {
+					BasicDBObject theObj = (BasicDBObject) cursor.next();
+					String content = theObj.toString();
+					System.out.println(content);
+					String DataHora = (theObj).getString("dat") + " " + (theObj).getString("tim");
+					String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+					SimpleDateFormat sodia = new SimpleDateFormat("dd-MM-yyyy");
+					Date parsedDate;
+					Date diaDate;
+					// verificar se a data é valida
+					try {
+
+						diaDate = sdf.parse(DataHora);
+						System.out.println("Dia" + sodia.format(diaDate));
+
+						if (!timeStamp.contains(sodia.format(diaDate))) {
+							System.out.println("timestamp:" + timeStamp);
+							System.out.println("erro na data");
+							DataHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+									.format(Calendar.getInstance().getTime());
+						}
+						parsedDate = sdf.parse(DataHora);
+						SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						int luminosidade = Integer.parseInt((theObj).getString("cell"));
+						double temperatura = Double.parseDouble((theObj).getString("tmp"));
+						String id = (theObj).getString("_id");
+						int foiExportado = Integer.parseInt((theObj).getString("exported"));
+						// se ainda nao foi exportado, foiExportado=0
+						if (foiExportado == 0) {
+							// criar a medicacao_luminosidade
+							if (luminosidade != 0) {
+								String query1 = " insert into medicao_luminosidade (Data_Hora_Medicao, Valor_Medicao_Luminosidade)"
+										+ " values (?, ?)";
+
+								// create the mysql insert preparedstatement
+								PreparedStatement preparedStmt1 = connection.prepareStatement(query1);
+								preparedStmt1.setString(1, print.format(parsedDate));
+								preparedStmt1.setDouble(2, luminosidade);
+
+								// execute the preparedstatement
+								preparedStmt1.execute();
+							}
+							// criar a medicacao_temperatura
+							String query2 = " insert into medicao_temperatura (Data_Hora_Medicao, Valor_Medicao_Temperatura)"
+									+ " values (?, ?)";
+							// create the mysql insert preparedstatement
+							PreparedStatement preparedStmt2 = connection.prepareStatement(query2);
+							preparedStmt2.setString(1, print.format(parsedDate));
+							preparedStmt2.setDouble(2, temperatura);
+
+							// execute the preparedstatement
+							preparedStmt2.execute();
+
+							// colocar foiExportado=1
+							BasicDBObject newDocument = new BasicDBObject();
+							newDocument.append("$set", new BasicDBObject().append("exported", 1));
+							BasicDBObject searchQuery = new BasicDBObject().append("_id", new ObjectId(id));
+							collection.update(searchQuery, newDocument);
+							System.out.println("Valor da temperatura:" + temperatura);
+							System.out.println("Valor do if:" + (LITemperatura + LITemperatura * 0.4));
+
+							// decidir se cria o alerta
+							criaAlertaTemperatura(temperatura, print.format(parsedDate), connection, stmt);
+							criaAlertaLuminosidade(luminosidade, print.format(parsedDate), connection, stmt);
+						}
+
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
-			
-			
-					  	
-		  }
-	            
-		
-		} else {
-		System.out.println("ERROR: Unable to make a database connection!");
-		}
 
-		System.out.println("Trying to get a list of all entrys in sensor collection...");
-		try {
-		statement = connection.createStatement();
+			} else {
+				System.out.println("ERROR: Unable to make a database connection!");
+			}
 
-		} finally {
-		System.out.println("Closing all open resources...");
-		if (result != null) result.close();
-		if (statement != null) statement.close();
-		if (connection != null) connection.close();
+			System.out.println("Trying to get a list of all entrys in sensor collection...");
+			try {
+				statement = connection.createStatement();
+
+			} finally {
+				System.out.println("Closing all open resources...");
+				if (result != null)
+					result.close();
+				if (statement != null)
+					statement.close();
+				if (connection != null)
+					connection.close();
+			}
+
+		} catch (MongoException e) {
+			e.printStackTrace();
 		}
-		
-		
-	} catch (MongoException e) {
-		e.printStackTrace();
 	}
-	}
-	
-	
+
 	private static void ObterLimites(Statement stmt) throws SQLException {
 		// TODO Auto-generated method stub
-		 String sql = "SELECT Limite_Inferior_Temperatura,Limite_Superior_Temperatura, Limite_Inferior_Luminosidade,Limite_Superior_Luminosidade FROM Sistema";
-	      ResultSet rs = stmt.executeQuery(sql);
-	      //STEP 5: Extract data from result set
-	      while(rs.next()){
-	         //Retrieve by column name
-	         LITemperatura = rs.getDouble("Limite_Inferior_Temperatura");
-	         LSTemperatura = rs.getDouble("Limite_Superior_Temperatura");
-	         LILuminosidade = rs.getDouble("Limite_Inferior_Luminosidade");
-	         LSLuminosidade = rs.getDouble("Limite_Superior_Luminosidade");
-	         valorXtemperatura= (LSTemperatura- LITemperatura)/2;
-	         valorXluminosidade= (LSLuminosidade -LILuminosidade)/2;
+		String sql = "SELECT Limite_Inferior_Temperatura,Limite_Superior_Temperatura, Limite_Inferior_Luminosidade,Limite_Superior_Luminosidade FROM Sistema";
+		ResultSet rs = stmt.executeQuery(sql);
+		// STEP 5: Extract data from result set
+		while (rs.next()) {
+			// Retrieve by column name
+			LITemperatura = rs.getDouble("Limite_Inferior_Temperatura");
+			LSTemperatura = rs.getDouble("Limite_Superior_Temperatura");
+			LILuminosidade = rs.getDouble("Limite_Inferior_Luminosidade");
+			LSLuminosidade = rs.getDouble("Limite_Superior_Luminosidade");
+			valorXtemperatura = (LSTemperatura - LITemperatura) / 2;
+			valorXluminosidade = (LSLuminosidade - LILuminosidade) / 2;
 
-	         //Display values
-	         System.out.print("LITemperatura: " +  LITemperatura);
-	         System.out.print(", LSTemperatura: " + LSTemperatura);
-	         System.out.print(", LILuminosidade: " + LILuminosidade);
-	         System.out.println(", LSLuminosidade: " + LSLuminosidade);
-	      }
-	      rs.close();
+			// Display values
+			System.out.print("LITemperatura: " + LITemperatura);
+			System.out.print(", LSTemperatura: " + LSTemperatura);
+			System.out.print(", LILuminosidade: " + LILuminosidade);
+			System.out.println(", LSLuminosidade: " + LSLuminosidade);
+		}
+		rs.close();
 	}
-	
 
+	private static void criaAlertaTemperatura(double temperatura, String date, Connection connection, Statement stmt)
+			throws SQLException {
+		// alerta Vermelho Temperatura
+		String existeAlertaVermelhoTemp = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
+				+ date + "\" , interval 1 minute)";
+		ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
+		if (rsVermelhoTemp.next() == false
+				&& ((temperatura <= (LITemperatura + LITemperatura * 0.4)) || (temperatura >= LSTemperatura * 0.9))) {
+			alertaVermelhoTemperatura = true;
+			String alertaVermelhoTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+					+ " values (?, ?, ?, ?, ?, ?, ?)";
+			// create the mysql insert preparedstatement
+			PreparedStatement preparedStmt3 = connection.prepareStatement(alertaVermelhoTemperatura);
+			preparedStmt3.setString(1, "temp");
+			preparedStmt3.setString(2, "vermelho");
+			preparedStmt3.setString(3, date);
+			preparedStmt3.setDouble(4, temperatura);
+			preparedStmt3.setString(5, "O valor da temperatura aproxima-se criticamente dos limites");
+			preparedStmt3.setDouble(6, LITemperatura);
+			preparedStmt3.setDouble(7, LSTemperatura);
+
+			// execute the preparedstatement
+			preparedStmt3.execute();
+
+			String investigadores = "SELECT * FROM main.investigador";
+			ResultSet inves = stmt.executeQuery(investigadores);
+			while (inves.next()) {
+				String invest = inves.getNString("Email_Investigador");
+				System.out.println("Investigador" + invest);
+				sendEmails(invest, "Alerta Vermelho Temperatura", "Valor da temperatura" + temperatura);
+			}
+			inves.close();
+
+		} else {
+			alertaVermelhoTemperatura = false;
+		}
+
+		// alerta Laranja Temperatura
+		String existeAlertaLaranjaTemp = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
+				+ date + "\" , interval 1 minute)";
+		ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
+		if (rsLaranjaTemp.next() == false && (temperatura <= (LITemperatura + LITemperatura * 0.8))
+				&& (temperatura > (LITemperatura + LITemperatura * 0.4))
+				|| (temperatura >= (LSTemperatura * 0.8) && temperatura < LSTemperatura * 0.9)) {
+			alertaLaranjaTemperatura = true;
+			String alertaLaranjaTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+					+ " values (?, ?, ?, ?, ?, ?, ?)";
+			// create the mysql insert preparedstatement
+			PreparedStatement preparedStmt3 = connection.prepareStatement(alertaLaranjaTemperatura);
+			preparedStmt3.setString(1, "temp");
+			preparedStmt3.setString(2, "laranja");
+			preparedStmt3.setString(3, date);
+			preparedStmt3.setDouble(4,temperatura);
+			preparedStmt3.setString(5, "O valor da temperatura aproxima-se dos limites");
+			preparedStmt3.setDouble(6, LITemperatura);
+			preparedStmt3.setDouble(7, LSTemperatura);
+
+			// execute the preparedstatement
+			preparedStmt3.execute();
+
+			String investigadores = "SELECT * FROM main.investigador";
+			ResultSet inves = stmt.executeQuery(investigadores);
+			while (inves.next()) {
+				String invest = inves.getNString("Email_Investigador");
+				System.out.println("Investigador" + invest);
+				sendEmails(invest, "Alerta Laranja Temperatura", "Valor da temperatura" + temperatura);
+			}
+			inves.close();
+
+		} else {
+			alertaLaranjaTemperatura = false;
+		}
+
+		// Detetar picos
+		if (Math.abs(temperatura - valorAntigoTemperatura) > valorXtemperatura && pico == false
+				&& valorAntigoTemperatura!=0) {
+			pico = true;
+			valorAnomaloTemperatura = temperatura;
+			new Thread() {
+				
+				@Override
+				public void run() {
+					try {
+						sleep(time);
+						String mysql = "SELECT * FROM medicao_temperatura where Id_Medicao_Temperatura =(Select MAX(Id_Medicao_Temperatura) from medicao_temperatura)";
+						ResultSet rs = stmt.executeQuery(mysql);
+						Double valorAtualTemperatura = rs.getDouble("Valor_Medicao_Temperatura");
+						rs.close();
+						if (Math.abs(valorAtualTemperatura - valorAntigoTemperatura) > valorXtemperatura) {
+							// alerta Vermelho Temperatura
+							String existeAlertaVermelhoTemp = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
+									+ date + "\" , interval 1 minute)";
+							ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
+							if (rsVermelhoTemp.next() == false
+									&& ((valorAtualTemperatura <= (LITemperatura + LITemperatura * 0.4)) || (valorAtualTemperatura >= LSTemperatura * 0.9))) {
+								alertaVermelhoTemperatura = true;
+								String alertaVermelhoTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+										+ " values (?, ?, ?, ?, ?, ?, ?)";
+								// create the mysql insert preparedstatement
+								PreparedStatement preparedStmt3 = connection.prepareStatement(alertaVermelhoTemperatura);
+								preparedStmt3.setString(1, "temp");
+								preparedStmt3.setString(2, "vermelho");
+								preparedStmt3.setString(3, date);
+								preparedStmt3.setDouble(4, valorAtualTemperatura);
+								preparedStmt3.setString(5, "O valor da temperatura aproxima-se criticamente dos limites");
+								preparedStmt3.setDouble(6, LITemperatura);
+								preparedStmt3.setDouble(7, LSTemperatura);
+
+								// execute the preparedstatement
+								preparedStmt3.execute();
+
+								String investigadores = "SELECT * FROM main.investigador";
+								ResultSet inves = stmt.executeQuery(investigadores);
+								while (inves.next()) {
+									String invest = inves.getNString("Email_Investigador");
+									System.out.println("Investigador" + invest);
+									sendEmails(invest, "Alerta Vermelho Temperatura", "Valor da temperatura" + valorAtualTemperatura);
+								}
+								inves.close();
+
+							} else {
+								alertaVermelhoTemperatura = false;
+							}
+
+							// alerta Laranja Temperatura
+							String existeAlertaLaranjaTemp = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
+									+ date + "\" , interval 1 minute)";
+							ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
+							if (rsLaranjaTemp.next() == false && (temperatura <= (LITemperatura + LITemperatura * 0.8))
+									&& (valorAtualTemperatura > (LITemperatura + LITemperatura * 0.4))
+									|| (valorAtualTemperatura >= (LSTemperatura * 0.8) && valorAtualTemperatura < LSTemperatura * 0.9)) {
+								alertaLaranjaTemperatura = true;
+								String alertaLaranjaTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+										+ " values (?, ?, ?, ?, ?, ?, ?)";
+								// create the mysql insert preparedstatement
+								PreparedStatement preparedStmt3 = connection.prepareStatement(alertaLaranjaTemperatura);
+								preparedStmt3.setString(1, "temp");
+								preparedStmt3.setString(2, "laranja");
+								preparedStmt3.setString(3, date);
+								preparedStmt3.setDouble(4, valorAtualTemperatura);
+								preparedStmt3.setString(5, "O valor da temperatura aproxima-se dos limites");
+								preparedStmt3.setDouble(6, LITemperatura);
+								preparedStmt3.setDouble(7, LSTemperatura);
+
+								// execute the preparedstatement
+								preparedStmt3.execute();
+
+								String investigadores = "SELECT * FROM main.investigador";
+								ResultSet inves = stmt.executeQuery(investigadores);
+								while (inves.next()) {
+									String invest = inves.getNString("Email_Investigador");
+									System.out.println("Investigador" + invest);
+									sendEmails(invest, "Alerta Laranja Temperatura", "Valor da temperatura" + valorAtualTemperatura);
+								}
+								inves.close();
+
+							} else {
+								alertaLaranjaTemperatura = false;
+							}
+							if(alertaLaranjaTemperatura==false && alertaVermelhoTemperatura==false) {
+								String alertaAmareloTemperatura = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+										+ " values (?, ?, ?, ?, ?, ?, ?)";
+								// create the mysql insert preparedstatement
+								PreparedStatement preparedStmt3 = connection.prepareStatement(alertaAmareloTemperatura);
+								preparedStmt3.setString(1, "temp");
+								preparedStmt3.setString(2, "Amarelo");
+								preparedStmt3.setString(3, date);
+								preparedStmt3.setDouble(4, valorAtualTemperatura);
+								preparedStmt3.setString(5, "Ocorreu um pico de temperatura");
+								preparedStmt3.setDouble(6, LITemperatura);
+								preparedStmt3.setDouble(7, LSTemperatura);
+	
+								// execute the preparedstatement
+								preparedStmt3.execute();
+								
+								String investigadores = "SELECT * FROM main.investigador";
+								ResultSet inves = stmt.executeQuery(investigadores);
+								while (inves.next()) {
+									String invest = inves.getNString("Email_Investigador");
+									System.out.println("Investigador" + invest);
+									sendEmails(invest, "Alerta Amarelo Temperatura", "Valor da temperatura" + valorAtualTemperatura);
+								}
+								inves.close();
+							}
+						}else{
+							pico = false;
+						}
+						
+					} catch (InterruptedException e) {
+						System.out.println("esta tudo bem ;)");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}.start();
+		}else{
+			valorAntigoTemperatura=temperatura;
+		}
+
+	}
+
+	private static void criaAlertaLuminosidade(double luminosidade, String date, Connection connection, Statement stmt)
+			throws SQLException {
+		// alerta Vermelho Luminosidade
+		String existeAlertaVermelhoLum = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
+				+ date + "\" , interval 1 minute)";
+		ResultSet rsVermelhoLum = stmt.executeQuery(existeAlertaVermelhoLum);
+		if (rsVermelhoLum.next() == false && (luminosidade <= (LILuminosidade + LILuminosidade * 0.4))
+				|| (luminosidade >= LSLuminosidade * 0.9)) {
+			alertaVermelhoLuminosidade = true;
+			String alertaVermelhoLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+					+ " values (?, ?, ?, ?, ?, ?, ?)";
+			// create the mysql insert preparedstatement
+			PreparedStatement preparedStmt3 = connection.prepareStatement(alertaVermelhoLuminosidade);
+			preparedStmt3.setString(1, "lum");
+			preparedStmt3.setString(2, "vermelho");
+			preparedStmt3.setString(3, date);
+			preparedStmt3.setDouble(4, luminosidade);
+			preparedStmt3.setString(5, "O valor da luminosidade aproxima-se criticamente dos limites");
+			preparedStmt3.setDouble(6, LILuminosidade);
+			preparedStmt3.setDouble(7, LSLuminosidade);
+
+			// execute the preparedstatement
+			preparedStmt3.execute();
+
+			String investigadores = "SELECT * FROM main.investigador";
+			ResultSet inves = stmt.executeQuery(investigadores);
+			while (inves.next()) {
+				String invest = inves.getNString("Email_Investigador");
+				System.out.println("Investigador" + invest);
+				sendEmails(invest, "Alerta Vermelho Luminosidade", "Valor da luminosidade" + luminosidade);
+			}
+			inves.close();
+
+		} else {
+			alertaVermelhoLuminosidade = false;
+		}
+
+		// alerta Laranja Luminosidade
+		String existeAlertaLaranjaLum = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
+				+ date + "\" , interval 1 minute)";
+		ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
+		if (rsLaranjaLum.next() == false && (luminosidade <= (LILuminosidade + LILuminosidade * 0.8))
+				&& (luminosidade > (LILuminosidade + LILuminosidade * 0.4))
+				|| (luminosidade >= (LSLuminosidade * 0.8) && luminosidade < LSLuminosidade * 0.9)) {
+			alertaLaranjaLuminosidade = true;
+			String alertaLaranjaLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+					+ " values (?, ?, ?, ?, ?, ?, ?)";
+			// create the mysql insert preparedstatement
+			PreparedStatement preparedStmt3 = connection.prepareStatement(alertaLaranjaLuminosidade);
+			preparedStmt3.setString(1, "lum");
+			preparedStmt3.setString(2, "laranja");
+			preparedStmt3.setString(3, date);
+			preparedStmt3.setDouble(4, luminosidade);
+			preparedStmt3.setString(5, "O valor da luminosidade aproxima-se dos limites");
+			preparedStmt3.setDouble(6, LILuminosidade);
+			preparedStmt3.setDouble(7, LSLuminosidade);
+
+			// execute the preparedstatement
+			preparedStmt3.execute();
+
+			String investigadores = "SELECT * FROM main.investigador";
+			ResultSet inves = stmt.executeQuery(investigadores);
+			while (inves.next()) {
+				String invest = inves.getNString("Email_Investigador");
+				System.out.println("Investigador" + invest);
+				sendEmails(invest, "Alerta Laranja Luminosidade", "Valor da luminosidade" + luminosidade);
+			}
+			inves.close();
+
+		} else {
+			alertaLaranjaLuminosidade = false;
+		}
+
+		// alerta Amarelo Luminosidade
+		if (Math.abs(luminosidade - valorAntigoLuminosidade) > valorXluminosidade && alertaAmareloLuminosidade == false
+				&& alertaVermelhoLuminosidade == false && alertaLaranjaLuminosidade == false) {
+			alertaAmareloLuminosidade = true;
+			valorAnomaloLuminosidade = luminosidade;
+		}
+
+		if (alertaAmareloLuminosidade == true && valorAntigoLuminosidade != 0) {
+			count++;
+			if (count == 2) {
+				if (Math.abs(luminosidade - valorAntigoLuminosidade) > valorXluminosidade) {
+					String alertaAmareloLuminosidade = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
+							+ " values (?, ?, ?, ?, ?, ?, ?)";
+					// create the mysql insert preparedstatement
+					PreparedStatement preparedStmt3 = connection.prepareStatement(alertaAmareloLuminosidade);
+					preparedStmt3.setString(1, "lum");
+					preparedStmt3.setString(2, "Amarelo");
+					preparedStmt3.setString(3, date);
+					preparedStmt3.setDouble(4, luminosidade);
+					preparedStmt3.setString(5, "Ocorreu um pico de luminosidade");
+					preparedStmt3.setDouble(6, LILuminosidade);
+					preparedStmt3.setDouble(7, LSLuminosidade);
+
+					// execute the preparedstatement
+					preparedStmt3.execute();
+				} else {
+					alertaAmareloLuminosidade = false;
+					count = 0;
+				}
+			}
+		} else {
+			valorAntigoLuminosidade = luminosidade;
+		}
+
+	}
+
+	public static boolean sendEmails(String to, String sub, String text) {
+		System.out.println(to + sub + text);
+		// Sender's email ID needs to be mentioned
+
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "outlook.office365.com");
+		props.put("mail.smtp.port", "587");
+
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication("es1g1@outlook.com", "grupo1grupo");
+			}
+		});
+
+		try {
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("es1g1@outlook.com"));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+			message.setSubject(sub);
+			message.setText(text);
+
+			Transport.send(message);
+
+			System.out.println("Done");
+			System.out.println("Sent message successfully....");
+			return true;
+		} catch (MessagingException mex) {
+			mex.printStackTrace();
+			return false;
+		}
+	}
 }

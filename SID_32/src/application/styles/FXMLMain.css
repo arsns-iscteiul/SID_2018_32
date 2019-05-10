@@ -1,0 +1,97 @@
+#left {
+	-fx-background-color: #252525;
+}
+
+#center_scrollpane {
+	-fx-background-color: #ffffff;
+}
+
+#center_scrollpane > .viewport, .corner {
+	-fx-background-color: transparent;
+}
+
+#profile_image_btn {
+	-fx-background-color: transparent;
+}
+
+#add_cultura_btn {
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
+}
+
+#add_simple_btn{
+	-fx-background-color: transparent;
+}
+
+#cultura_listview {
+	-fx-background-color: transparent;
+}
+
+#cultura_listview .list-cell {
+	-fx-background-color: transparent;
+	-fx-text-fill: white;
+}
+
+#cultura_listview .list-cell:selected {
+	-fx-background-color: #2f2f2f;
+	-fx-effect: dropshadow(three-pass-box, rgba(0.0,0.0,0.0,0.8), 10.0, 0.0, 0.0, 0.0);
+	-fx-text-fill: white;
+	-fx-margin: 10.0;
+}
+
+#info_pane {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 8.0;
+}
+
+#info_pane:hover {
+	-fx-effect: dropshadow(gaussian, #afafaf, 40.0, 0.0, 0.0, 14.0);
+}
+
+#up {
+	-fx-graphic: url("/application/media/icons/doubleup_black_20px.png");
+}
+
+#down {
+	-fx-graphic: url("/application/media/icons/doubledown_black_20px.png");
+}
+
+/* <VARIABLES> */
+#pH {
+	-fx-graphic: url("/application/media/icons/variablepH_pink_32px.png");
+}
+
+#pH_stroke_color, .default-color0.chart-line-symbol, .default-color1.chart-line-symbol, .default-color2.chart-line-symbol, .default-color3.chart-line-symbol {
+	-fx-stroke: #ff2d55;
+	-fx-background-color: #ff2d55, #ffffff;
+}
+
+#CO2 {
+	-fx-graphic: url("/application/media/icons/variableCO2_orange_32px.png");
+}
+
+#CO2_stroke_color, .default-color1.chart-line-symbol, .default-color2.chart-line-symbol, .default-color3.chart-line-symbol{
+	-fx-stroke: #5856d6;
+	-fx-background-color: #5856d6, #ffffff;
+}
+
+#H2O {
+	-fx-graphic: url("/application/media/icons/variableH2O_blue_32px.png");
+}
+
+#H2O_stroke_color, .default-color2.chart-line-symbol, .default-color3.chart-line-symbol {
+	-fx-stroke: #007aff;
+	-fx-background-color: #007aff, #ffffff;
+}
+
+#O2 {
+	-fx-graphic: url("/application/media/icons/variableO2_lightblue_32px.png");
+}
+
+#O2_stroke_color, .default-color3.chart-line-symbol {
+	-fx-stroke: #5ac8fa;
+	-fx-background-color: #5ac8fa, #ffffff;
+}
+
+/* <VARIABLES/> */
