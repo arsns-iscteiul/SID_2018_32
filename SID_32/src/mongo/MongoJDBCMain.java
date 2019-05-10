@@ -289,7 +289,7 @@ public class MongoJDBCMain {
 					  		valorAntigoTemperatura=temperatura;
 					  	}
 						
-					  //alerta Amarelo Luminosidade
+					  //alerta Amarelo Luminosidade 
 					  	
 					  	if(Math.abs(temperatura - valorAntigoTemperatura) > valorXtemperatura && alertaAmareloTemperatura==false && alertaVermelhoTemperatura==false && alertaLaranjaTemperatura==false) {
 					  		alertaAmareloTemperatura=true;
