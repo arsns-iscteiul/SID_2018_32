@@ -7,6 +7,6 @@ public class Main {
 		insert.testeMqtt();
 		ExportingThread export = new ExportingThread();
 		export.start();  
-	}  
+	}   
 	  
 }
