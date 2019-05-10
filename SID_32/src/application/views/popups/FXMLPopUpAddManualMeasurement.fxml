@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="220.0" minWidth="460.0" pickOnBounds="false" prefHeight="220.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<VBox alignment="CENTER" layoutX="32.0" layoutY="132.0" prefHeight="248.0" prefWidth="380.0" spacing="40.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+			<children>
+				<VBox alignment="CENTER" layoutX="28.0" layoutY="12.0" spacing="10.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+					<children>
+						<HBox id="container" alignment="CENTER_LEFT" layoutX="50.0" layoutY="37.0" maxWidth="300.0" prefHeight="32.0" prefWidth="300.0" spacing="10.0">
+							<children>
+								<ChoiceBox id="variable_choice_box" fx:id="variable_choice_box" prefHeight="25.0" prefWidth="270.0" />
+							</children>
+							<padding>
+								<Insets left="20.0" />
+							</padding>
+						</HBox>
+						<HBox id="container" alignment="CENTER_LEFT" maxWidth="300.0" prefHeight="32.0" prefWidth="300.0" spacing="10.0">
+							<children>
+								<Label text="Value" />
+								<TextField id="field" fx:id="email_field" alignment="TOP_LEFT" prefHeight="25.0" prefWidth="200.0" promptText="00.00" />
+							</children>
+							<padding>
+								<Insets left="20.0" />
+							</padding>
+						</HBox>
+						<Button id="login_btn" alignment="CENTER" maxWidth="300.0" mnemonicParsing="false" prefWidth="300.0" text="OK" textAlignment="CENTER" textFill="WHITE">
+							<cursor>
+								<Cursor fx:constant="HAND" />
+							</cursor>
+						</Button>
+					</children>
+				</VBox>
+			</children>
+		</VBox>
+	</children>
+</AnchorPane>
