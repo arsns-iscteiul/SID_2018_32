@@ -65,8 +65,8 @@ public class FXMLAuditorController extends FXMLController implements Initializab
 	private void buildTableView() {
 		tables.getChildren().clear();
 		try {
-			System.out.println(tables_choice_box.getSelectionModel().getSelectedItem());
-			LinkedList<String>[] array = connector.allTableData("cultura");
+			LinkedList<String>[] array = connector
+					.allTableData(tables_choice_box.getSelectionModel().getSelectedItem());
 			for (int i = 0; i != array.length - 1; i += 1) {
 
 				ObservableList<String> ol1 = FXCollections.observableArrayList(array[i]);
@@ -74,8 +74,9 @@ public class FXMLAuditorController extends FXMLController implements Initializab
 				lv1.getItems().addAll(ol1);
 				tables.getChildren().add(lv1);
 				list_views.add(lv1);
-				bindScrollBars(lv1);
+
 				bindSelectors(lv1);
+				bindScrollBars(lv1);
 			}
 
 		} catch (SQLException e) {
@@ -90,7 +91,7 @@ public class FXMLAuditorController extends FXMLController implements Initializab
 				if (!list_views.isEmpty()) {
 					for (ListView<String> lv : list_views) {
 						if (lv1.equals(lv)) {
-							break;
+							return;
 						}
 						Node n1 = lv1.lookup(".scroll-bar");
 						if (n1 instanceof ScrollBar) {

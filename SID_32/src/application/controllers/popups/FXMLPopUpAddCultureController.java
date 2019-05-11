@@ -40,8 +40,8 @@ public class FXMLPopUpAddCultureController extends FXMLController implements Ini
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			System.out.println(timestamp.toString());
 			String fields[];
-			fields = new String[] { name.getText(), description.getText(), null, investigador_id };
-			connector.changeContentOfATable("Cultura", fields, "INSERT");
+			fields = new String[] { name.getText(), description.getText(), "1", investigador_id };
+			connector.insertCultura(fields);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

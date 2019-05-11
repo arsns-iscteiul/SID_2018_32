@@ -112,7 +112,7 @@ public class Connector {
 		ResultSet resultSet = connection.getMetaData().getTables(null, null, "", null);
 		LinkedList<String> tableNames = new LinkedList<>();
 		while (resultSet.next()) {
-			if (resultSet.getString(3).contains("[log]")) {
+			if (resultSet.getString(3).contains("_log_")) {
 				tableNames.add(resultSet.getString(3));
 			}
 		}
@@ -485,6 +485,17 @@ public class Connector {
 			list.add(list_medicaoes);
 		}
 		return list;
+	}
+
+	public void insertCultura(String fields[]) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call abc(?,?,?,?)}");
+		ps.setEscapeProcessing(true);
+		ps.setString(1, fields[0]);
+		ps.setString(2, fields[1]);
+		ps.setInt(3, Integer.parseInt(fields[2]));
+		ps.setInt(4, Integer.parseInt(fields[3]));
+		System.out.println(ps);
+		ps.executeUpdate();
 	}
 
 }
