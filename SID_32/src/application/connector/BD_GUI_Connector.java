@@ -219,18 +219,20 @@ public class BD_GUI_Connector {
 	/**
 	 * This Method creates and inserts a new VariavelMedida in the database
 	 * 
+	 * @param idCultura - culturasID of the variavelMedida
 	 * @param upperLimit - upperlimit of the VariavelMedida
 	 * @param lowerLimit - lowerlimit of the VariavelMedida
-	 * @param idVariavel - id of the Variavel you are measuring
+	 * @param idVariavel - id of the variavel 
 	 * @throws SQLException - if a database access error occurs or this method is
 	 *                      called on a closed connection
 	 */
-	public void insertVariavelMedida(int upperLimit, int lowerLimit, int idVariavel) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaINSERT(?,?,?)}");
+	public void insertVariavelMedida(int idCultura, int upperLimit, int lowerLimit, int idVariavel) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaINSERT(?,?,?,?)}");
 		ps.setEscapeProcessing(true);
-		ps.setInt(1, upperLimit);
-		ps.setInt(2, lowerLimit);
-		ps.setInt(3, idVariavel);
+		ps.setInt(1, idCultura);
+		ps.setInt(2, upperLimit);
+		ps.setInt(3, lowerLimit);
+		ps.setInt(4, idVariavel);
 		ps.executeUpdate();
 	}
 
@@ -465,5 +467,6 @@ public class BD_GUI_Connector {
 	public String getPassword() {
 		return password;
 	}
-
+	
 }
+

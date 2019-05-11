@@ -175,7 +175,7 @@ class BD_Connector_JUnit {
 	@Test
 	void insertMedicao() {
 		try {
-			b.insertMedicao(5 , 12);
+			b.insertMedicao(5 , 1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -194,7 +194,7 @@ class BD_Connector_JUnit {
 	@Test
 	void insertVariavelMedida() {
 		try {
-			b.insertVariavelMedida(15, 20, 1);
+			b.insertVariavelMedida(3, 15, 20, 1);
 		} catch (SQLException e) {
 		}
 	}
