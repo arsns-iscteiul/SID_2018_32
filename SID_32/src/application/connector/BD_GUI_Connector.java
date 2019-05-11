@@ -161,8 +161,7 @@ public class BD_GUI_Connector {
 	 */
 	public LinkedList<Variavel> getVariaveisCultura(int idCultura) throws SQLException {
 		ResultSet resultSet = connection.createStatement().executeQuery(
-				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM cultura, variavel, variavel_medida WHERE cultura.Id_Cultura = variavel_medida.cultura_fk AND variavel_medida.variavel_fk = variavel.Id_Variavel AND cultura.Id_Cultura="
-						+ idCultura);
+				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM variavel, variavel_medida WHERE variavel.Id_Variavel = variavel_medida.variavel_fk AND variavel_medida.cultura_fk ="  + idCultura);
 		return createVariavel(resultSet);
 
 	}
@@ -177,72 +176,25 @@ public class BD_GUI_Connector {
 	 */
 	public LinkedList<Medicao> getMedicoesCultura(int idCultura) throws SQLException {
 
-		PreparedStatement sqlString = connection.prepareStatement("EXEC <Medicao[SELECT]>?");
+		PreparedStatement sqlString = connection.prepareStatement("{call MedicaoSELECT(?)}");
 		sqlString.setEscapeProcessing(true);
 		sqlString.setInt(1, idCultura);
 		ResultSet resultSet = sqlString.executeQuery();
 
 		return createMedicoes(resultSet);
 	}
-
-	/**
-	 * This function allows you to execute stored procedures. These SPs are used to
-	 * INSERT information, DELETE information or UPDATE information. The DB must
-	 * have the SPs necessary to do so. These procedures have a certain format.
-	 * (table[INSERT] or table[DELETE], ...)
-	 * 
-	 * @param table     - the name of a table in the db
-	 * @param fields    - arguments of the SP that's being executed. These arguments
-	 *                  need to be ordered. DON'T INCLUDE AUTO_INCREMENT FIELDS.
-	 * @param operation - This operation is an enum that can only be "INSERT, DELETE
-	 *                  or UPDATE"
-	 * @throws SQLException - If a database access error occurs or this method is
-	 *                      called on a closed connection
-	 */
-	public void changeContentOfATable(String table, String fields[], String operation) throws SQLException {
-
-		String sp = "EXEC <" + table + "[" + operation.toUpperCase() + "]> ";
-		for (int i = 0; i != fields.length - 1; i++) {
-			sp += "?,";
-		}
-		sp += "?";
-
-		PreparedStatement sqlString = connection.prepareStatement(sp);
-		sqlString.setEscapeProcessing(true);
-		setParam(sqlString.getParameterMetaData(), sqlString, fields);
-		sqlString.executeUpdate();
-
+	
+	public void insertCultura(String fields[]) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call abc(?,?,?,?)}");
+		ps.setEscapeProcessing(true);
+		ps.setString(1, fields[0]);
+		ps.setString(2, fields[1]);
+		ps.setInt(3, Integer.parseInt(fields[2]));
+		ps.setInt(4, Integer.parseInt(fields[3]));
+		System.out.println(ps);
+		ps.executeUpdate();
 	}
 
-	/**
-	 * This function is used to set the parameters of a stored procedure.
-	 * 
-	 * @param paramMeta - MetaData of the parameters of a stored procedure.
-	 * @param sqlString - the prepareStatement of the sp (example: EXEC
-	 *                  <cultura[INSERT]>?,?,?)
-	 * @param fields    - the arguments of the SP that is being executed. These
-	 *                  arguments need to be ordered. DON'T INCLUDE AUTO_INCREMENT
-	 *                  FIELDS.
-	 * @throws SQLException - If a database access error occurs
-	 */
-	private void setParam(ParameterMetaData paramMeta, PreparedStatement sqlString, String fields[])
-			throws SQLException {
-
-		int paramSize = paramMeta.getParameterCount();
-
-		for (int i = 0; i != paramSize; i++) {
-			String type = paramMeta.getParameterTypeName(i);
-
-			switch (type) {
-			case "VARCHAR":
-				sqlString.setString(i + 1, fields[i]);
-				break;
-			// Case for each types. Although we only use string and integer.
-			default:
-				sqlString.setInt(i + 1, Integer.parseInt(fields[i]));
-			}
-		}
-	}
 
 	/**
 	 * This function transforms the rows of a given column and table, into a list.
@@ -352,12 +304,12 @@ public class BD_GUI_Connector {
 		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
 		for (int i = 0; i != variavelList.size(); i++) {
 			ResultSet resultSet = connection.createStatement().executeQuery(
-					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM Medicao, Cultura, variavel_medida, Variavel WHERE Cultura.Id_Cultura =variavel_medida.cultura_fk AND Cultura.Id_Cultura = "
-							+ idCultura + " AND Variavel.Id_Variavel = " + variavelList.get(i).getId_variavel());
+					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM Medicao, variavel_medida, Variavel WHERE variavel_medida=" + idCultura + "AND Variavel.Id_Variavel =" + variavelList.get(i).getId_variavel());
 
 			while (resultSet.next()) {
 				list.add(i, createMedicoes(resultSet));
 			}
+			resultSet.beforeFirst();
 		}
 		return null;
 	}
