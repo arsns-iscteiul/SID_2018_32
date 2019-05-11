@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import application.connector.Connector;
 import application.connector.objects.Variavel;
 import application.controllers.FXMLController;
+import application.controllers.FXMLMainController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 
 public class FXMLPopUpAddVariableToMonitorizeController extends FXMLController implements Initializable {
 
+	private FXMLMainController fxmlMainController = null;
 	private Connector connector = null;
 	private String cultura_id;
 
@@ -29,7 +31,9 @@ public class FXMLPopUpAddVariableToMonitorizeController extends FXMLController i
 	@FXML
 	private ListView<Variavel> variables_not_monitorized_list_view;
 
-	public FXMLPopUpAddVariableToMonitorizeController(Connector connector, String cultura_id) {
+	public FXMLPopUpAddVariableToMonitorizeController(FXMLMainController fxmlMainController, Connector connector,
+			String cultura_id) {
+		this.fxmlMainController = fxmlMainController;
 		this.connector = connector;
 		this.cultura_id = cultura_id;
 	}
@@ -46,7 +50,8 @@ public class FXMLPopUpAddVariableToMonitorizeController extends FXMLController i
 			LinkedList<Variavel> variables_not_being_monitorized = new LinkedList<>();
 			for (Variavel variable : connector.getVariavelTable()) {
 				boolean is_being_monitorized = false;
-				for (Variavel variables_being_monitorized : connector.getVariaveisCultura(Integer.parseInt(cultura_id))) {
+				for (Variavel variables_being_monitorized : connector
+						.getVariaveisCultura(Integer.parseInt(cultura_id))) {
 					if (variables_being_monitorized.getId_variavel().equalsIgnoreCase(variable.getId_variavel())) {
 						is_being_monitorized = true;
 					}
@@ -69,13 +74,14 @@ public class FXMLPopUpAddVariableToMonitorizeController extends FXMLController i
 			System.out.println(variables_not_monitorized_list_view.getSelectionModel().getSelectedItem());
 			String fields[];
 			fields = new String[] { cultura_id,
-					variables_not_monitorized_list_view.getSelectionModel().getSelectedItem().getId_variavel(), "20.00",
-					"10.00" };
+					variables_not_monitorized_list_view.getSelectionModel().getSelectedItem().getId_variavel(), "20",
+					"10" };
 			connector.insertVariavelMedida(fields);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close(event);
+			fxmlMainController.refreshMonitorizedVariablesHBox(cultura_id);
 		}
 
 	}

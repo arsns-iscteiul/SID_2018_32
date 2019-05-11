@@ -2,17 +2,14 @@ package application.connector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
 import application.connector.objects.Cultura;
-import application.connector.objects.Investigador;
-import application.connector.objects.Log;
 import application.connector.objects.Medicao;
-import application.connector.objects.MedicaoLuminosidade;
-import application.connector.objects.MedicaoTemperatura;
 import application.connector.objects.Variavel;
 import application.connector.objects.VariavelMedida;
 
@@ -22,10 +19,9 @@ import application.connector.objects.VariavelMedida;
  * @author Rúben Silva
  *
  */
-public class Connector {
+public class BD_GUI_Connector {
 
-	private final static String MAIN_DATABASE_URL = "jdbc:mysql://localhost:3307/main";
-	private final static String AUDITOR_DATABASE_URL = "jdbc:mysql://localhost:3307/auditor";
+	private final static String DATABASEURL = "jdbc:mysql://localhost:3307/main";
 	private String username;
 	private String password;
 	private Connection connection;
@@ -33,7 +29,7 @@ public class Connector {
 	/**
 	 * Constructor of the BD_GUI_Connector. - Loads SQLServer JDBC Driver
 	 */
-	public Connector(String database_url) {
+	public BD_GUI_Connector() {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -54,30 +50,13 @@ public class Connector {
 	 * @throws SQLException - this exception is thrown in case of no internet
 	 *                      connection or bad login (wrong credentials)
 	 */
-	public String login(String database, String username, String password) throws SQLException {
+	public void login(String username, String password) throws SQLException {
 
 		this.username = username;
 		this.password = password;
 
-		if (database.equals("auditor")) {
-			connection = DriverManager.getConnection(AUDITOR_DATABASE_URL, "root", "");
-		} else if (database.equals("main")) {
-			connection = DriverManager.getConnection(MAIN_DATABASE_URL, "root", "");
-		}
+		connection = DriverManager.getConnection(DATABASEURL, username, password);
 
-		if (username.equals("auditor") && username.equals("auditor")) {
-			return "auditor";
-		} else if (username.equals("admin") && password.equals("admin")) {
-			return "admin";
-		}
-
-		for (Investigador investigador : getInvestigadorTable()) {
-			if (investigador.getEmail_investigador().equals(username) && investigador.getPwd().equals(password)) {
-				System.out.println(investigador.getId_investigador());
-				return investigador.getId_investigador();
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -110,19 +89,6 @@ public class Connector {
 	}
 
 	/**
-	 * This function returns the log columns of all the log tables that the logged
-	 * user has access to.
-	 * 
-	 * @return a list containing all the log tables of the user
-	 * @throws SQLException - if a user can't access the database.
-	 */
-	public LinkedList<Log> getLogColumns(String tableName) throws SQLException {
-		ResultSet resultSet = connection.createStatement().executeQuery("SELECT " + tableName + ".idlog, " + tableName
-				+ ".utilizador, " + tableName + ".dataLog, " + tableName + ".operacao FROM " + tableName);
-		return createLog(resultSet);
-	}
-
-	/**
 	 * This function returns the rows of a given table and column
 	 * 
 	 * @param tableName  - the table name in mysql
@@ -134,18 +100,6 @@ public class Connector {
 	public LinkedList<String> getTableColumn(String tableName, String columnName) throws SQLException {
 		ResultSet resultSet = connection.createStatement().executeQuery("SELECT " + columnName + " FROM " + tableName);
 		return (LinkedList<String>) convertResultSetColumnToALinkedList(resultSet, 1);
-	}
-
-	/**
-	 * This function returns all the content of the "Investigador" table
-	 * 
-	 * @return a List that each position is an object (Investigador).
-	 * @throws SQLException - if a user doesn't have permissions to execute a select
-	 *                      query in a given table
-	 */
-	public LinkedList<Investigador> getInvestigadorTable() throws SQLException {
-		ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM Investigador");
-		return createInvestigador(resultSet);
 	}
 
 	/**
@@ -207,26 +161,9 @@ public class Connector {
 	 */
 	public LinkedList<Variavel> getVariaveisCultura(int idCultura) throws SQLException {
 		ResultSet resultSet = connection.createStatement().executeQuery(
-				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM variavel, variavel_medida WHERE variavel.Id_Variavel = variavel_medida.variavel_fk AND variavel_medida.cultura_fk = "
+				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM variavel, variavel_medida WHERE variavel.Id_Variavel = variavel_medida.variavel_fk AND variavel_medida.cultura_fk ="
 						+ idCultura);
 		return createVariavel(resultSet);
-
-	}
-
-	/**
-	 * This function returns all the content of the "Variavel" table of a certain
-	 * cultura
-	 * 
-	 * @param idCultura - id of a cultura u want to display its variables
-	 * @return a List that each position is an object (Variavel).
-	 * @throws SQLException - if a user doesn't have permissions to execute a select
-	 *                      query in a given table
-	 */
-	public LinkedList<Cultura> getCulturasInvestigador(int idInvestigador) throws SQLException {
-		ResultSet resultSet = connection.createStatement().executeQuery(
-				"SELECT cultura.Id_Cultura, cultura.Nome_Cultura, cultura.Descricao_cultura, cultura.Tipo_Cultura, cultura.investigador_fk FROM investigador, cultura WHERE cultura.investigador_fk = investigador.Id_Investigador AND investigador.Id_Investigador = "
-						+ idInvestigador);
-		return createCultura(resultSet);
 
 	}
 
@@ -246,26 +183,6 @@ public class Connector {
 		ResultSet resultSet = sqlString.executeQuery();
 
 		return createMedicoes(resultSet);
-	}
-
-	public LinkedList<MedicaoTemperatura> getMedicoesTemperatura() throws SQLException {
-		LinkedList<String>[] medicoes_temperatura = allTableData("medicao_temperatura");
-		LinkedList<MedicaoTemperatura> list = new LinkedList<>();
-		for (int i = 0; i != medicoes_temperatura[0].size(); i++) {
-			list.add(new MedicaoTemperatura(medicoes_temperatura[0].get(i), medicoes_temperatura[1].get(i),
-					medicoes_temperatura[2].get(i)));
-		}
-		return list;
-	}
-
-	public LinkedList<MedicaoLuminosidade> getMedicoesLuminosidade() throws SQLException {
-		LinkedList<String>[] medicoes_luminosidade = allTableData("medicao_luminosidade");
-		LinkedList<MedicaoLuminosidade> list = new LinkedList<>();
-		for (int i = 0; i != medicoes_luminosidade[0].size(); i++) {
-			list.add(new MedicaoLuminosidade(medicoes_luminosidade[0].get(i), medicoes_luminosidade[1].get(i),
-					medicoes_luminosidade[2].get(i)));
-		}
-		return list;
 	}
 
 	public void insertVariavelMedida(String fields[]) throws SQLException {
@@ -288,7 +205,7 @@ public class Connector {
 	public void insertMedicao(String fields[]) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("{call MedicaoINSERT(?,?,?)}");
 		ps.setEscapeProcessing(true);
-		ps.setInt(1, Integer.parseInt(fields[0]));
+		ps.setString(1, fields[0]);
 		ps.setInt(2, Integer.parseInt(fields[1]));
 		ps.setString(3, fields[2]);
 		ps.executeUpdate();
@@ -397,40 +314,6 @@ public class Connector {
 	}
 
 	/**
-	 * Function that creates Cultura objects from a resultset and places in a
-	 * linkedlist<Cultura>.
-	 * 
-	 * @param resultSet each row correspondes with an object Cultura.
-	 * @return linkedlist of objects Cultura.
-	 * @throws SQLException - If a database access error occurs-
-	 */
-	private LinkedList<Investigador> createInvestigador(ResultSet resultSet) throws SQLException {
-		LinkedList<Investigador> list = new LinkedList<Investigador>();
-		while (resultSet.next()) {
-			list.add(new Investigador(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
-					resultSet.getString(4), resultSet.getString(5)));
-		}
-		return list;
-	}
-
-	/**
-	 * Function that creates Log objects from a resultset and places in a
-	 * linkedlist<Log>.
-	 * 
-	 * @param resultSet each row correspondes with an object Log.
-	 * @return linkedlist of objects Log.
-	 * @throws SQLException - If a database access error occurs-
-	 */
-	private LinkedList<Log> createLog(ResultSet resultSet) throws SQLException {
-		LinkedList<Log> list = new LinkedList<Log>();
-		while (resultSet.next()) {
-			list.add(new Log(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
-					resultSet.getString(4)));
-		}
-		return list;
-	}
-
-	/**
 	 * This function returns all Medicao objects in database which are being
 	 * measured by a Cultura, given it's id, separated by variable.
 	 * 
@@ -441,12 +324,13 @@ public class Connector {
 	 *                      select query
 	 */
 	public LinkedList<LinkedList<Medicao>> getMedicoesCulturaByVariavel(int idCultura) throws SQLException {
+
 		LinkedList<Variavel> variavelList = getVariaveisCultura(idCultura);
 		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
 		for (int i = 0; i != variavelList.size(); i++) {
 			ResultSet resultSet = connection.createStatement().executeQuery(
-					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM medicao, variavel_medida, variavel WHERE variavel_medida.cultura_fk = "
-							+ idCultura + " AND variavel.Id_Variavel = " + variavelList.get(i).getId_variavel());
+					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM Medicao, variavel_medida, Variavel WHERE variavel_medida.cultura_fk="
+							+ idCultura + "AND Variavel.Id_Variavel =" + variavelList.get(i).getId_variavel());
 
 			while (resultSet.next()) {
 				list.add(i, createMedicoes(resultSet));
@@ -454,28 +338,6 @@ public class Connector {
 			resultSet.beforeFirst();
 		}
 		return list;
-	}
-
-	/**
-	 * This function returns all the content of a given table
-	 * 
-	 * @param tableName - the name of the table in the db
-	 * @return an array that each position is a column. Each position of the array
-	 *         is a linkedlist<String>
-	 * @throws SQLException - if a user doesn't have permissions to execute a select
-	 *                      query in a given table
-	 */
-	public LinkedList<String>[] allTableData(String tableName) throws SQLException {
-		ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM " + tableName);
-		@SuppressWarnings("unchecked")
-		LinkedList<String>[] table = (LinkedList<String>[]) new LinkedList<?>[resultSet.getMetaData().getColumnCount()];
-
-		for (int i = 0; i != table.length; i++, resultSet.beforeFirst()) {
-			table[i] = (LinkedList<String>) convertResultSetColumnToALinkedList(resultSet, i + 1);
-		}
-
-		return table;
-
 	}
 
 	/**

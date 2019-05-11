@@ -58,13 +58,15 @@ public class FXMLLoginController extends FXMLController implements Initializable
 	@FXML
 	public void login(ActionEvent event) throws IOException {
 		try {
-			String id_investigador = connector.login(email_field.getText(), password_hide_field.getText());
+			String id_investigador = connector.login("main", email_field.getText(), password_hide_field.getText());
 			if (!(id_investigador == null)) {
 				if (id_investigador.equals("auditor")) {
+					Connector auditorConnector = new Connector("localhost:3307/auditor");
+					auditorConnector.login("auditor", email_field.getText(), password_hide_field.getText());
 					FXMLLoader auditor_loader = new FXMLLoader(
 							getClass().getResource("/application/views/auditor/FXMLAuditor.fxml"));
-					FXMLAuditorController auditor_controller = new FXMLAuditorController(fxmlShellController,
-							connector);
+					FXMLAuditorController auditor_controller = new FXMLAuditorController(fxmlShellController, connector,
+							auditorConnector);
 					fxmlShellController.setDisplay("Auditor", auditor_loader, auditor_controller, true);
 				} else if (id_investigador.equals("admin")) {
 					FXMLLoader admin_loader = new FXMLLoader(
@@ -82,8 +84,7 @@ public class FXMLLoginController extends FXMLController implements Initializable
 			}
 		} catch (SQLException e) {
 			showWrongCredentialsWarning();
-			System.out.println(
-					"Unable to establish a connection with the database! - Check credentials/Internet Connection");
+			e.printStackTrace();
 		}
 	}
 

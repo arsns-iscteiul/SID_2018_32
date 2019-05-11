@@ -15,7 +15,7 @@
 	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<VBox alignment="CENTER" layoutX="32.0" layoutY="132.0"
-			spacing="40.0" AnchorPane.bottomAnchor="40.0"
+			spacing="10.0" AnchorPane.bottomAnchor="40.0"
 			AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0"
 			AnchorPane.topAnchor="40.0">
 			<children>
@@ -30,8 +30,8 @@
 					</children>
 				</VBox>
 				<ChoiceBox fx:id="tables_choice_box" prefWidth="150.0" />
-				<HBox fx:id="table_names" />
-				<HBox fx:id="tables" alignment="CENTER" spacing="8.0" />
+				<TableView fx:id="table_view" prefHeight="200.0"
+					prefWidth="200.0" />
 				<Button id="logout_btn" mnemonicParsing="false"
 					onAction="#logout" prefHeight="25.0" prefWidth="167.0"
 					text="Logout" textFill="WHITE">

@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import application.connector.Connector;
 import application.controllers.FXMLController;
+import application.controllers.FXMLMainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,7 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class FXMLPopUpAddCultureController extends FXMLController implements Initializable {
-
+	
+	private FXMLMainController fxmlMainController = null;
 	private Connector connector = null;
 	private String investigador_id;
 
@@ -24,7 +26,8 @@ public class FXMLPopUpAddCultureController extends FXMLController implements Ini
 	@FXML
 	private TextField description;
 
-	public FXMLPopUpAddCultureController(Connector connector, String investigador_id) {
+	public FXMLPopUpAddCultureController(FXMLMainController fxmlMainController, Connector connector, String investigador_id) {
+		this.fxmlMainController = fxmlMainController;
 		this.connector = connector;
 		this.investigador_id = investigador_id;
 	}
@@ -46,6 +49,7 @@ public class FXMLPopUpAddCultureController extends FXMLController implements Ini
 			e.printStackTrace();
 		} finally {
 			close(event);
+			fxmlMainController.refreshLeftPane();
 		}
 	}
 

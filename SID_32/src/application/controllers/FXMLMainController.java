@@ -94,16 +94,32 @@ public class FXMLMainController extends FXMLController implements Initializable 
 				refreshCentralPane(cultura_listview.getSelectionModel().getSelectedItem());
 			}
 		});
+		refreshLeftPane();
+	}
+
+	public void refreshLeftPane() {
 		try {
+			cultura_observablelist.clear();
 			cultura_observablelist.addAll(connector.getCulturasInvestigador(Integer.parseInt(id_investigador)));
+			cultura_listview.getItems().clear();
 			cultura_listview.getItems().addAll(cultura_observablelist);
-		} catch (SQLException e) {
+		} catch (NumberFormatException | SQLException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	private void buildWelcomingPane() {
-		refreshCentralPane(null);
+		center_display.setManaged(false);
+		center_display.setVisible(false);
+		try {
+			FXMLLoader welcoming_loader = new FXMLLoader(
+					getClass().getResource("/application/views/FXMLWelcoming.fxml"));
+			Parent welcoming_pane = welcoming_loader.load();
+			init_display.getChildren().add(welcoming_pane);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void buildLineChart() {
@@ -136,29 +152,15 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	}
 
 	private void refreshCentralPane(Cultura cultura_selected) {
-		if (cultura_selected == null) {
-			try {
-				center_display.setManaged(false);
-				center_display.setVisible(false);
-				FXMLLoader welcoming_loader = new FXMLLoader(
-						getClass().getResource("/application/views/FXMLWelcoming.fxml"));
-
-				Parent welcoming_pane = welcoming_loader.load();
-				init_display.getChildren().add(welcoming_pane);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			center_display.setManaged(true);
-			center_display.setVisible(true);
-			init_display.setManaged(false);
-			init_display.setVisible(false);
-			refreshCulturaNameLabel(cultura_selected.getNome_cultura());
-			refreshSensorsHBox();
-			refreshMonitorizedVariablesHBox(cultura_selected.getId_cultura());
-			refreshLineChart(cultura_selected.getId_cultura(), cultura_selected.getNome_cultura());
-			refreshTableView(cultura_selected.getId_cultura());
-		}
+		init_display.setManaged(false);
+		init_display.setVisible(false);
+		center_display.setManaged(true);
+		center_display.setVisible(true);
+		refreshCulturaNameLabel(cultura_selected.getNome_cultura());
+		refreshSensorsHBox();
+		refreshMonitorizedVariablesHBox(cultura_selected.getId_cultura());
+		refreshLineChart(cultura_selected.getId_cultura(), cultura_selected.getNome_cultura());
+		refreshTableView(cultura_selected.getId_cultura());
 	}
 
 	private void refreshCulturaNameLabel(String cultura_selected_name) {
@@ -193,7 +195,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		}
 	}
 
-	private void refreshMonitorizedVariablesHBox(String cultura_selected_id) {
+	public void refreshMonitorizedVariablesHBox(String cultura_selected_id) {
 		monitorized_variables_hbox.getChildren().clear();
 		try {
 			for (Variavel variavel : connector.getVariaveisCultura(Integer.parseInt(cultura_selected_id))) {
@@ -213,7 +215,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 
 	}
 
-	private void refreshTableView(String cultura_selected_id) {
+	public void refreshTableView(String cultura_selected_id) {
 		clearTableView();
 		try {
 			ObservableList<Medicao> medicoes = FXCollections
@@ -232,11 +234,11 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void refreshLineChart(String cultura_selected_id, String cultura_selected_name) {
+	public void refreshLineChart(String cultura_selected_id, String cultura_selected_name) {
 		line_chart.getData().clear();
 		try {
 			for (LinkedList<Medicao> list_medicoes : connector
-					.getMedicoesCulturaByVariable(Integer.parseInt(cultura_selected_id))) {
+					.getMedicoesCulturaByVariavel(Integer.parseInt(cultura_selected_id))) {
 				XYChart.Series series = new XYChart.Series();
 				series.setName(list_medicoes.getFirst().getMore_info());
 				for (Medicao medicao : connector.getMedicoesCultura(Integer.parseInt(cultura_selected_id))) {
@@ -277,7 +279,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private void addCulture() {
 		FXMLLoader popup_add_culture_loader = new FXMLLoader(
 				getClass().getResource("/application/views/popups/FXMLPopUpAddCulture.fxml"));
-		FXMLPopUpAddCultureController popup_add_culture_controller = new FXMLPopUpAddCultureController(connector,
+		FXMLPopUpAddCultureController popup_add_culture_controller = new FXMLPopUpAddCultureController(this, connector,
 				id_investigador);
 		buildPopPup("Add culture", "PopUpAddCulture", popup_add_culture_loader, popup_add_culture_controller);
 	}
@@ -287,7 +289,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		FXMLLoader popup_add_variable_to_monitorize_loader = new FXMLLoader(
 				getClass().getResource("/application/views/popups/FXMLPopUpAddVariableToMonitorize.fxml"));
 		FXMLPopUpAddVariableToMonitorizeController popup_add_variable_to_monitorize_controller = new FXMLPopUpAddVariableToMonitorizeController(
-				connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura());
+				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura());
 		buildPopPup("Add variable to monitorize", "PopUpAddVariableToMonitorize",
 				popup_add_variable_to_monitorize_loader, popup_add_variable_to_monitorize_controller);
 	}
@@ -297,7 +299,8 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		FXMLLoader popup_add_manual_measurement_loader = new FXMLLoader(
 				getClass().getResource("/application/views/popups/FXMLPopUpAddManualMeasurement.fxml"));
 		FXMLPopUpAddManualMeasurementController popup_add_manual_measurement_controller = new FXMLPopUpAddManualMeasurementController(
-				connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura());
+				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura(),
+				cultura_listview.getSelectionModel().getSelectedItem().getNome_cultura());
 		buildPopPup("Add manual mesurement", "PopUpAddManualMeasurement", popup_add_manual_measurement_loader,
 				popup_add_manual_measurement_controller);
 	}

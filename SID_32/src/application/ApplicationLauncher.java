@@ -17,7 +17,7 @@ public class ApplicationLauncher extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		Connector connector = new Connector();
+		Connector connector = new Connector("localhost:3307/main");
 
 		FXMLLoader shell_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLShell.fxml"));
 		FXMLShellController shell_controller = new FXMLShellController(connector);
