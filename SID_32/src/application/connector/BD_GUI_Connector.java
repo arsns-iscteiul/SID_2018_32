@@ -161,7 +161,8 @@ public class BD_GUI_Connector {
 	 */
 	public LinkedList<Variavel> getVariaveisCultura(int idCultura) throws SQLException {
 		ResultSet resultSet = connection.createStatement().executeQuery(
-				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM variavel, variavel_medida WHERE variavel.Id_Variavel = variavel_medida.variavel_fk AND variavel_medida.cultura_fk ="  + idCultura);
+				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM variavel, variavel_medida WHERE variavel.Id_Variavel = variavel_medida.variavel_fk AND variavel_medida.cultura_fk ="
+						+ idCultura);
 		return createVariavel(resultSet);
 
 	}
@@ -183,18 +184,42 @@ public class BD_GUI_Connector {
 
 		return createMedicoes(resultSet);
 	}
-	
+
+	public void insertVariavelMedida(String fields[]) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaINSERT(?,?,?,?)}");
+		ps.setEscapeProcessing(true);
+		ps.setInt(1, Integer.parseInt(fields[0]));
+		ps.setInt(2, Integer.parseInt(fields[1]));
+		ps.setInt(3, Integer.parseInt(fields[2]));
+		ps.setInt(4, Integer.parseInt(fields[3]));
+		ps.executeQuery();
+	}
+
+	public void insertVariavel(String fields[]) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call VariavelINSERT(?)}");
+		ps.setEscapeProcessing(true);
+		ps.setString(1, fields[0]);
+		ps.executeQuery();
+	}
+
+	public void insertMedicao(String fields[]) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call MedicaoINSERT(?,?,?)}");
+		ps.setEscapeProcessing(true);
+		ps.setString(1, fields[0]);
+		ps.setInt(2, Integer.parseInt(fields[1]));
+		ps.setString(3, fields[2]);
+		ps.executeUpdate();
+	}
+
 	public void insertCultura(String fields[]) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call abc(?,?,?,?)}");
+		PreparedStatement ps = connection.prepareStatement("{call culturaINSERT(?,?,?,?)}");
 		ps.setEscapeProcessing(true);
 		ps.setString(1, fields[0]);
 		ps.setString(2, fields[1]);
 		ps.setInt(3, Integer.parseInt(fields[2]));
 		ps.setInt(4, Integer.parseInt(fields[3]));
-		System.out.println(ps);
 		ps.executeUpdate();
 	}
-
 
 	/**
 	 * This function transforms the rows of a given column and table, into a list.
@@ -304,7 +329,8 @@ public class BD_GUI_Connector {
 		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
 		for (int i = 0; i != variavelList.size(); i++) {
 			ResultSet resultSet = connection.createStatement().executeQuery(
-					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM Medicao, variavel_medida, Variavel WHERE variavel_medida.cultura_fk=" + idCultura + "AND Variavel.Id_Variavel =" + variavelList.get(i).getId_variavel());
+					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM Medicao, variavel_medida, Variavel WHERE variavel_medida.cultura_fk="
+							+ idCultura + "AND Variavel.Id_Variavel =" + variavelList.get(i).getId_variavel());
 
 			while (resultSet.next()) {
 				list.add(i, createMedicoes(resultSet));
