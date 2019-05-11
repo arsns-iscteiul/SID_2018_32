@@ -28,30 +28,28 @@
 						<HBox id="container" alignment="CENTER_LEFT" layoutX="50.0"
 							layoutY="37.0" maxWidth="300.0" prefHeight="32.0"
 							prefWidth="300.0" spacing="10.0">
-							<children>
-								<ChoiceBox id="variable_choice_box"
-									fx:id="variable_choice_box" prefHeight="25.0" prefWidth="270.0" />
-							</children>
 							<padding>
 								<Insets left="20.0" />
 							</padding>
+							<children>
+								<TextField id="field" fx:id="name" prefHeight="25.0"
+									prefWidth="264.0" promptText="Culture name" />
+							</children>
 						</HBox>
 						<HBox id="container" alignment="CENTER_LEFT" maxWidth="300.0"
-							prefHeight="32.0" prefWidth="300.0" spacing="10.0">
+							prefHeight="75.0" prefWidth="300.0" spacing="10.0">
 							<children>
-								<Label text="Value" />
-								<TextField id="field" fx:id="value_field"
-									alignment="TOP_LEFT" onAction="#addManualMeasurement"
-									prefHeight="25.0" prefWidth="200.0" promptText="00.00" />
+								<TextField id="field" fx:id="description"
+									prefHeight="59.0" prefWidth="264.0"
+									promptText="Culture description" />
 							</children>
 							<padding>
 								<Insets left="20.0" />
 							</padding>
 						</HBox>
 						<Button id="login_btn" alignment="CENTER" maxWidth="300.0"
-							mnemonicParsing="false" onAction="#addManualMeasurement"
-							prefWidth="300.0" text="OK" textAlignment="CENTER"
-							textFill="WHITE">
+							mnemonicParsing="false" onAction="#addCulture" prefWidth="300.0"
+							text="OK" textAlignment="CENTER" textFill="WHITE">
 							<cursor>
 								<Cursor fx:constant="HAND" />
 							</cursor>

@@ -16,7 +16,7 @@
 		<VBox alignment="CENTER" layoutX="32.0" layoutY="132.0" prefHeight="248.0" prefWidth="380.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
 			<children>
 				<ListView id="variavel_to_add_listview" fx:id="variables_not_monitorized_list_view" prefHeight="157.0" prefWidth="440.0" />
-				<Button id="ok_btn" mnemonicParsing="false" onAction="#add_variable_to_be_monitorized" prefWidth="80.0" text="OK" textFill="WHITE">
+				<Button id="ok_btn" mnemonicParsing="false" onAction="#addVariableToMonitorize" prefWidth="80.0" text="OK" textFill="WHITE">
 					<cursor>
 						<Cursor fx:constant="HAND" />
 					</cursor>

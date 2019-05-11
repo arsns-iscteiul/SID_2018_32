@@ -12,6 +12,7 @@ import application.connector.objects.Medicao;
 import application.connector.objects.MedicaoLuminosidade;
 import application.connector.objects.MedicaoTemperatura;
 import application.connector.objects.Variavel;
+import application.controllers.popups.FXMLPopUpAddCultureController;
 import application.controllers.popups.FXMLPopUpAddManualMeasurementController;
 import application.controllers.popups.FXMLPopUpAddVariableToMonitorizeController;
 import application.controllers.popups.FXMLPopUpShellController;
@@ -40,6 +41,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,11 +51,16 @@ public class FXMLMainController extends FXMLController implements Initializable 
 
 	private FXMLShellController fxmlShellController = null;
 	private Connector connector = null;
+	private String id_investigador = null;
 
 	private ObservableList<Cultura> cultura_observablelist = FXCollections.observableArrayList();
 
 	@FXML
 	private ListView<Cultura> cultura_listview;
+	@FXML
+	private AnchorPane init_display;
+	@FXML
+	private AnchorPane center_display;
 	@FXML
 	private Label cultura_name_label;
 	@FXML
@@ -67,9 +74,10 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	@FXML
 	private TableView<Medicao> table_view;
 
-	public FXMLMainController(FXMLShellController fxmlShellController, Connector connector) {
+	public FXMLMainController(FXMLShellController fxmlShellController, Connector connector, String id_investigador) {
 		this.fxmlShellController = fxmlShellController;
 		this.connector = connector;
+		this.id_investigador = id_investigador;
 	}
 
 	@Override
@@ -87,16 +95,15 @@ public class FXMLMainController extends FXMLController implements Initializable 
 			}
 		});
 		try {
-			cultura_observablelist.addAll(connector.getCulturas());
+			cultura_observablelist.addAll(connector.getCulturasFromInvestigador(id_investigador));
 			cultura_listview.getItems().addAll(cultura_observablelist);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("NAO DEU :'(");
 		}
 	}
 
 	private void buildWelcomingPane() {
-
+		refreshCentralPane(null);
 	}
 
 	private void buildLineChart() {
@@ -129,11 +136,29 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	}
 
 	private void refreshCentralPane(Cultura cultura_selected) {
-		refreshCulturaNameLabel(cultura_selected.getNome_cultura());
-		refreshSensorsHBox();
-		refreshMonitorizedVariablesHBox(cultura_selected.getId_cultura());
-		refreshLineChart(cultura_selected.getId_cultura(), cultura_selected.getNome_cultura());
-		refreshTableView(cultura_selected.getId_cultura());
+		if (cultura_selected == null) {
+			try {
+				center_display.setManaged(false);
+				center_display.setVisible(false);
+				FXMLLoader welcoming_loader = new FXMLLoader(
+						getClass().getResource("/application/views/FXMLWelcoming.fxml"));
+
+				Parent welcoming_pane = welcoming_loader.load();
+				init_display.getChildren().add(welcoming_pane);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			center_display.setManaged(true);
+			center_display.setVisible(true);
+			init_display.setManaged(false);
+			init_display.setVisible(false);
+			refreshCulturaNameLabel(cultura_selected.getNome_cultura());
+			refreshSensorsHBox();
+			refreshMonitorizedVariablesHBox(cultura_selected.getId_cultura());
+			refreshLineChart(cultura_selected.getId_cultura(), cultura_selected.getNome_cultura());
+			refreshTableView(cultura_selected.getId_cultura());
+		}
 	}
 
 	private void refreshCulturaNameLabel(String cultura_selected_name) {
@@ -248,7 +273,16 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	}
 
 	@FXML
-	private void addVariableToMonitorize() {
+	private void addCulture() {
+		FXMLLoader popup_add_culture_loader = new FXMLLoader(
+				getClass().getResource("/application/views/popups/FXMLPopUpAddCulture.fxml"));
+		FXMLPopUpAddCultureController popup_add_culture_controller = new FXMLPopUpAddCultureController(connector,
+				id_investigador);
+		buildPopPup("Add culture", "PopUpAddCulture", popup_add_culture_loader, popup_add_culture_controller);
+	}
+
+	@FXML
+	private void addVariableToBeMonitorized() {
 		FXMLLoader popup_add_variable_to_monitorize_loader = new FXMLLoader(
 				getClass().getResource("/application/views/popups/FXMLPopUpAddVariableToMonitorize.fxml"));
 		FXMLPopUpAddVariableToMonitorizeController popup_add_variable_to_monitorize_controller = new FXMLPopUpAddVariableToMonitorizeController(

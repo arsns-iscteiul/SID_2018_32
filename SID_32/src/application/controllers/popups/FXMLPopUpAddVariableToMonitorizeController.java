@@ -12,9 +12,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 public class FXMLPopUpAddVariableToMonitorizeController extends FXMLController implements Initializable {
 
@@ -57,13 +60,30 @@ public class FXMLPopUpAddVariableToMonitorizeController extends FXMLController i
 			variables_not_monitorized_list_view.getItems().addAll(variables_not_monitorized_observablelist);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("NAO DEU :'(");
 		}
 	}
 
 	@FXML
-	public void add_variable_to_be_monitorized() {
-		System.out.println(variables_not_monitorized_list_view.getSelectionModel().getSelectedItem());
+	public void addVariableToMonitorize(ActionEvent event) {
+		try {
+			System.out.println(variables_not_monitorized_list_view.getSelectionModel().getSelectedItem());
+			String fields[];
+			fields = new String[] { cultura_id,
+					variables_not_monitorized_list_view.getSelectionModel().getSelectedItem().getId_variavel(), "20.00",
+					"10.00" };
+			connector.changeContentOfATable("VariavelMedida", fields, "INSERT");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(event);
+		}
+
+	}
+
+	@FXML
+	public void close(ActionEvent event) {
+		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		stage.close();
 	}
 
 }

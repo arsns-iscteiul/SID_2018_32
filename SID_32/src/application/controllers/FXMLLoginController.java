@@ -5,6 +5,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import application.connector.Connector;
+import application.controllers.auditor.FXMLAuditorController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import application.connector.Connector;
 
 public class FXMLLoginController extends FXMLController implements Initializable {
 
@@ -53,18 +54,25 @@ public class FXMLLoginController extends FXMLController implements Initializable
 		wrong_credentials_warning_label.setVisible(false);
 	}
 
+	@SuppressWarnings("null")
 	@FXML
 	public void login(ActionEvent event) throws IOException {
 		try {
-			if (email_field.getText().equals("test")) {
-				FXMLLoader main_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLMain.fxml"));
-				FXMLMainController main_controller = new FXMLMainController(fxmlShellController, connector);
-				fxmlShellController.setDisplay("Main", main_loader, main_controller, true);
+			String id_investigador = connector.login(email_field.getText(), password_hide_field.getText());
+			if (!(id_investigador == null)) {
+				if (id_investigador.equals("auditor")) {
+					FXMLLoader auditor_loader = new FXMLLoader(
+							getClass().getResource("/application/views/auditor/FXMLAuditor.fxml"));
+					FXMLAuditorController main_controller = new FXMLAuditorController(fxmlShellController, connector);
+					fxmlShellController.setDisplay("Auditor", auditor_loader, main_controller, true);
+				} else {
+					FXMLLoader main_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLMain.fxml"));
+					FXMLMainController main_controller = new FXMLMainController(fxmlShellController, connector,
+							id_investigador);
+					fxmlShellController.setDisplay("Main", main_loader, main_controller, true);
+				}
 			} else {
-				connector.login(email_field.getText(), password_hide_field.getText());
-				FXMLLoader main_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLMain.fxml"));
-				FXMLMainController main_controller = new FXMLMainController(fxmlShellController, connector);
-				fxmlShellController.setDisplay("Main", main_loader, main_controller, true);
+				showWrongCredentialsWarning();
 			}
 		} catch (SQLException e) {
 			showWrongCredentialsWarning();

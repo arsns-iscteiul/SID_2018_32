@@ -10,6 +10,8 @@ import java.util.LinkedList;
 
 import application.connector.objects.Cultura;
 import application.connector.objects.Medicao;
+import application.connector.objects.MedicaoLuminosidade;
+import application.connector.objects.MedicaoTemperatura;
 import application.connector.objects.Variavel;
 import application.connector.objects.VariavelMedida;
 
@@ -151,6 +153,30 @@ public class BD_GUI_Connector {
 	}
 
 	/**
+	 * This function returns all the content of the "Medicao_Temperatura" table
+	 * 
+	 * @return a List that each position is an object (MedicaoTemperatura).
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<MedicaoTemperatura> getMedicaoTemperaturaTable() throws SQLException {
+		ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM medicao_temperatura");
+		return createMedicoesTemperatura(resultSet);
+	}
+
+	/**
+	 * This function returns all the content of the "Medicao_Luminosidade" table
+	 * 
+	 * @return a List that each position is an object (MedicaoLuminosidade).
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<MedicaoLuminosidade> getMedicaoLuminosidadeTable() throws SQLException {
+		ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM medicao_luminosidade");
+		return createMedicoesLuminosidade(resultSet);
+	}
+
+	/**
 	 * This function returns all the content of the "Variavel" table of a certain
 	 * cultura
 	 * 
@@ -161,7 +187,7 @@ public class BD_GUI_Connector {
 	 */
 	public LinkedList<Variavel> getVariaveisCultura(int idCultura) throws SQLException {
 		ResultSet resultSet = connection.createStatement().executeQuery(
-				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM cultura, variavel, variavel_medida WHERE cultura.Id_Cultura = variavel_medida.cultura_fk AND variavel_medida.variavel_fk = variavel.Id_Variavel AND cultura.Id_Cultura="
+				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM cultura, variavel, variavel_medida WHERE cultura.Id_Cultura = variavel_medida.cultura_fk AND variavel_medida.variavel_fk = variavel.Id_Variavel AND cultura.Id_Cultura = "
 						+ idCultura);
 		return createVariavel(resultSet);
 
@@ -286,6 +312,38 @@ public class BD_GUI_Connector {
 	}
 
 	/**
+	 * Function that creates medicao_temperatura objects from a resultset and places
+	 * in a linkedlist<MedicaoTemperatura>.
+	 * 
+	 * @param resultSet each row correspondes with an object MedicaoTemperatura.
+	 * @return linkedlist of objects medicao_temperatura.
+	 * @throws SQLException - If a database access error occurs-
+	 */
+	private LinkedList<MedicaoTemperatura> createMedicoesTemperatura(ResultSet resultSet) throws SQLException {
+		LinkedList<MedicaoTemperatura> list = new LinkedList<MedicaoTemperatura>();
+		while (resultSet.next()) {
+			list.add(new MedicaoTemperatura(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3)));
+		}
+		return list;
+	}
+
+	/**
+	 * Function that creates medicao_luminosidade objects from a resultset and
+	 * places in a linkedlist<MedicaoLuminosidade>.
+	 * 
+	 * @param resultSet each row correspondes with an object MedicaoLuminosidade.
+	 * @return linkedlist of objects medicao_luminosidade.
+	 * @throws SQLException - If a database access error occurs-
+	 */
+	private LinkedList<MedicaoLuminosidade> createMedicoesLuminosidade(ResultSet resultSet) throws SQLException {
+		LinkedList<MedicaoLuminosidade> list = new LinkedList<MedicaoLuminosidade>();
+		while (resultSet.next()) {
+			list.add(new MedicaoLuminosidade(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3)));
+		}
+		return list;
+	}
+
+	/**
 	 * Function that creates Variavel objects from a resultset and places in a
 	 * linkedlist<Variavel>.
 	 * 
@@ -360,6 +418,38 @@ public class BD_GUI_Connector {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * This function returns all Medicao objects in database which are being
+	 * measured by a Cultura, given it's id, separated by variable
+	 *
+	 * @return array of lists of Medicao objects separated by variable
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<LinkedList<Medicao>> getMedicoesCulturaByVariavel(String cultura_id) throws SQLException {
+		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
+		LinkedList<String> variaveis_medidas_ids = new LinkedList<>();
+		for (VariavelMedida vm : getVariavelMedidaTable()) {
+			if (vm.getCultura_fk().equalsIgnoreCase(cultura_id)) {
+				variaveis_medidas_ids.add(vm.getVariavel_fk());
+			}
+		}
+
+		for (Variavel v : getVariaveisCultura(Integer.parseInt(cultura_id))) {
+			LinkedList<Medicao> list_medicaoes = new LinkedList<>();
+			for (Medicao m : getMedicaoTable()) {
+				if (variaveis_medidas_ids.contains(m.getVariavel_medida_fk())
+						&& variaveis_medidas_ids.contains(v.getId_variavel())) {
+					m.setMore_info(v.getNome_variavel());
+					list_medicaoes.add(m);
+				}
+			}
+			list.add(list_medicaoes);
+		}
+		System.out.println(list.size());
+		return list;
 	}
 
 	/**

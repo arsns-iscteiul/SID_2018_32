@@ -1,0 +1,24 @@
+#container {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+#field {
+    -fx-background-color: transparent;
+}
+
+#password_viewer_btn {
+	-fx-background-color: transparent;
+    -fx-graphic: url("/application/media/icons/notvisible_gray_20px.png");
+}
+
+#password_viewer_btn:selected {
+    -fx-graphic: url("/application/media/icons/visible_gray_20px.png");
+}
+
+#login_btn {
+	-fx-background-color: linear-gradient(to right, #11998e 40%, #38ef7d 100%);
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 
 import application.connector.objects.Cultura;
+import application.connector.objects.Investigador;
 import application.connector.objects.Medicao;
 import application.connector.objects.MedicaoLuminosidade;
 import application.connector.objects.MedicaoTemperatura;
@@ -52,13 +53,23 @@ public class Connector {
 	 * @throws SQLException - this exception is thrown in case of no internet
 	 *                      connection or bad login (wrong credentials)
 	 */
-	public void login(String username, String password) throws SQLException {
+	public String login(String username, String password) throws SQLException {
 
 		this.username = username;
 		this.password = password;
 
-		connection = DriverManager.getConnection(DATABASEURL, username, password);
+		connection = DriverManager.getConnection(DATABASEURL, "root", "");
 
+		if (username.equals("auditor")) {
+			return "auditor";
+		}
+
+		for (Investigador investigador : getInvestigadores()) {
+			if (investigador.getEmail_investigador().equals(username) && investigador.getPwd().equals(password)) {
+				return investigador.getId_investigador();
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -85,6 +96,25 @@ public class Connector {
 		LinkedList<String> tableNames = new LinkedList<>();
 		while (resultSet.next()) {
 			tableNames.add(resultSet.getString(3));
+		}
+		return tableNames;
+
+	}
+
+	/**
+	 * This function returns the name of all the log tables that the logged user has
+	 * access to.
+	 * 
+	 * @return a list containing all the log tables of the user
+	 * @throws SQLException - if a user can't access the database.
+	 */
+	public LinkedList<String> getAllLogTables() throws SQLException {
+		ResultSet resultSet = connection.getMetaData().getTables(null, null, "", null);
+		LinkedList<String> tableNames = new LinkedList<>();
+		while (resultSet.next()) {
+			if (resultSet.getString(3).contains("[log]")) {
+				tableNames.add(resultSet.getString(3));
+			}
 		}
 		return tableNames;
 
@@ -195,16 +225,16 @@ public class Connector {
 
 		int paramSize = paramMeta.getParameterCount();
 
-		for (int i = 0; i != paramSize; i++) {
+		for (int i = 1; i != paramSize; i++) {
 			String type = paramMeta.getParameterTypeName(i);
 
 			switch (type) {
 			case "VARCHAR":
-				sqlString.setString(i + 1, fields[i]);
+				sqlString.setString(i, fields[i]);
 				break;
 			// Case for each types. Although we only use string and integer.
 			default:
-				sqlString.setInt(i + 1, Integer.parseInt(fields[i]));
+				sqlString.setInt(i, Integer.parseInt(fields[i]));
 			}
 		}
 	}
@@ -228,6 +258,28 @@ public class Connector {
 	}
 
 	/**
+	 * This function returns all Investigador objects
+	 *
+	 * @return list of the Investigador objects in database on table "investigador"
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<Investigador> getInvestigadores() throws SQLException {
+		LinkedList<String>[] investigadores = allTableData("investigador");
+		LinkedList<Investigador> list = new LinkedList<>();
+		for (int i = 0; i != investigadores[0].size(); i++) {
+			String id_investigador = investigadores[0].get(i);
+			String nome_investigador = investigadores[1].get(i);
+			String email_investigador = investigadores[2].get(i);
+			String pwd = investigadores[3].get(i);
+			String categoria_profissional = investigadores[4].get(i);
+			list.add(new Investigador(id_investigador, nome_investigador, email_investigador, pwd,
+					categoria_profissional));
+		}
+		return list;
+	}
+
+	/**
 	 * This function returns all Cultura objects
 	 *
 	 * @return list of the Cultura objects in database on table "cultura"
@@ -244,6 +296,30 @@ public class Connector {
 			String tipo_cultura = culturas[3].get(i);
 			String investigador_fk = culturas[4].get(i);
 			list.add(new Cultura(id_cultura, nome_cultura, descricao_cultura, tipo_cultura, investigador_fk));
+		}
+		return list;
+	}
+
+	/**
+	 * This function returns all Cultura objects from a given id_investigador
+	 *
+	 * @return list of the Cultura objects in database on table "cultura" from a
+	 *         certain Investigador
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<Cultura> getCulturasFromInvestigador(String id_investigador) throws SQLException {
+		LinkedList<String>[] culturas = allTableData("cultura");
+		LinkedList<Cultura> list = new LinkedList<>();
+		for (int i = 0; i != culturas[0].size(); i++) {
+			if (culturas[4].get(i).equalsIgnoreCase(id_investigador)) {
+				String id_cultura = culturas[0].get(i);
+				String nome_cultura = culturas[1].get(i);
+				String descricao_cultura = culturas[2].get(i);
+				String tipo_cultura = culturas[3].get(i);
+				String investigador_fk = culturas[4].get(i);
+				list.add(new Cultura(id_cultura, nome_cultura, descricao_cultura, tipo_cultura, investigador_fk));
+			}
 		}
 		return list;
 	}
@@ -408,7 +484,6 @@ public class Connector {
 			}
 			list.add(list_medicaoes);
 		}
-		System.out.println(list.size());
 		return list;
 	}
 
