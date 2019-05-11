@@ -10,7 +10,7 @@ public class ExportingThread extends Thread{
 		while(true) {
 			try { 
 				sleep(7000);
-				exporter.export();
+				exporter.migracao();
 			} catch (InterruptedException | SQLException e) { 
 				e.printStackTrace();  
 			}

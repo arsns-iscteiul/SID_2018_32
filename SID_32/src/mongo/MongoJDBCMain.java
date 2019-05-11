@@ -58,8 +58,13 @@ public class MongoJDBCMain {
 	ResultSet result = null;
 	
 	
-	public MongoJDBCMain() throws SQLException {
-		migracao();
+	public MongoJDBCMain() {
+		try {
+			migracao();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void migracao() throws SQLException {
@@ -209,7 +214,7 @@ public class MongoJDBCMain {
 	}
 
 	public static void main(String[] args) throws SQLException {
-		new MongoJDBCMain().migracao();
+		new MongoJDBCMain();
 	}
 
 	private void ObterLimites(Statement stmt) throws SQLException {
