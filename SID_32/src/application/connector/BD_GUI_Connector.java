@@ -304,7 +304,7 @@ public class BD_GUI_Connector {
 		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
 		for (int i = 0; i != variavelList.size(); i++) {
 			ResultSet resultSet = connection.createStatement().executeQuery(
-					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM Medicao, variavel_medida, Variavel WHERE variavel_medida=" + idCultura + "AND Variavel.Id_Variavel =" + variavelList.get(i).getId_variavel());
+					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM Medicao, variavel_medida, Variavel WHERE variavel_medida.cultura_fk=" + idCultura + "AND Variavel.Id_Variavel =" + variavelList.get(i).getId_variavel());
 
 			while (resultSet.next()) {
 				list.add(i, createMedicoes(resultSet));
