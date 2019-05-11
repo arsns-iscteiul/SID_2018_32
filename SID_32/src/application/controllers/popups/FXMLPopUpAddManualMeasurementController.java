@@ -38,7 +38,7 @@ public class FXMLPopUpAddManualMeasurementController extends FXMLController impl
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {
-			variables_observablelist.addAll(connector.getVariaveisDaCultura(cultura_id));
+			variables_observablelist.addAll(connector.getVariaveisCultura(Integer.parseInt(cultura_id)));
 			variable_choice_box.setItems(variables_observablelist);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,7 +54,7 @@ public class FXMLPopUpAddManualMeasurementController extends FXMLController impl
 			String fields[];
 			fields = new String[] { timestamp.toString(), value_field.getText(),
 					variable_choice_box.getSelectionModel().getSelectedItem().getId_variavel() };
-			connector.changeContentOfATable("medicao", fields, "INSERT");
+			connector.insertMedicao(fields);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

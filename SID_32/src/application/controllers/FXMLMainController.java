@@ -95,7 +95,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 			}
 		});
 		try {
-			cultura_observablelist.addAll(connector.getCulturasFromInvestigador(id_investigador));
+			cultura_observablelist.addAll(connector.getCulturasInvestigador(Integer.parseInt(id_investigador)));
 			cultura_listview.getItems().addAll(cultura_observablelist);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -196,7 +196,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private void refreshMonitorizedVariablesHBox(String cultura_selected_id) {
 		monitorized_variables_hbox.getChildren().clear();
 		try {
-			for (Variavel variavel : connector.getVariaveisDaCultura(cultura_selected_id)) {
+			for (Variavel variavel : connector.getVariaveisCultura(Integer.parseInt(cultura_selected_id))) {
 				Label variavel_label = new Label(variavel.getNome_variavel());
 				variavel_label.setContentDisplay(ContentDisplay.TOP);
 				variavel_label.setCursor(Cursor.HAND);
@@ -217,7 +217,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		clearTableView();
 		try {
 			ObservableList<Medicao> medicoes = FXCollections
-					.observableArrayList(connector.getMedicoesDaCultura(cultura_selected_id));
+					.observableArrayList(connector.getMedicoesCultura(Integer.parseInt(cultura_selected_id)));
 			table_view.setItems(medicoes);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -235,10 +235,11 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private void refreshLineChart(String cultura_selected_id, String cultura_selected_name) {
 		line_chart.getData().clear();
 		try {
-			for (LinkedList<Medicao> list_medicoes : connector.getMedicoesDaCulturaByVariable(cultura_selected_id)) {
+			for (LinkedList<Medicao> list_medicoes : connector
+					.getMedicoesCulturaByVariable(Integer.parseInt(cultura_selected_id))) {
 				XYChart.Series series = new XYChart.Series();
 				series.setName(list_medicoes.getFirst().getMore_info());
-				for (Medicao medicao : connector.getMedicoesDaCultura(cultura_selected_id)) {
+				for (Medicao medicao : connector.getMedicoesCultura(Integer.parseInt(cultura_selected_id))) {
 					series.getData().add(new XYChart.Data(medicao.getData_hora_medicao(),
 
 							Integer.parseInt(medicao.getId_medicao())));

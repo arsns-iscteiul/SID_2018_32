@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.connector.Connector;
+import application.controllers.admin.FXMLAdminController;
 import application.controllers.auditor.FXMLAuditorController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +55,6 @@ public class FXMLLoginController extends FXMLController implements Initializable
 		wrong_credentials_warning_label.setVisible(false);
 	}
 
-	@SuppressWarnings("null")
 	@FXML
 	public void login(ActionEvent event) throws IOException {
 		try {
@@ -63,8 +63,14 @@ public class FXMLLoginController extends FXMLController implements Initializable
 				if (id_investigador.equals("auditor")) {
 					FXMLLoader auditor_loader = new FXMLLoader(
 							getClass().getResource("/application/views/auditor/FXMLAuditor.fxml"));
-					FXMLAuditorController main_controller = new FXMLAuditorController(fxmlShellController, connector);
-					fxmlShellController.setDisplay("Auditor", auditor_loader, main_controller, true);
+					FXMLAuditorController auditor_controller = new FXMLAuditorController(fxmlShellController,
+							connector);
+					fxmlShellController.setDisplay("Auditor", auditor_loader, auditor_controller, true);
+				} else if (id_investigador.equals("admin")) {
+					FXMLLoader admin_loader = new FXMLLoader(
+							getClass().getResource("/application/views/admin/FXMLAdmin.fxml"));
+					FXMLAdminController admin_controller = new FXMLAdminController(fxmlShellController, connector);
+					fxmlShellController.setDisplay("Admin", admin_loader, admin_controller, true);
 				} else {
 					FXMLLoader main_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLMain.fxml"));
 					FXMLMainController main_controller = new FXMLMainController(fxmlShellController, connector,

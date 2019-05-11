@@ -22,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TableView;
@@ -39,6 +40,8 @@ public class FXMLAuditorController extends FXMLController implements Initializab
 	private ChoiceBox<String> tables_choice_box;
 	@FXML
 	private TableView<String> table_view;
+	@FXML
+	private HBox table_names;
 	@FXML
 	private HBox tables;
 

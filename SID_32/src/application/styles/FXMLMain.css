@@ -22,6 +22,7 @@
 
 #add_simple_btn{
 	-fx-background-color: transparent;
+	-fx-graphic: url("/application/media/icons/add_black_20px.png");
 }
 
 #cultura_listview {

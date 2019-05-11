@@ -165,6 +165,9 @@ public class FXMLShellController extends FXMLController implements Initializable
 		if (fxml_name.equals("Auditor")) {
 			display_node.getStylesheets().add(
 					getClass().getResource("/application/styles/auditor/FXML" + fxml_name + ".css").toExternalForm());
+		} else if (fxml_name.equals("Admin")) {
+			display_node.getStylesheets().add(
+					getClass().getResource("/application/styles/admin/FXML" + fxml_name + ".css").toExternalForm());
 		} else {
 			display_node.getStylesheets()
 					.add(getClass().getResource("/application/styles/FXML" + fxml_name + ".css").toExternalForm());

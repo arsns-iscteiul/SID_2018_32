@@ -1,0 +1,21 @@
+#container {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+#field {
+    -fx-background-color: transparent;
+}
+
+#logout_btn {
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+
+#add_simple_btn{
+	-fx-background-color: transparent;
+	-fx-graphic: url("/application/media/icons/add_black_20px.png");
+}

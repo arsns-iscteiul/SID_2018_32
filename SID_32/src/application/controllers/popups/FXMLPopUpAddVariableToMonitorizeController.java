@@ -44,9 +44,9 @@ public class FXMLPopUpAddVariableToMonitorizeController extends FXMLController i
 				});
 		try {
 			LinkedList<Variavel> variables_not_being_monitorized = new LinkedList<>();
-			for (Variavel variable : connector.getVariaveis()) {
+			for (Variavel variable : connector.getVariavelTable()) {
 				boolean is_being_monitorized = false;
-				for (Variavel variables_being_monitorized : connector.getVariaveisDaCultura(cultura_id)) {
+				for (Variavel variables_being_monitorized : connector.getVariaveisCultura(Integer.parseInt(cultura_id))) {
 					if (variables_being_monitorized.getId_variavel().equalsIgnoreCase(variable.getId_variavel())) {
 						is_being_monitorized = true;
 					}
@@ -71,7 +71,7 @@ public class FXMLPopUpAddVariableToMonitorizeController extends FXMLController i
 			fields = new String[] { cultura_id,
 					variables_not_monitorized_list_view.getSelectionModel().getSelectedItem().getId_variavel(), "20.00",
 					"10.00" };
-			connector.changeContentOfATable("VariavelMedida", fields, "INSERT");
+			connector.insertVariavelMedida(fields);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
