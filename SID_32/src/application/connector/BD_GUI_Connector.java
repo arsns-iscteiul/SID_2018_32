@@ -1,11 +1,15 @@
 package application.connector;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 import application.connector.objects.Cultura;
@@ -185,39 +189,170 @@ public class BD_GUI_Connector {
 		return createMedicoes(resultSet);
 	}
 
-	public void insertVariavelMedida(String fields[]) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaINSERT(?,?,?,?)}");
-		ps.setEscapeProcessing(true);
-		ps.setInt(1, Integer.parseInt(fields[0]));
-		ps.setInt(2, Integer.parseInt(fields[1]));
-		ps.setInt(3, Integer.parseInt(fields[2]));
-		ps.setInt(4, Integer.parseInt(fields[3]));
-		ps.executeQuery();
+	/**
+	 * This function returns all Medicao objects in database which are being
+	 * measured by a Cultura, given it's id, separated by variable.
+	 * 
+	 * @param idCultura - id of a cultura u want to display its medições
+	 * @return Medicao objects in database which are being measured by a Cultura,
+	 *         given it's id, separated by variable
+	 * @throws SQLException - if a user doesn't have permissions to execute the
+	 *                      select query
+	 */
+	public LinkedList<LinkedList<Medicao>> getMedicoesCulturaByVariavel(int idCultura) throws SQLException {
+
+		LinkedList<Variavel> variavelList = getVariaveisCultura(idCultura);
+		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
+		for (int i = 0; i != variavelList.size(); i++) {
+			ResultSet resultSet = connection.createStatement().executeQuery(
+					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM medicao, variavel_medida WHERE medicao.Variavel_medida_fk = variavel_medida.Variavel_medida_ID AND variavel_medida.variavel_fk = "
+							+ variavelList.get(i).getId_variavel() + " AND variavel_medida.cultura_fk = " + idCultura);
+
+			while (resultSet.next()) {
+				list.add(createMedicoes(resultSet));
+			}
+			resultSet.beforeFirst();
+		}
+		return list;
 	}
 
-	public void insertVariavel(String fields[]) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call VariavelINSERT(?)}");
+	/**
+	 * This Method creates and inserts a new VariavelMedida in the database
+	 * 
+	 * @param upperLimit - upperlimit of the VariavelMedida
+	 * @param lowerLimit - lowerlimit of the VariavelMedida
+	 * @param idVariavel - id of the Variavel you are measuring
+	 * @throws SQLException - if a database access error occurs or this method is
+	 *                      called on a closed connection
+	 */
+	public void insertVariavelMedida(int upperLimit, int lowerLimit, int idVariavel) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaINSERT(?,?,?)}");
 		ps.setEscapeProcessing(true);
-		ps.setString(1, fields[0]);
-		ps.executeQuery();
-	}
-
-	public void insertMedicao(String fields[]) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call MedicaoINSERT(?,?,?)}");
-		ps.setEscapeProcessing(true);
-		ps.setString(1, fields[0]);
-		ps.setInt(2, Integer.parseInt(fields[1]));
-		ps.setString(3, fields[2]);
+		ps.setInt(1, upperLimit);
+		ps.setInt(2, lowerLimit);
+		ps.setInt(3, idVariavel);
 		ps.executeUpdate();
 	}
 
-	public void insertCultura(String fields[]) throws SQLException {
+	/**
+	 * This Method creates and inserts a new Variavel in the database
+	 * 
+	 * @param name - name of the new variavel
+	 * @throws SQLException - if a database access error occurs or this method is
+	 *                      called on a closed connection
+	 */
+	public void insertVariavel(String name) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call VariavelINSERT(?)}");
+		ps.setEscapeProcessing(true);
+		ps.setString(1, name);
+		ps.executeUpdate();
+	}
+
+	/**
+	 * This Method creates and inserts a new Medicao in the database
+	 * @param value - value of the new medicao you want to insert
+	 * @param variavelMedidaFK - foreign key of the variavelMedida
+	 * @throws SQLException - if a database access error occurs or this method is
+	 *                      called on a closed connection
+	 */
+	public void insertMedicao(int value, int variavelMedidaFK) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call MedicaoINSERT(?,?,?)}");
+		ps.setEscapeProcessing(true);
+		ps.setInt(1, value);
+		ps.setInt(2,variavelMedidaFK);
+		ps.setTimestamp(3, new Timestamp(Calendar.getInstance().getTimeInMillis()));
+		;
+		ps.executeUpdate();
+	}
+
+	/**
+	 * This Method creates and inserts a new Cultura in the database
+	 * 
+	 * @param nomeCultura     - Name of the cultura u want to insert
+	 * @param description     - description of the cultura
+	 * @param type            - type of the cultura
+	 * @param id_investigador - investigadors id
+	 * @throws SQLException - if a database access error occurs or this method is
+	 *                      called on a closed connection
+	 */
+
+	public void insertCultura(String culturaName, String description, int type, int id_investigador)
+			throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("{call culturaINSERT(?,?,?,?)}");
 		ps.setEscapeProcessing(true);
-		ps.setString(1, fields[0]);
-		ps.setString(2, fields[1]);
-		ps.setInt(3, Integer.parseInt(fields[2]));
-		ps.setInt(4, Integer.parseInt(fields[3]));
+		ps.setString(1, culturaName);
+		ps.setString(2, description);
+		ps.setInt(3, type);
+		ps.setInt(4, id_investigador);
+		ps.executeUpdate();
+	}
+
+	public void insertInvestigador(String nome, String email, String categoria, String pwd) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call investigadorINSERT(?,?,?,?)}");
+		ps.setString(1, nome);
+		ps.setString(2, email);
+		ps.setString(3, categoria);
+		ps.setString(4, pwd);
+		ps.executeUpdate();
+	}
+
+	/**
+	 * This method deletes a VariavelMedida from the database base on its ID.
+	 * 
+	 * @param idVariavelMedida - id of the VariavelMedida you want to delete.
+	 * @throws SQLException - if a database access error occurs or this method is
+	 *                      called on a closed connection
+	 */
+	public void deleteVariavelMedida(int idVariavelMedida) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaDELETE(?)}");
+		ps.setInt(1, idVariavelMedida);
+		ps.executeUpdate();
+	}
+
+	/**
+	 * This method deletes a Variavel from the database base on its ID.
+	 * 
+	 * @param idVariavel - id of the Variavel you want to delete.
+	 * @throws SQLException - if a database access error occurs or this method is
+	 *                      called on a closed connection
+	 */
+	public void deleteVariavel(int idVariavel) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call VariavelDELETE(?)}");
+		ps.setInt(1, idVariavel);
+		ps.executeUpdate();
+
+	}
+
+	/**
+	 * This method deletes a Medicao from the database base on its ID.
+	 * 
+	 * @param idMedicao - id of the Medicao you want to delete.
+	 * @throws SQLException - if a database access error occurs or this method is
+	 *                      called on a closed connection
+	 */
+	public void deleteMedicao(int idMedicao) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call MedicaoDELETE(?)}");
+		ps.setInt(1, idMedicao);
+		ps.executeUpdate();
+
+	}
+
+	/**
+	 * This method deletes a Cultura from the database base on its ID.
+	 * 
+	 * @param idCultura - id of the Cultura you want to delete.
+	 * @throws SQLException - if a database access error occurs or this method is
+	 *                      called on a closed connection
+	 */
+	public void deleteCultura(int idCultura) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call CulturaDELETE(?)}");
+		ps.setInt(1, idCultura);
+		ps.executeUpdate();
+	}
+
+	public void deleteInvestigador(int idInvestigador) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call InvestigadorDELETE(?)}");
+		ps.setInt(1, idInvestigador);
 		ps.executeUpdate();
 	}
 
@@ -311,33 +446,6 @@ public class BD_GUI_Connector {
 					resultSet.getString(4), resultSet.getString(5)));
 		}
 		return list;
-	}
-
-	/**
-	 * This function returns all Medicao objects in database which are being
-	 * measured by a Cultura, given it's id, separated by variable.
-	 * 
-	 * @param idCultura - id of a cultura u want to display its medições
-	 * @return Medicao objects in database which are being measured by a Cultura,
-	 *         given it's id, separated by variable
-	 * @throws SQLException - if a user doesn't have permissions to execute the
-	 *                      select query
-	 */
-	public LinkedList<LinkedList<Medicao>> getMedicoesCulturaByVariavel(int idCultura) throws SQLException {
-
-		LinkedList<Variavel> variavelList = getVariaveisCultura(idCultura);
-		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
-		for (int i = 0; i != variavelList.size(); i++) {
-			ResultSet resultSet = connection.createStatement().executeQuery(
-					"SELECT Medicao.Id_Medicao, Medicao.Data_Hora_Medicao, Medicao.Valor_Medicao, Medicao.Variavel_medida_fk FROM Medicao, variavel_medida, Variavel WHERE variavel_medida.cultura_fk="
-							+ idCultura + "AND Variavel.Id_Variavel =" + variavelList.get(i).getId_variavel());
-
-			while (resultSet.next()) {
-				list.add(i, createMedicoes(resultSet));
-			}
-			resultSet.beforeFirst();
-		}
-		return null;
 	}
 
 	/**

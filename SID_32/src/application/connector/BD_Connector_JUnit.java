@@ -39,9 +39,8 @@ class BD_Connector_JUnit {
 
 	@Test
 	void insertCultura() {
-		String[] s = { "nome-cultura", "descricao", "6", "1" };
 		try {
-			b.insertCultura(s);
+			b.insertCultura("nome-_-Cultura", "descricao", 6 , 1);
 		} catch (SQLException e) {
 			System.out.println("No permissons to insert on that given table, or wrong fields");
 		}
@@ -148,7 +147,6 @@ class BD_Connector_JUnit {
 	void getMedicoesCulturaVariavel() {
 		try {
 			LinkedList<LinkedList<Medicao>> list = b.getMedicoesCulturaByVariavel(3);
-			System.out.println(list.size());
 			int i = 0;
 			for (LinkedList<Medicao> v : list) {
 				System.out.println(i);
@@ -171,6 +169,63 @@ class BD_Connector_JUnit {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	@Test
+	void insertMedicao() {
+		try {
+			b.insertMedicao(5 , 12);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	void insertVariavel() {
+		String s[] = { "ishdiau" };
+		try {
+			b.insertVariavel("Pretty");
+		} catch (SQLException e) {
+		}
+	}
+
+	@Test
+	void insertVariavelMedida() {
+		try {
+			b.insertVariavelMedida(15, 20, 1);
+		} catch (SQLException e) {
+		}
+	}
+
+	@Test
+	void deleteVariavel() throws NumberFormatException, SQLException {
+		b.deleteVariavel(Integer.parseInt(b.getVariavelTable().getLast().getId_variavel()));
+	}
+
+	@Test
+	void deleteCultura() throws NumberFormatException, SQLException {
+		b.deleteCultura(Integer.parseInt(b.getCulturaTable().getLast().getId_cultura()));
+	}
+
+	@Test
+	void deleteVariavelMedida() throws NumberFormatException, SQLException {
+		b.deleteVariavelMedida(Integer.parseInt(b.getVariavelMedidaTable().getLast().getVariavel_medida_id()));
+	}
+
+	@Test
+	void deleteMedicao() throws NumberFormatException, SQLException {
+		b.deleteMedicao(Integer.parseInt(b.getMedicaoTable().getLast().getId_medicao()));
+	}
+	
+	@Test 
+	void insertInvestigador(){
+		
+		try {
+			b.insertInvestigador("sabio", "idk", "categoria", "secret-very");
+		} catch (SQLException e) {
+			System.out.println("NO PERMISSONS");
 		}
 	}
 
