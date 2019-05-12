@@ -54,10 +54,8 @@ public class FXMLPopUpAddManualMeasurementController extends FXMLController impl
 	@FXML
 	public void addManualMeasurement(ActionEvent event) {
 		try {
-			String fields[];
-			fields = new String[] { "", value_field.getText(),
-					variable_choice_box.getSelectionModel().getSelectedItem().getId_variavel() };
-			connector.insertMedicao(fields);
+			connector.insertMedicao(Integer.parseInt(value_field.getText()),
+					Integer.parseInt(variable_choice_box.getSelectionModel().getSelectedItem().getId_variavel()));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

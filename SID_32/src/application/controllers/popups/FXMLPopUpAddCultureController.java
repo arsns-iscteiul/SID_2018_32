@@ -2,7 +2,6 @@ package application.controllers.popups;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ResourceBundle;
 
 import application.connector.Connector;
@@ -16,7 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class FXMLPopUpAddCultureController extends FXMLController implements Initializable {
-	
+
 	private FXMLMainController fxmlMainController = null;
 	private Connector connector = null;
 	private String investigador_id;
@@ -26,7 +25,8 @@ public class FXMLPopUpAddCultureController extends FXMLController implements Ini
 	@FXML
 	private TextField description;
 
-	public FXMLPopUpAddCultureController(FXMLMainController fxmlMainController, Connector connector, String investigador_id) {
+	public FXMLPopUpAddCultureController(FXMLMainController fxmlMainController, Connector connector,
+			String investigador_id) {
 		this.fxmlMainController = fxmlMainController;
 		this.connector = connector;
 		this.investigador_id = investigador_id;
@@ -40,11 +40,7 @@ public class FXMLPopUpAddCultureController extends FXMLController implements Ini
 	@FXML
 	public void addCulture(ActionEvent event) {
 		try {
-			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			System.out.println(timestamp.toString());
-			String fields[];
-			fields = new String[] { name.getText(), description.getText(), "1", investigador_id };
-			connector.insertCultura(fields);
+			connector.insertCultura(name.getText(), description.getText(), 1, Integer.parseInt(investigador_id));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

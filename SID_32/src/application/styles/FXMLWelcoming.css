@@ -18,7 +18,30 @@
 }
 
 #login_btn {
-	-fx-background-color: linear-gradient(to right, #11998e 40%, #38ef7d 100%);
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
 	-fx-background-radius: 60.0;
     -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+.text-area {
+    -fx-background-insets: 0.0;
+    -fx-background-color: transparent, #ffffff, transparent, #ffffff;
+}
+
+.text-area .content {
+    -fx-background-color: transparent, #ffffff, transparent, #ffffff;
+}
+
+.text-area:focused .content {
+    -fx-background-color: transparent, #ffffff, transparent, #ffffff;
+}
+
+.text-area:focused {
+    -fx-highlight-fill: #38ef7d;
+}
+
+.text-area .content {
+    -fx-padding: 10.0px;
+    -fx-text-fill: #000000;
+    -fx-highlight-fill: #38ef7d;
 }

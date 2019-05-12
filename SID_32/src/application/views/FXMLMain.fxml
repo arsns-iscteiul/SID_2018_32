@@ -66,13 +66,37 @@
 							<children>
 								<AnchorPane id="center" fx:id="center_display" pickOnBounds="false" prefHeight="1065.0" prefWidth="631.0" BorderPane.alignment="CENTER">
 									<children>
-										<VBox layoutX="40.0" layoutY="30.0" spacing="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
+										<VBox layoutX="40.0" layoutY="30.0" spacing="10.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
 											<children>
-												<Label id="cultura_name_label" fx:id="cultura_name_label" layoutX="31.0" layoutY="27.0" text="cultura_name_label" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="30.0">
-													<font>
-														<Font name="System Bold" size="24.0" />
-													</font>
-												</Label>
+                                    <HBox alignment="CENTER_LEFT">
+                                       <children>
+      												<Label id="cultura_name_label" fx:id="cultura_name_label" text="cultura_name_label">
+      													<font>
+      														<Font name="System Bold" size="24.0" />
+      													</font>
+      												</Label>
+                                          <Button id="remove_simple_btn" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#removeCulture" textFill="WHITE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <image>
+                                                      <Image url="@../media/icons/remove_black_20px.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <TextArea id="cultura_description" fx:id="cultura_description_text_area" prefHeight="31.0" promptText="This culture has no description">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextArea>
 												<Label layoutX="30.0" layoutY="73.0" text="Sensor Analytics Overview" AnchorPane.leftAnchor="40.0">
 													<font>
 														<Font name="System Bold" size="18.0" />
@@ -175,6 +199,21 @@
 																		</ImageView>
 																	</graphic>
 																</Button>
+                                                <Button id="remove_simple_btn" alignment="CENTER_RIGHT" layoutX="185.0" layoutY="10.0" mnemonicParsing="false" onAction="#removeVariableToBeMonitorized" textFill="WHITE">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <graphic>
+                                                      <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <image>
+                                                            <Image url="@../media/icons/remove_black_20px.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
 															</children>
 														</HBox>
 														<HBox id="monitorized_variables_hbox" fx:id="monitorized_variables_hbox" alignment="CENTER_LEFT" spacing="20.0" />

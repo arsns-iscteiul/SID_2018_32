@@ -39,6 +39,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -63,6 +64,8 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private AnchorPane center_display;
 	@FXML
 	private Label cultura_name_label;
+	@FXML
+	private TextArea cultura_description_text_area;
 	@FXML
 	private Label temperature_label;
 	@FXML
@@ -110,6 +113,8 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	}
 
 	private void buildWelcomingPane() {
+		init_display.setManaged(true);
+		init_display.setVisible(true);
 		center_display.setManaged(false);
 		center_display.setVisible(false);
 		try {
@@ -156,15 +161,16 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		init_display.setVisible(false);
 		center_display.setManaged(true);
 		center_display.setVisible(true);
-		refreshCulturaNameLabel(cultura_selected.getNome_cultura());
+		refreshCulturaNameLabel(cultura_selected.getNome_cultura(), cultura_selected.getDescricao_cultura());
 		refreshSensorsHBox();
 		refreshMonitorizedVariablesHBox(cultura_selected.getId_cultura());
 		refreshLineChart(cultura_selected.getId_cultura(), cultura_selected.getNome_cultura());
 		refreshTableView(cultura_selected.getId_cultura());
 	}
 
-	private void refreshCulturaNameLabel(String cultura_selected_name) {
+	private void refreshCulturaNameLabel(String cultura_selected_name, String cultura_selected_description) {
 		cultura_name_label.setText(cultura_selected_name);
+		cultura_description_text_area.setText(cultura_selected_description);
 	}
 
 	private void refreshSensorsHBox() {
@@ -253,6 +259,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Error about mesurements");
 		}
 	}
 
@@ -285,12 +292,35 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	}
 
 	@FXML
+	private void removeCulture() {
+		try {
+			connector.deleteCultura(
+					Integer.parseInt(cultura_listview.getSelectionModel().getSelectedItem().getId_cultura()));
+		} catch (NumberFormatException | SQLException e) {
+			e.printStackTrace();
+//		} finally {
+//			buildWelcomingPane();
+//			refreshLeftPane();
+		}
+	}
+
+	@FXML
 	private void addVariableToBeMonitorized() {
 		FXMLLoader popup_add_variable_to_monitorize_loader = new FXMLLoader(
 				getClass().getResource("/application/views/popups/FXMLPopUpAddVariableToMonitorize.fxml"));
 		FXMLPopUpAddVariableToMonitorizeController popup_add_variable_to_monitorize_controller = new FXMLPopUpAddVariableToMonitorizeController(
-				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura());
+				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura(), true);
 		buildPopPup("Add variable to monitorize", "PopUpAddVariableToMonitorize",
+				popup_add_variable_to_monitorize_loader, popup_add_variable_to_monitorize_controller);
+	}
+
+	@FXML
+	private void removeVariableToBeMonitorized() {
+		FXMLLoader popup_add_variable_to_monitorize_loader = new FXMLLoader(
+				getClass().getResource("/application/views/popups/FXMLPopUpAddVariableToMonitorize.fxml"));
+		FXMLPopUpAddVariableToMonitorizeController popup_add_variable_to_monitorize_controller = new FXMLPopUpAddVariableToMonitorizeController(
+				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura(), false);
+		buildPopPup("Remove variable being monitorize", "PopUpAddVariableToMonitorize",
 				popup_add_variable_to_monitorize_loader, popup_add_variable_to_monitorize_controller);
 	}
 
