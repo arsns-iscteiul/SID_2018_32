@@ -1,6 +1,6 @@
 package application.connector.objects;
 
-public class VariavelMedida {
+public class VariavelMedida{
 
 	private String variavel_medida_id;
 	private String cultura_fk;

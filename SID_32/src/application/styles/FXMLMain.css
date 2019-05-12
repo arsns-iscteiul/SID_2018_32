@@ -22,6 +22,36 @@
 
 #add_simple_btn{
 	-fx-background-color: transparent;
+	-fx-graphic: url("/application/media/icons/add_black_20px.png");
+}
+
+#remove_simple_btn{
+	-fx-background-color: transparent;
+	-fx-graphic: url("/application/media/icons/remove_black_20px.png");
+}
+
+
+#cultura_description {
+	-fx-background-insets: 0.0;
+    -fx-background-color: transparent, #ffffff, transparent, #ffffff;
+}
+
+#cultura_description .content {
+    -fx-background-color: transparent, #ffffff, transparent, #ffffff;
+}
+
+#cultura_description:focused .content {
+    -fx-background-color: transparent, #ffffff, transparent, #ffffff;
+}
+
+#cultura_description:focused {
+    -fx-highlight-fill: #38ef7d;
+}
+
+#cultura_description .content {
+    -fx-padding: 10.0px;
+    -fx-text-fill: #000000;
+    -fx-highlight-fill: #38ef7d;
 }
 
 #cultura_listview {

@@ -1,6 +1,6 @@
 package application.connector.objects;
 
-public class Cultura {
+public class Cultura{
 
 	private String id_cultura;
 	private String nome_cultura;

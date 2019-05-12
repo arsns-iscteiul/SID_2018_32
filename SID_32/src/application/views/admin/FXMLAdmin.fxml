@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane pickOnBounds="false"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<VBox alignment="CENTER" layoutX="32.0" layoutY="132.0"
+			spacing="40.0" AnchorPane.bottomAnchor="40.0"
+			AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0"
+			AnchorPane.topAnchor="40.0">
+			<children>
+				<VBox alignment="CENTER">
+					<children>
+						<Label text="Admin tables">
+							<font>
+								<Font size="24.0" />
+							</font>
+						</Label>
+						<Label
+							text="Here you can monitorize Researcher and Variable tables" />
+					</children>
+				</VBox>
+				<HBox fx:id="tables" alignment="CENTER" spacing="20.0">
+					<children>
+						<VBox alignment="CENTER" spacing="8.0">
+							<children>
+								<HBox alignment="CENTER" prefHeight="100.0"
+									prefWidth="200.0">
+									<children>
+										<Label text="Researchers">
+											<font>
+												<Font name="System Bold" size="18.0" />
+											</font>
+										</Label>
+										<Button id="add_simple_btn" alignment="CENTER_RIGHT"
+											mnemonicParsing="false" onAction="#addResearcher"
+											textFill="WHITE">
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+											<graphic>
+												<ImageView fitHeight="20.0" fitWidth="20.0"
+													pickOnBounds="true" preserveRatio="true">
+													<cursor>
+														<Cursor fx:constant="HAND" />
+													</cursor>
+													<image>
+														<Image url="@../../media/icons/add_black_20px.png" />
+													</image>
+												</ImageView>
+											</graphic>
+										</Button>
+									</children>
+								</HBox>
+								<TableView fx:id="investigadores_table_view" />
+							</children>
+						</VBox>
+						<Separator orientation="VERTICAL" prefHeight="200.0" />
+						<VBox alignment="CENTER" spacing="4.0">
+							<children>
+								<VBox spacing="4.0">
+									<children>
+										<HBox alignment="CENTER" prefHeight="100.0"
+											prefWidth="200.0">
+											<children>
+												<Label text="Variables">
+													<font>
+														<Font name="System Bold" size="18.0" />
+													</font>
+												</Label>
+												<Button id="add_simple_btn" alignment="CENTER_RIGHT"
+													mnemonicParsing="false" onAction="#addVariable"
+													textFill="WHITE">
+													<cursor>
+														<Cursor fx:constant="HAND" />
+													</cursor>
+													<graphic>
+														<ImageView fitHeight="20.0" fitWidth="20.0"
+															pickOnBounds="true" preserveRatio="true">
+															<cursor>
+																<Cursor fx:constant="HAND" />
+															</cursor>
+															<image>
+																<Image url="@../../media/icons/add_black_20px.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+											</children>
+										</HBox>
+										<HBox />
+									</children>
+								</VBox>
+								<TableView fx:id="variaveis_table_view" />
+							</children>
+						</VBox>
+					</children>
+				</HBox>
+				<VBox fx:id="add_researcher_hbox" alignment="CENTER"
+					spacing="4.0">
+					<children>
+						<HBox spacing="4.0">
+							<children>
+								<Label text="Name" />
+								<TextField fx:id="new_nome_investigador" />
+								<Separator orientation="VERTICAL" />
+								<Label layoutX="10.0" layoutY="10.0" text="E-mail" />
+								<TextField fx:id="new_email_investigador"
+									layoutX="38.0" layoutY="10.0" />
+								<Separator orientation="VERTICAL" />
+								<Label layoutX="10.0" layoutY="10.0" text="Password" />
+								<PasswordField fx:id="new_password_investigador" />
+								<Separator layoutX="400.0" layoutY="10.0"
+									orientation="VERTICAL" />
+								<Label layoutX="410.0" layoutY="10.0" text="Cat. Prof." />
+								<TextField fx:id="new_catprof_investigador" />
+							</children>
+						</HBox>
+						<Button id="logout_btn" mnemonicParsing="false"
+							onAction="#addResearcherInsert" prefHeight="25.0"
+							prefWidth="168.0" text="Add Researcher" textFill="WHITE">
+							<cursor>
+								<Cursor fx:constant="HAND" />
+							</cursor>
+						</Button>
+					</children>
+				</VBox>
+				<VBox fx:id="add_variable_hbox" alignment="CENTER"
+					spacing="4.0">
+					<children>
+						<HBox alignment="CENTER" spacing="4.0">
+							<children>
+								<Label text="Name" />
+								<TextField fx:id="new_nome_variavel" />
+							</children>
+						</HBox>
+						<Button id="logout_btn" mnemonicParsing="false"
+							onAction="#addVariableInsert" prefHeight="25.0" prefWidth="168.0"
+							text="Add Researcher" textFill="WHITE">
+							<cursor>
+								<Cursor fx:constant="HAND" />
+							</cursor>
+						</Button>
+					</children>
+				</VBox>
+				<Button id="logout_btn" mnemonicParsing="false"
+					onAction="#logout" prefHeight="25.0" prefWidth="191.0"
+					text="Logout" textFill="WHITE">
+					<cursor>
+						<Cursor fx:constant="HAND" />
+					</cursor>
+				</Button>
+			</children>
+		</VBox>
+	</children>
+</AnchorPane>

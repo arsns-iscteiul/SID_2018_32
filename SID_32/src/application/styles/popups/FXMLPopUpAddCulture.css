@@ -1,0 +1,36 @@
+#container {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+#field {
+    -fx-background-color: transparent;
+}
+
+#password_viewer_btn {
+	-fx-background-color: transparent;
+    -fx-graphic: url("/application/media/icons/notvisible_gray_20px.png");
+}
+
+#password_viewer_btn:selected {
+    -fx-graphic: url("/application/media/icons/visible_gray_20px.png");
+}
+
+#login_btn {
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+.choice-box .context-menu { -fx-background-color: #ffffff; }
+.choice-box .menu-item:focused { -fx-background-color: #ffffff; }
+.choice-box .menu-item > .label { -fx-text-fill: #000000; }
+.choice-box .menu-item:focused > .label { -fx-text-fill: #000000; }
+
+.choice-box {
+  -fx-background-color: #ffffff;
+  -fx-mark-color: #38ef7d;
+}
+
+.choice-box > .label { -fx-text-fill: #000000; }

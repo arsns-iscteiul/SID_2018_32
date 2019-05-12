@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<VBox alignment="CENTER" layoutX="32.0" layoutY="132.0" prefHeight="248.0" prefWidth="380.0" spacing="40.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+			<children>
+				<HBox alignment="BASELINE_CENTER" spacing="10.0">
+					<children>
+						<Label text="YOUR LAB.">
+							<font>
+								<Font name="System Bold" size="24.0" />
+							</font>
+						</Label>
+						<Label text="making results">
+							<font>
+								<Font size="24.0" />
+							</font>
+						</Label>
+					</children>
+				</HBox>
+				<VBox alignment="CENTER" layoutX="28.0" layoutY="12.0" spacing="10.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+					<children>
+						<Label text="Welcome back">
+							<font>
+								<Font name="System Bold" size="24.0" />
+							</font>
+						</Label>
+					</children>
+				</VBox>
+            <TextArea editable="false" text="Select a  Culture to start working. If you don't have one, click in the button at your left to create one." wrapText="true" />
+			</children>
+		</VBox>
+	</children>
+</AnchorPane>
