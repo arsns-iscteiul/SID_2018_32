@@ -67,7 +67,7 @@ public class Connector {
 			connection = DriverManager.getConnection(MAIN_DATABASE_URL, "root", "");
 		}
 
-		if (username.equals("auditor") && username.equals("auditor")) {
+		if (username.equals("auditor") && password.equals("auditor")) {
 			return "auditor";
 		} else if (username.equals("admin") && password.equals("admin")) {
 			return "admin";
