@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.AnchorPane?> 
 
 <AnchorPane pickOnBounds="false"
 	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
