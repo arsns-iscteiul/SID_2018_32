@@ -43,6 +43,10 @@ public class FXMLAdminController extends FXMLController implements Initializable
 	@FXML
 	private VBox add_variable_hbox;
 	@FXML
+	private VBox remove_researcher_hbox;
+	@FXML
+	private VBox remove_variable_hbox;
+	@FXML
 	private TextField new_nome_investigador;
 	@FXML
 	private TextField new_email_investigador;
@@ -52,6 +56,10 @@ public class FXMLAdminController extends FXMLController implements Initializable
 	private TextField new_catprof_investigador;
 	@FXML
 	private TextField new_nome_variavel;
+	@FXML
+	private TextField id_delete_variavel;
+	@FXML
+	private TextField id_delete_investigador;
 
 	public FXMLAdminController(FXMLShellController fxmlShellController, Connector connector) {
 		this.fxmlShellController = fxmlShellController;
@@ -60,12 +68,20 @@ public class FXMLAdminController extends FXMLController implements Initializable
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		setVisibleManagedProperties();
+		buildInvestigadoresTableView();
+		buildVariaveisTableView();
+	}
+
+	private void setVisibleManagedProperties() {
 		add_researcher_hbox.setVisible(false);
 		add_researcher_hbox.setManaged(false);
 		add_variable_hbox.setVisible(false);
 		add_variable_hbox.setManaged(false);
-		buildInvestigadoresTableView();
-		buildVariaveisTableView();
+		remove_researcher_hbox.setVisible(false);
+		remove_researcher_hbox.setManaged(false);
+		remove_variable_hbox.setVisible(false);
+		remove_variable_hbox.setManaged(false);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -146,6 +162,12 @@ public class FXMLAdminController extends FXMLController implements Initializable
 	}
 
 	@FXML
+	private void removeResearcher() {
+		remove_researcher_hbox.setVisible(true);
+		remove_researcher_hbox.setManaged(true);
+	}
+
+	@FXML
 	private void addResearcherInsert() {
 		try {
 			connector.insertInvestigador(new_nome_investigador.getText(), new_email_investigador.getText(),
@@ -160,9 +182,28 @@ public class FXMLAdminController extends FXMLController implements Initializable
 	}
 
 	@FXML
+	private void removeResearcherDelete() {
+		try {
+			connector.deleteInvestigador(Integer.parseInt(id_delete_investigador.getText()));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			remove_researcher_hbox.setVisible(false);
+			remove_researcher_hbox.setManaged(false);
+			buildInvestigadoresTableView();
+		}
+	}
+
+	@FXML
 	private void addVariable() {
 		add_variable_hbox.setVisible(true);
 		add_variable_hbox.setManaged(true);
+	}
+
+	@FXML
+	private void removeVariable() {
+		remove_variable_hbox.setVisible(true);
+		remove_variable_hbox.setManaged(true);
 	}
 
 	@FXML
@@ -174,6 +215,19 @@ public class FXMLAdminController extends FXMLController implements Initializable
 		} finally {
 			add_variable_hbox.setVisible(false);
 			add_variable_hbox.setManaged(false);
+			buildVariaveisTableView();
+		}
+	}
+
+	@FXML
+	private void removeVariableDelete() {
+		try {
+			connector.deleteVariavel(Integer.parseInt(id_delete_variavel.getText()));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			remove_variable_hbox.setVisible(false);
+			remove_variable_hbox.setManaged(false);
 			buildVariaveisTableView();
 		}
 	}

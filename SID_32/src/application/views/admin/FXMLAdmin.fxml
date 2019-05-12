@@ -60,6 +60,25 @@
 												</ImageView>
 											</graphic>
 										</Button>
+										<Button id="remove_simple_btn" alignment="CENTER_RIGHT"
+											layoutX="167.0" layoutY="46.0" mnemonicParsing="false"
+											onAction="#removeResearcher" textFill="WHITE">
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+											<graphic>
+												<ImageView fitHeight="20.0" fitWidth="20.0"
+													pickOnBounds="true" preserveRatio="true">
+													<cursor>
+														<Cursor fx:constant="HAND" />
+													</cursor>
+													<image>
+														<Image
+															url="@../../media/icons/remove_black_20px.png" />
+													</image>
+												</ImageView>
+											</graphic>
+										</Button>
 									</children>
 								</HBox>
 								<TableView fx:id="investigadores_table_view" />
@@ -92,6 +111,26 @@
 															</cursor>
 															<image>
 																<Image url="@../../media/icons/add_black_20px.png" />
+															</image>
+														</ImageView>
+													</graphic>
+												</Button>
+												<Button id="remove_simple_btn"
+													alignment="CENTER_RIGHT" layoutX="155.0" layoutY="46.0"
+													mnemonicParsing="false" onAction="#removeVariable"
+													textFill="WHITE">
+													<cursor>
+														<Cursor fx:constant="HAND" />
+													</cursor>
+													<graphic>
+														<ImageView fitHeight="20.0" fitWidth="20.0"
+															pickOnBounds="true" preserveRatio="true">
+															<cursor>
+																<Cursor fx:constant="HAND" />
+															</cursor>
+															<image>
+																<Image
+																	url="@../../media/icons/remove_black_20px.png" />
 															</image>
 														</ImageView>
 													</graphic>
@@ -135,6 +174,24 @@
 						</Button>
 					</children>
 				</VBox>
+				<VBox fx:id="remove_researcher_hbox" alignment="CENTER"
+					layoutX="10.0" layoutY="650.0" spacing="4.0">
+					<children>
+						<HBox alignment="CENTER" spacing="4.0">
+							<children>
+								<Label layoutX="410.0" layoutY="10.0" text="Id" />
+								<TextField fx:id="id_delete_investigador" />
+							</children>
+						</HBox>
+						<Button id="logout_btn" mnemonicParsing="false"
+							onAction="#removeResearcherDelete" prefHeight="25.0"
+							prefWidth="168.0" text="Remove Researcher" textFill="WHITE">
+							<cursor>
+								<Cursor fx:constant="HAND" />
+							</cursor>
+						</Button>
+					</children>
+				</VBox>
 				<VBox fx:id="add_variable_hbox" alignment="CENTER"
 					spacing="4.0">
 					<children>
@@ -146,7 +203,25 @@
 						</HBox>
 						<Button id="logout_btn" mnemonicParsing="false"
 							onAction="#addVariableInsert" prefHeight="25.0" prefWidth="168.0"
-							text="Add Researcher" textFill="WHITE">
+							text="Add Variable" textFill="WHITE">
+							<cursor>
+								<Cursor fx:constant="HAND" />
+							</cursor>
+						</Button>
+					</children>
+				</VBox>
+				<VBox fx:id="remove_variable_hbox" alignment="CENTER"
+					layoutX="10.0" layoutY="838.0" spacing="4.0">
+					<children>
+						<HBox alignment="CENTER" spacing="4.0">
+							<children>
+								<Label text="Id" />
+								<TextField fx:id="id_delete_variavel" />
+							</children>
+						</HBox>
+						<Button id="logout_btn" mnemonicParsing="false"
+							onAction="#removeVariableDelete" prefHeight="25.0"
+							prefWidth="168.0" text="Remove Variable" textFill="WHITE">
 							<cursor>
 								<Cursor fx:constant="HAND" />
 							</cursor>

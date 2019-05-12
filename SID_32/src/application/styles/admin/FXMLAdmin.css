@@ -14,8 +14,12 @@
     -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
 }
 
-
 #add_simple_btn{
 	-fx-background-color: transparent;
 	-fx-graphic: url("/application/media/icons/add_black_20px.png");
+}
+
+#remove_simple_btn{
+	-fx-background-color: transparent;
+	-fx-graphic: url("/application/media/icons/remove_black_20px.png");
 }
