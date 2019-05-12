@@ -61,7 +61,7 @@ public class FXMLLoginController extends FXMLController implements Initializable
 			String id_investigador = connector.login("main", email_field.getText(), password_hide_field.getText());
 			if (!(id_investigador == null)) {
 				if (id_investigador.equals("auditor")) {
-					Connector auditorConnector = new Connector("localhost:3307/auditor");
+					Connector auditorConnector = new Connector();
 					auditorConnector.login("auditor", email_field.getText(), password_hide_field.getText());
 					FXMLLoader auditor_loader = new FXMLLoader(
 							getClass().getResource("/application/views/auditor/FXMLAuditor.fxml"));

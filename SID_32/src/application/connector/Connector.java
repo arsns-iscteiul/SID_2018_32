@@ -35,7 +35,7 @@ public class Connector {
 	/**
 	 * Constructor of the BD_GUI_Connector. - Loads SQLServer JDBC Driver
 	 */
-	public Connector(String database_url) {
+	public Connector() {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -109,19 +109,6 @@ public class Connector {
 		}
 		return tableNames;
 
-	}
-
-	/**
-	 * This function returns the log columns of all the log tables that the logged
-	 * user has access to.
-	 * 
-	 * @return a list containing all the log tables of the user
-	 * @throws SQLException - if a user can't access the database.
-	 */
-	public LinkedList<Log> getLogColumns(String tableName) throws SQLException {
-		ResultSet resultSet = connection.createStatement().executeQuery("SELECT " + tableName + ".idlog, " + tableName
-				+ ".utilizador, " + tableName + ".dataLog, " + tableName + ".operacao FROM " + tableName);
-		return createLog(resultSet);
 	}
 
 	/**
@@ -209,7 +196,7 @@ public class Connector {
 	 */
 	public LinkedList<Variavel> getVariaveisCultura(int idCultura) throws SQLException {
 		ResultSet resultSet = connection.createStatement().executeQuery(
-				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM variavel, variavel_medida WHERE variavel.Id_Variavel = variavel_medida.variavel_fk AND variavel_medida.cultura_fk = "
+				"SELECT variavel.Id_Variavel, variavel.Nome_Variavel FROM variavel, variavel_medida WHERE variavel.Id_Variavel = variavel_medida.variavel_fk AND variavel_medida.cultura_fk ="
 						+ idCultura);
 		return createVariavel(resultSet);
 
@@ -253,11 +240,152 @@ public class Connector {
 	}
 
 	/**
+	 * This function returns all Medicao objects in database which are being
+	 * measured by a Cultura, given it's id
+	 *
+	 * @return list of Medicao objects
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<Medicao> getMedicoesDaCultura(String cultura_id) throws SQLException {
+		LinkedList<Medicao> list = new LinkedList<>();
+		LinkedList<String> variaveis_medidas_id = new LinkedList<>();
+		for (VariavelMedida vm : getVariaveisMedidas()) {
+			if (vm.getCultura_fk().equalsIgnoreCase(cultura_id)) {
+				variaveis_medidas_id.add(vm.getVariavel_fk());
+			}
+		}
+		for (Medicao m : getMedicoes()) {
+			if (variaveis_medidas_id.contains(m.getVariavel_medida_fk())) {
+				list.add(m);
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * This function returns all VariavelMedida objects in database on table
+	 * "variavel_medida"
+	 *
+	 * @return list of the VariavelMedida objects
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<VariavelMedida> getVariaveisMedidas() throws SQLException {
+		LinkedList<String>[] variaveis_medidas = allTableData("variavel_medida");
+		LinkedList<VariavelMedida> list = new LinkedList<>();
+		for (int i = 0; i != variaveis_medidas[0].size(); i++) {
+			String variavel_medida_id = variaveis_medidas[0].get(i);
+			String cultura_fk = variaveis_medidas[1].get(i);
+			String variavel_fk = variaveis_medidas[2].get(i);
+			String limite_superior = variaveis_medidas[3].get(i);
+			String limite_inferior = variaveis_medidas[4].get(i);
+			list.add(new VariavelMedida(variavel_medida_id, cultura_fk, variavel_fk, limite_superior, limite_inferior));
+		}
+		return list;
+	}
+
+	/**
+	 * This function returns all Medicao objects
+	 *
+	 * @return list of the Medicao objects in database on table "medicao"
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<Medicao> getMedicoes() throws SQLException {
+		LinkedList<String>[] variaveis = allTableData("medicao");
+		LinkedList<Medicao> list = new LinkedList<>();
+		for (int i = 0; i != variaveis[0].size(); i++) {
+			String id_medicao = variaveis[0].get(i);
+			String data_hora_medicao = variaveis[1].get(i);
+			String valor_medicao = variaveis[2].get(i);
+			String variavel_medida_fk = variaveis[3].get(i);
+			list.add(new Medicao(id_medicao, data_hora_medicao, valor_medicao, variavel_medida_fk));
+		}
+		return list;
+	}
+
+	/**
+	 * This function returns all Medicao objects in database which are being
+	 * measured by a Cultura, given it's id, separated by variable
+	 *
+	 * @return array of lists of Medicao objects separated by variable
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<LinkedList<Medicao>> getMedicoesDaCulturaByVariable(String cultura_id) throws SQLException {
+		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
+		LinkedList<String> variaveis_medidas_ids = new LinkedList<>();
+		for (VariavelMedida vm : getVariaveisMedidas()) {
+			if (vm.getCultura_fk().equalsIgnoreCase(cultura_id)) {
+				variaveis_medidas_ids.add(vm.getVariavel_fk());
+			}
+		}
+
+		for (Variavel v : getVariaveisDaCultura(cultura_id)) {
+			LinkedList<Medicao> list_medicaoes = new LinkedList<>();
+			for (Medicao m : getMedicoes()) {
+				if (variaveis_medidas_ids.contains(m.getVariavel_medida_fk())
+						&& variaveis_medidas_ids.contains(v.getId_variavel())) {
+					m.setMore_info(v.getNome_variavel());
+					list_medicaoes.add(m);
+				}
+			}
+			list.add(list_medicaoes);
+		}
+		System.out.println(list.size());
+		return list;
+	}
+
+	/**
+	 * This function returns all Variavel objects in database which are being
+	 * monitorized by a Cultura, given it's id
+	 *
+	 * @return list of Variavel objects
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<Variavel> getVariaveisDaCultura(String cultura_id) throws SQLException {
+		LinkedList<Variavel> list = new LinkedList<>();
+		LinkedList<String> variaveis_medidas_id = new LinkedList<>();
+		for (VariavelMedida vm : getVariaveisMedidas()) {
+			if (vm.getCultura_fk().equalsIgnoreCase(cultura_id)) {
+				variaveis_medidas_id.add(vm.getVariavel_fk());
+			}
+		}
+		for (Variavel v : getVariaveis()) {
+			if (variaveis_medidas_id.contains(v.getId_variavel())) {
+				list.add(v);
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * This function returns all Variavel objects
+	 *
+	 * @return list of the Variavel objects in database on table "variavel"
+	 * @throws SQLException - if a user doesn't have permissions to execute a select
+	 *                      query in a given table
+	 */
+	public LinkedList<Variavel> getVariaveis() throws SQLException {
+		LinkedList<String>[] variaveis = allTableData("variavel");
+		LinkedList<Variavel> list = new LinkedList<>();
+		for (int i = 0; i != variaveis[0].size(); i++) {
+			String id_variavel = variaveis[0].get(i);
+			String nome_variavel = variaveis[1].get(i);
+			list.add(new Variavel(id_variavel, nome_variavel));
+		}
+		return list;
+	}
+
+	/**
 	 * This Method creates and inserts a new VariavelMedida in the database
 	 * 
+	 * @param idCultura  - culturasID of the variavelMedida
 	 * @param upperLimit - upperlimit of the VariavelMedida
 	 * @param lowerLimit - lowerlimit of the VariavelMedida
-	 * @param idVariavel - id of the Variavel you are measuring
+	 * @param idVariavel - id of the variavel
 	 * @throws SQLException - if a database access error occurs or this method is
 	 *                      called on a closed connection
 	 */
@@ -266,9 +394,9 @@ public class Connector {
 		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaINSERT(?,?,?,?)}");
 		ps.setEscapeProcessing(true);
 		ps.setInt(1, idCultura);
-		ps.setInt(1, upperLimit);
-		ps.setInt(2, lowerLimit);
-		ps.setInt(3, idVariavel);
+		ps.setInt(2, upperLimit);
+		ps.setInt(3, lowerLimit);
+		ps.setInt(4, idVariavel);
 		ps.executeUpdate();
 	}
 
@@ -300,7 +428,6 @@ public class Connector {
 		ps.setInt(1, value);
 		ps.setInt(2, variavelMedidaFK);
 		ps.setTimestamp(3, new Timestamp(Calendar.getInstance().getTimeInMillis()));
-		;
 		ps.executeUpdate();
 	}
 
@@ -420,6 +547,53 @@ public class Connector {
 	}
 
 	/**
+	 * This function returns the log columns of all the log tables that the logged
+	 * user has access to.
+	 * 
+	 * @return a list containing all the log tables of the user
+	 * @throws SQLException - if a user can't access the database.
+	 */
+	public LinkedList<Log> getLogColumns(String tableName) throws SQLException {
+		ResultSet resultSet = connection.createStatement().executeQuery("SELECT " + tableName + ".idlog, " + tableName
+				+ ".utilizador, " + tableName + ".dataLog, " + tableName + ".operacao FROM " + tableName);
+		return createLog(resultSet);
+	}
+	
+	/**
+	 * Function that creates Log objects from a resultset and places in a
+	 * linkedlist<Log>.
+	 * 
+	 * @param resultSet each row correspondes with an object Log.
+	 * @return linkedlist of objects Log.
+	 * @throws SQLException - If a database access error occurs-
+	 */
+	private LinkedList<Log> createLog(ResultSet resultSet) throws SQLException {
+		LinkedList<Log> list = new LinkedList<Log>();
+		while (resultSet.next()) {
+			list.add(new Log(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
+					resultSet.getString(4)));
+		}
+		return list;
+	}
+
+	/**
+	 * Function that creates Cultura objects from a resultset and places in a
+	 * linkedlist<Cultura>.
+	 * 
+	 * @param resultSet each row correspondes with an object Cultura.
+	 * @return linkedlist of objects Cultura.
+	 * @throws SQLException - If a database access error occurs-
+	 */
+	private LinkedList<Investigador> createInvestigador(ResultSet resultSet) throws SQLException {
+		LinkedList<Investigador> list = new LinkedList<Investigador>();
+		while (resultSet.next()) {
+			list.add(new Investigador(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
+					resultSet.getString(4), resultSet.getString(5)));
+		}
+		return list;
+	}
+
+	/**
 	 * Function that creates medicao objects from a resultset and places in a
 	 * linkedlist<Medicao>.
 	 * 
@@ -483,95 +657,6 @@ public class Connector {
 		while (resultSet.next()) {
 			list.add(new Cultura(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
 					resultSet.getString(4), resultSet.getString(5)));
-		}
-		return list;
-	}
-
-	/**
-	 * Function that creates Cultura objects from a resultset and places in a
-	 * linkedlist<Cultura>.
-	 * 
-	 * @param resultSet each row correspondes with an object Cultura.
-	 * @return linkedlist of objects Cultura.
-	 * @throws SQLException - If a database access error occurs-
-	 */
-	private LinkedList<Investigador> createInvestigador(ResultSet resultSet) throws SQLException {
-		LinkedList<Investigador> list = new LinkedList<Investigador>();
-		while (resultSet.next()) {
-			list.add(new Investigador(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
-					resultSet.getString(4), resultSet.getString(5)));
-		}
-		return list;
-	}
-
-	/**
-	 * Function that creates Log objects from a resultset and places in a
-	 * linkedlist<Log>.
-	 * 
-	 * @param resultSet each row correspondes with an object Log.
-	 * @return linkedlist of objects Log.
-	 * @throws SQLException - If a database access error occurs-
-	 */
-	private LinkedList<Log> createLog(ResultSet resultSet) throws SQLException {
-		LinkedList<Log> list = new LinkedList<Log>();
-		while (resultSet.next()) {
-			list.add(new Log(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
-					resultSet.getString(4)));
-		}
-		return list;
-	}
-
-	/**
-	 * This function returns all Medicao objects in database which are being
-	 * measured by a Cultura, given it's id, separated by variable
-	 *
-	 * @return array of lists of Medicao objects separated by variable
-	 * @throws SQLException - if a user doesn't have permissions to execute a select
-	 *                      query in a given table
-	 */
-	public LinkedList<LinkedList<Medicao>> getMedicoesCulturaByVariavel(int cultura_id) throws SQLException {
-		LinkedList<LinkedList<Medicao>> list = new LinkedList<LinkedList<Medicao>>();
-		LinkedList<String> variaveis_medidas_ids = new LinkedList<>();
-		for (VariavelMedida vm : getVariavelMedidaTable()) {
-			if (Integer.parseInt(vm.getCultura_fk()) == cultura_id) {
-				variaveis_medidas_ids.add(vm.getVariavel_fk());
-			}
-		}
-
-		for (Variavel v : getVariaveisCultura(cultura_id)) {
-			LinkedList<Medicao> list_medicaoes = new LinkedList<>();
-			for (Medicao m : getMedicaoTable()) {
-				if (variaveis_medidas_ids.contains(m.getVariavel_medida_fk())
-						&& variaveis_medidas_ids.contains(v.getId_variavel())) {
-					m.setMore_info(v.getNome_variavel());
-					list_medicaoes.add(m);
-				}
-			}
-			list.add(list_medicaoes);
-		}
-		return list;
-	}
-
-	/**
-	 * This function returns all Medicao objects in database which are being
-	 * measured by a Cultura, given it's id
-	 *
-	 * @return list of Medicao objects
-	 * @throws SQLException - if a user doesn't have permissions to execute a select
-	 *                      query in a given table
-	 */
-	public LinkedList<Medicao> getMedicoesCultura(int cultura_id) throws SQLException {
-		LinkedList<Medicao> list = new LinkedList<>();
-		LinkedList<String> variaveis_medidas_id = new LinkedList<>();
-		for (VariavelMedida vm : getVariavelMedidaTable()) {
-			if (Integer.parseInt(vm.getCultura_fk()) == cultura_id) {
-				variaveis_medidas_id.add(vm.getVariavel_fk());
-			}
-		}
-		for (Medicao m : getMedicaoTable()) {
-			if (variaveis_medidas_id.contains(m.getVariavel_medida_fk())) {
-				list.add(m);
-			}
 		}
 		return list;
 	}

@@ -65,40 +65,74 @@ public class FXMLAuditorController extends FXMLController implements Initializab
 	private void buildTableView() {
 		table_view.getItems().clear();
 		switch (tables_choice_box.getSelectionModel().getSelectedItem()) {
+		case "categoria_profissional":
+			buildCategoriaProfissionalTableView();
+			break;
 		case "cultura":
 			buildCulturaTableView();
 			break;
 		case "investigador":
 			buildInvestigadorTableView();
 			break;
+		case "medicao":
+			buildMedicaoTableView();
+			break;
+		case "medicao_temperatura":
+			buildMedicaoTemperaturaTableView();
+			break;
+		case "medicao_luminosidade":
+			buildMedicaoLuminosidadeTableView();
+			break;
+		case "variavel":
+			buildVariavelTableView();
+			break;
+		case "variavel_medida":
+			buildVariavelMedidaTableView();
+			break;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	private void buildVariavelMedidaTableView() {
+		buildLogTableView();
+
+	}
+
+	private void buildVariavelTableView() {
+		buildLogTableView();
+
+	}
+
+	private void buildMedicaoLuminosidadeTableView() {
+		buildLogTableView();
+
+	}
+
+	private void buildMedicaoTemperaturaTableView() {
+		buildLogTableView();
+
+	}
+
+	private void buildMedicaoTableView() {
+		buildLogTableView();
+
+	}
+
+	private void buildCategoriaProfissionalTableView() {
+		buildLogTableView();
+
+	}
+
 	private void buildCulturaTableView() {
-		try {
-			TableColumn<Log, String> logIdCol = new TableColumn<Log, String>("Id");
-			TableColumn<Log, String> logUtilizadorCol = new TableColumn<Log, String>("Utilizador");
-			TableColumn<Log, String> logDataHoraCol = new TableColumn<Log, String>("Data e Hora");
-			TableColumn<Log, String> logOperacaoCol = new TableColumn<Log, String>("Operação");
+		buildLogTableView();
+	}
 
-			logIdCol.setCellValueFactory(new PropertyValueFactory<>("idlog"));
-			logUtilizadorCol.setCellValueFactory(new PropertyValueFactory<>("utilizador"));
-			logDataHoraCol.setCellValueFactory(new PropertyValueFactory<>("dataLog"));
-			logOperacaoCol.setCellValueFactory(new PropertyValueFactory<>("operacao"));
+	private void buildInvestigadorTableView() {
+		buildLogTableView();
 
-			table_view.getColumns().addAll(logIdCol, logUtilizadorCol, logDataHoraCol, logOperacaoCol);
-
-			ObservableList<Log> logs = FXCollections.observableArrayList(
-					auditorConnector.getLogColumns(tables_choice_box.getSelectionModel().getSelectedItem()));
-			table_view.setItems(logs);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private void buildInvestigadorTableView() {
+	private void buildLogTableView() {
 		try {
 			TableColumn<Log, String> logIdCol = new TableColumn<Log, String>("Id");
 			TableColumn<Log, String> logUtilizadorCol = new TableColumn<Log, String>("Utilizador");
@@ -118,7 +152,6 @@ public class FXMLAuditorController extends FXMLController implements Initializab
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@FXML
