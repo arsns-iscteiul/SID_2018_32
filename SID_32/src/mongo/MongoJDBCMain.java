@@ -28,52 +28,75 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.MongoException;
 
 public class MongoJDBCMain {
 
-	double LITemperatura;
-	double LSTemperatura;
-	double LILuminosidade;
-	double LSLuminosidade;
-	double valorXtemperatura;
-	double valorXluminosidade;
-	double valorAntigoTemperatura = 0;
-	double valorAntigoLuminosidade = 0;
-	double valorAnomaloTemperatura = 0;
-	double valorAnomaloLuminosidade = 0;
-	boolean alertaAmareloTemperatura = false;
-	boolean alertaAmareloLuminosidade = false;
-	boolean alertaLaranjaTemperatura = false;
-	boolean alertaLaranjaLuminosidade = false;
-	boolean alertaVermelhoTemperatura = false;
-	boolean alertaVermelhoLuminosidade = false;
-	boolean picoTemperatura = false;
-	boolean picoLuminosidade = false;
-	int count = 0;
-	int time = 20000;
-	Statement stmt = null;
-	Connection connection = null;
-	Statement statement = null;
-	ResultSet result = null;
+	private double LITemperatura;
+	private double LSTemperatura;
+	private double LILuminosidade;
+	private double LSLuminosidade;
+	private double valorXtemperatura;
+	private double valorXluminosidade;
+	
+	private double valorAntigoTemperatura ;
+	private double valorAntigoLuminosidade ;
+	private double valorAnomaloTemperatura ;
+	private double valorAnomaloLuminosidade;
+	private boolean alertaAmareloTemperatura ;
+	private boolean alertaAmareloLuminosidade;
+	private boolean alertaLaranjaTemperatura ;
+	private boolean alertaLaranjaLuminosidade;
+	private boolean alertaVermelhoTemperatura;
+	private boolean alertaVermelhoLuminosidade;
+	private boolean picoTemperatura;
+	private boolean picoLuminosidade;
+	private int time;
+	private Statement stmt = null;
+	private Connection connection = null;
+	private DBCollection collection;
 
 	public MongoJDBCMain() {
+		valorAntigoTemperatura = 0;
+		valorAntigoLuminosidade = 0;
+		valorAnomaloTemperatura = 0;
+		valorAnomaloLuminosidade = 0;
+		alertaAmareloTemperatura = false;
+		alertaAmareloLuminosidade = false;
+		alertaLaranjaTemperatura = false;
+		alertaLaranjaLuminosidade = false;
+		alertaVermelhoTemperatura = false;
+		alertaVermelhoLuminosidade = false;
+		picoTemperatura = false;
+		picoLuminosidade = false;
+		time = 20000;                          //    --------------------------------------------------------
+		
+		
+		
+		
 		try {
-			migracao();
+			connect();
+			if (connection != null) {
+				migracao();
+			}else {
+				System.out.println("ERROR: Unable to make a database connection!");
+			}
+
+			System.out.println("Trying to get a list of all entrys in sensor collection...");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-	@SuppressWarnings({ "resource", "deprecation" })
-	public void migracao() throws SQLException {
+	public void connect() {
 		try {
 			// ligar-se ao mongo
-			MongoClient mongoClient = new MongoClient();
+			MongoClient mongoClient = new MongoClient(
+					new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
 			mongoClient.getDatabaseNames().forEach(System.out::println);
 			DB db = mongoClient.getDB("sensores");
-			DBCollection collection = db.getCollection("sensor");
+			collection = db.getCollection("sensor");
 
 			// ligar-se � base de dados Main
 			String database_url = "jdbc:mysql://localhost:3307/main";
@@ -97,15 +120,22 @@ public class MongoJDBCMain {
 				e.printStackTrace();
 				return;
 			}
+		} catch (MongoException e) {
+			e.printStackTrace();
+		}
 
-			if (connection != null) {
+	}
+
+	@SuppressWarnings({ "resource", "deprecation" })
+	public void migracao() throws SQLException {
+		
+			
 				DatabaseMetaData metadata = connection.getMetaData();
 				System.out.println("Connection to the database has been established...");
 				System.out.println("JDBC Driver Name : " + metadata.getDriverName());
 				System.out.println("JDBC Driver Version : " + metadata.getDriverVersion());
 
 				// depois de liga��o feita com sucesso vai buscar os limites do sistema
-				Statement stmt = null;
 				stmt = connection.createStatement();
 				ObterLimites(stmt);
 
@@ -189,32 +219,23 @@ public class MongoJDBCMain {
 
 				}
 
-			} else {
-				System.out.println("ERROR: Unable to make a database connection!");
-			}
+			
+//			try {
+//				statement = connection.createStatement();
+//
+//			} finally {
+//				System.out.println("Closing all open resources...");
+//				if (result != null)
+//					result.close();
+//				if (statement != null)
+//					statement.close();
+//				if (connection != null)
+//					connection.close();
+//			}
 
-			System.out.println("Trying to get a list of all entrys in sensor collection...");
-			try {
-				statement = connection.createStatement();
-
-			} finally {
-				System.out.println("Closing all open resources...");
-				if (result != null)
-					result.close();
-				if (statement != null)
-					statement.close();
-				if (connection != null)
-					connection.close();
-			}
-
-		} catch (MongoException e) {
-			e.printStackTrace();
-		}
+		
 	}
 
-	public static void main(String[] args) throws SQLException {
-		new MongoJDBCMain();
-	}
 
 	private void ObterLimites(Statement stmt) throws SQLException {
 		// TODO Auto-generated method stub
@@ -533,8 +554,8 @@ public class MongoJDBCMain {
 
 	public void insertAlerta(String tipo, String intensidade, String datahora, double medicao, String descricao,
 			double li, double ls) throws SQLException {
-		String alerta = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior)"
-				+ " values (?, ?, ?, ?, ?, ?, ?)";
+		String alerta = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior,idInvestigador )"
+				+ " values (?, ?, ?, ?, ?, ?, ?,?)";
 		// create the mysql insert preparedstatement
 		PreparedStatement preparedStmt = connection.prepareStatement(alerta);
 		preparedStmt.setString(1, tipo);
@@ -544,6 +565,7 @@ public class MongoJDBCMain {
 		preparedStmt.setString(5, descricao);
 		preparedStmt.setDouble(6, li);
 		preparedStmt.setDouble(7, ls);
+		preparedStmt.setInt(8, 1);
 
 		// execute the preparedstatement
 		preparedStmt.execute();
@@ -582,5 +604,14 @@ public class MongoJDBCMain {
 			mex.printStackTrace();
 			return false;
 		}
+	}
+
+	
+	
+	public Connection getConnection() {
+		return connection;
+	}
+	public static void main(String[] args) throws SQLException {
+		new MongoJDBCMain();
 	}
 }
