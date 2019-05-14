@@ -43,8 +43,8 @@ public class InsertToMongo implements MqttCallback{
 	
 	public void testeMqtt(){
 		try {
-			client = new MqttClient("wss://iot.eclipse.org:443/ws", "user321");
-			//client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883","/sid_lab_2019");
+		//	client = new MqttClient("wss://iot.eclipse.org:443/ws", "user321");
+			client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883","/sid_lab_2019_2");
 			MqttConnectOptions options = new MqttConnectOptions();
 			options.setAutomaticReconnect(true);
 			options.setCleanSession(true);
@@ -52,7 +52,7 @@ public class InsertToMongo implements MqttCallback{
 			client.connect(options);
 			
 		    client.setCallback(this);
-		    client.subscribe("/sid_lab_2019");
+		    client.subscribe("/sid_lab_2019_2");
 		} catch (MqttException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,11 +75,35 @@ public class InsertToMongo implements MqttCallback{
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
 			String s = message.toString();
-			System.out.println(s+" -mensagem recebida2");
-			System.out.println(checkMsgFormat(s));
-			if (checkMsgFormat(s)){
+			s=s.replace("\"sens\"", ",\"sens\"");
+			String [] arr = s.split(",");
+			String msg = "";
+			for(String a : arr) {
+				if (a.contains("tmp")) {
+					msg+=a;
+					msg+=",";
+				}
+				if(a.contains("dat")) {
+					msg+=a;
+					msg+=",";
+				}
+				if(a.contains("tim")) {
+					msg+=a;
+					msg+=",";
+				}
+				if(a.contains("cell")) {
+					msg+=a;
+					msg+=",";
+				}
+				if(a.contains("sens")) {
+					msg+=a;
+				}
+				
+			}
+			System.out.println(s);
+			System.out.println(msg +"   -----    mensagem recebida");
+			if (checkMsgFormat(msg)){
 					s=s.replace("}", ",\"exported\":0}");
-					s=s.replace("\"sens\"", ",\"sens\"");
 				//	s.replaceAll("\\}", ",\"exported\":0}");		
 					System.out.println(s + " formato checkado, esta e a nova msg");
 					saveMessage(s);
@@ -127,12 +151,12 @@ public class InsertToMongo implements MqttCallback{
 	}
 	
 	public boolean checkMsgFormat (String msg) {
-		return msg.matches("\\{(\"tmp\"(\\s+)?:(\\s+)?\"\\d+.\\d+\",(\\s+)?)"
-				+ "\"hum\"(\\s+)?:(\\s+)?\"\\d+.\\d+\",(\\s+)?"
+		return msg.matches("\\{(\"tmp\"(\\s+)?:(\\s+)?\"\\d+.\\d+\",(\\s+)?)?"
+			//	+ "\"hum\"(\\s+)?:(\\s+)?\"\\d+.\\d+\",(\\s+)?"
 				+ "\"dat\"(\\s+)?:(\\s+)?\"(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/\\d+\",(\\s+)?"
 				+ "\"tim\"(\\s+)?:(\\s+)?\"(0?[0-9]|1[0-9]|2[0-3]):([0-9]|[1-5][0-9]):([0-9]|[1-5][0-9])\"(\\s+)?"
 				+ "(,\"cell\"(\\s+)?:(\\s+)?\"\\d+\"(\\s+)?)?"
-				+ "\"sens\"(\\s+)?:(\\s+)?\"\\w+\"(\\s+)?\\}");
+				+ ",\"sens\"(\\s+)?:(\\s+)?\"\\w+\"(\\s+)?\\}");
 			//	+ "\"exported\"(\\s+)?:(\\s+)?[01](\\s+)?\\}");	
 				
 	}
