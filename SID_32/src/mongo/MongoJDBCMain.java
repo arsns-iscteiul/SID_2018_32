@@ -125,6 +125,32 @@ public class MongoJDBCMain {
 		}
 
 	}
+	
+	public String verificarData(BasicDBObject theObj) {
+		String dataHora = (theObj).getString("dat") + " " + (theObj).getString("tim");
+		String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		SimpleDateFormat soDia = new SimpleDateFormat("dd-MM-yyyy");
+
+		try {
+			Date diaDate = sdf.parse(dataHora);
+			//	System.out.println("Dia" + soDia.format(diaDate));
+			Date parsedDate = sdf.parse(dataHora);
+			SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			dataHora = print.format(parsedDate);
+			if (!timeStamp.contains(soDia.format(diaDate))) {
+//					System.out.println("timestamp:" + timeStamp);
+//					System.out.println("erro na data");
+				dataHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+						.format(Calendar.getInstance().getTime());
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dataHora;
+
+	}
 
 	@SuppressWarnings({ "resource", "deprecation" })
 	public void migracao() throws SQLException {
@@ -143,79 +169,59 @@ public class MongoJDBCMain {
 				while (cursor.hasNext()) {
 					BasicDBObject theObj = (BasicDBObject) cursor.next();
 					String content = theObj.toString();
-					System.out.println(content);
-					String DataHora = (theObj).getString("dat") + " " + (theObj).getString("tim");
-					String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
-					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-					SimpleDateFormat soDia = new SimpleDateFormat("dd-MM-yyyy");
-					Date parsedDate;
-					Date diaDate;
-					// verificar se a data � valida
-					try {
-
-						diaDate = sdf.parse(DataHora);
-						System.out.println("Dia" + soDia.format(diaDate));
-						parsedDate = sdf.parse(DataHora);
-						SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						DataHora = print.format(parsedDate);
-						if (!timeStamp.contains(soDia.format(diaDate))) {
-							System.out.println("timestamp:" + timeStamp);
-							System.out.println("erro na data");
-							DataHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-									.format(Calendar.getInstance().getTime());
-						}
-						int luminosidade = 0;
-						if (content.contains("cell")) {
-							luminosidade = Integer.parseInt((theObj).getString("cell"));
-						}
-						double temperatura = Double.parseDouble((theObj).getString("tmp"));
-						String id = (theObj).getString("_id");
-						int foiExportado = Integer.parseInt((theObj).getString("exported"));
-						// se ainda nao foi exportado, foiExportado=0
-						if (foiExportado == 0) {
-							// criar a medicacao_luminosidade
-							if (luminosidade != 0) {
-								String query1 = " insert into medicao_luminosidade (Data_Hora_Medicao, Valor_Medicao_Luminosidade)"
-										+ " values (?, ?)";
-
-								// create the mysql insert preparedstatement
-								PreparedStatement preparedStmt1 = connection.prepareStatement(query1);
-								preparedStmt1.setString(1, DataHora);
-								preparedStmt1.setDouble(2, luminosidade);
-
-								// execute the preparedstatement
-								preparedStmt1.execute();
-							}
-							// criar a medicacao_temperatura
-							String query2 = " insert into medicao_temperatura (Data_Hora_Medicao, Valor_Medicao_Temperatura)"
+					
+					String dataHora = verificarData(theObj);
+			
+					int luminosidade = 0;
+					if (content.contains("cell")) {
+						luminosidade = Integer.parseInt((theObj).getString("cell"));
+					}
+					
+					double temperatura = Double.parseDouble((theObj).getString("tmp"));
+					String id = (theObj).getString("_id");
+					int foiExportado = Integer.parseInt((theObj).getString("exported"));
+					// se ainda nao foi exportado, foiExportado=0
+					if (foiExportado == 0) {
+						// criar a medicacao_luminosidade
+						if (luminosidade != 0) {
+							String query1 = " insert into medicao_luminosidade (Data_Hora_Medicao, Valor_Medicao_Luminosidade)"
 									+ " values (?, ?)";
+
 							// create the mysql insert preparedstatement
-							PreparedStatement preparedStmt2 = connection.prepareStatement(query2);
-							preparedStmt2.setString(1, DataHora);
-							preparedStmt2.setDouble(2, temperatura);
+							PreparedStatement preparedStmt1 = connection.prepareStatement(query1);
+							preparedStmt1.setString(1, dataHora);
+							preparedStmt1.setDouble(2, luminosidade);
 
 							// execute the preparedstatement
-							preparedStmt2.execute();
-
-							// colocar foiExportado=1
-							BasicDBObject newDocument = new BasicDBObject();
-							newDocument.append("$set", new BasicDBObject().append("exported", 1));
-							BasicDBObject searchQuery = new BasicDBObject().append("_id", new ObjectId(id));
-							collection.update(searchQuery, newDocument);
-							System.out.println("Valor da temperatura:" + temperatura);
-							System.out.println("Valor do if:" + (LITemperatura + LITemperatura * 0.4));
-
-							// decidir se cria o alerta
-							criaAlertaTemperatura(temperatura, DataHora, connection, stmt);
-							if (luminosidade != 0) {
-								criaAlertaLuminosidade(luminosidade, DataHora, connection, stmt);
-							}
+							preparedStmt1.execute();
 						}
+						// criar a medicacao_temperatura
+						String query2 = " insert into medicao_temperatura (Data_Hora_Medicao, Valor_Medicao_Temperatura)"
+								+ " values (?, ?)";
+						// create the mysql insert preparedstatement
+						PreparedStatement preparedStmt2 = connection.prepareStatement(query2);
+						preparedStmt2.setString(1, dataHora);
+						preparedStmt2.setDouble(2, temperatura);
 
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						// execute the preparedstatement
+						preparedStmt2.execute();
+
+						// colocar foiExportado=1
+						BasicDBObject newDocument = new BasicDBObject();
+						newDocument.append("$set", new BasicDBObject().append("exported", 1));
+						BasicDBObject searchQuery = new BasicDBObject().append("_id", new ObjectId(id));
+						collection.update(searchQuery, newDocument);
+						System.out.println("Valor da temperatura:" + temperatura);
+						System.out.println("Valor do if:" + (LITemperatura + LITemperatura * 0.4));
+
+						// decidir se cria o alerta
+						criaAlertaTemperatura(temperatura, dataHora, connection, stmt);
+						if (luminosidade != 0) {
+							criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt);
+						}
 					}
+
+					
 
 				}
 
@@ -318,9 +324,15 @@ public class MongoJDBCMain {
 				public void run() {
 					try {
 						sleep(time);
-						String mysql = "SELECT * FROM medicao_temperatura where Id_Medicao_Temperatura =(Select MAX(Id_Medicao_Temperatura) from medicao_temperatura)";
+						System.out.println("thread        acordada ****************");
+						String mysql = "SELECT Valor_Medicao_Temperatura FROM medicao_temperatura where Id_Medicao_Temperatura =(Select MAX(Id_Medicao_Temperatura) from medicao_temperatura)";
 						ResultSet rs = stmt.executeQuery(mysql);
-						Double valorAtualTemperatura = rs.getDouble("Valor_Medicao_Temperatura");
+						Double valorAtualTemperatura=0.0;
+						if (rs.next()) {
+							valorAtualTemperatura=rs.getDouble("Valor_Medicao_Temperatura");
+						}
+						
+					 
 						rs.close();
 						if (Math.abs(valorAtualTemperatura - valorAntigoTemperatura) > valorXtemperatura) {
 							// alerta Vermelho Temperatura
@@ -572,7 +584,7 @@ public class MongoJDBCMain {
 	}
 
 	public boolean sendEmails(String to, String sub, String text) {
-		System.out.println(to + sub + text);
+/*		System.out.println(to + sub + text);
 		// Sender's email ID needs to be mentioned
 
 		Properties props = new Properties();
@@ -604,6 +616,10 @@ public class MongoJDBCMain {
 			mex.printStackTrace();
 			return false;
 		}
+		
+		
+*/
+		return false;
 	}
 
 	
