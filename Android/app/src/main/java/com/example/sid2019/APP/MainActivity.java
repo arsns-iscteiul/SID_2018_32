@@ -56,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getCulturasAvailable(){
+        System.out.println("ClearingIDS");
         db.clearIds();
+        System.out.println("ClearingCulturas");
         db.clearCultura();
+        System.out.println("Done");
         HashMap<String, String> params = new HashMap<>();
         params.put("username", username);
         params.put("password", password);

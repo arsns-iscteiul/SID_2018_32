@@ -152,14 +152,14 @@ public class AlertasCulturaActivity extends AppCompatActivity {
                 if (alertas_variavel != null) {
                     for (int i = 0; i < alertas_variavel.length(); i++) {
                         JSONObject c = alertas_variavel.getJSONObject(i);
-                        String nomeVariavel = c.getString("NomeVariavel");
-                        String dataHoraAlerta = c.getString("DataHoraAlerta");
-                        String descricao = c.getString("Descricao");
-                        String intensidade = c.getString("Intensidade");
-                        String dataHoraMedicao = c.getString("DataHoraMedicao");
-                        double valorMedicao = c.getDouble("ValorMedicao");
-                        double limiteInferior = c.getDouble("LimiteInferior");
-                        double limiteSuperior = c.getDouble("LimiteSuperior");
+                        String nomeVariavel = c.getString("nomeVariavel");
+                        String dataHoraAlerta = c.getString("dataHoraAlerta");
+                        String descricao = c.getString("descricao");
+                        String intensidade = c.getString("intensidade");
+                        String dataHoraMedicao = c.getString("dataHoraMedicao");
+                        double valorMedicao = c.getDouble("valorMedicao");
+                        double limiteInferior = c.getDouble("limiteInferior");
+                        double limiteSuperior = c.getDouble("limiteSuperior");
                         db.insert_alertaCulturaVariaveis(nomeVariavel, dataHoraAlerta, descricao, intensidade, dataHoraMedicao, valorMedicao, limiteInferior,limiteSuperior);
                     }
                 }

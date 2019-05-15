@@ -98,13 +98,13 @@ public class AlertasGlobaisActivity extends AppCompatActivity {
             if(alertas_globais!=null){
                 for (int i=0;i< alertas_globais.length();i++){
                     JSONObject c = alertas_globais.getJSONObject(i);
-                    String nomeVariavel = c.getString("NomeVariavel");
-                    String dataHoraMedicao = c.getString("DataHoraAlerta");
-                    String descricao = c.getString("Descricao");
-                    String intensidade = c.getString("Intensidade");
-                    double valorMedicao = c.getDouble("ValorMedicao");
-                    double limiteInferior = c.getDouble("LimiteInferior");
-                    double limiteSuperior = c.getDouble("LimiteSuperior");
+                    String nomeVariavel = c.getString("nomeVariavel");
+                    String dataHoraMedicao = c.getString("dataHoraAlerta");
+                    String descricao = c.getString("descricao");
+                    String intensidade = c.getString("intensidade");
+                    double valorMedicao = c.getDouble("valorMedicao");
+                    double limiteInferior = c.getDouble("limiteInferior");
+                    double limiteSuperior = c.getDouble("limiteSuperior");
 
 
                     db.insert_alertaGlobal(dataHoraMedicao,nomeVariavel,limiteInferior,limiteSuperior,valorMedicao,descricao,intensidade);

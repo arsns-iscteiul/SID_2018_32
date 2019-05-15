@@ -17,11 +17,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        System.out.println("Creating db");
+
         sqLiteDatabase.execSQL(config.SQL_CREATE_CULTURA);
+        System.out.println("1");
         sqLiteDatabase.execSQL(config.SQL_CREATE_MEDICOESTEMPERATURA);
+        System.out.println("2");
         sqLiteDatabase.execSQL(config.SQL_CREATE_MEDICOESLUZ);
+        System.out.println("3");
         sqLiteDatabase.execSQL(config.SQL_CREATE_ALERTASGLOBAIS);
+        System.out.println("4");
+        sqLiteDatabase.execSQL(config.SQL_CREATE_ALERTASVARIAVEL);
+        System.out.println("5");
         sqLiteDatabase.execSQL(config.SQL_CREATE_AVAILABLEIDS);
+        System.out.println("6");
     }
 
     @Override
@@ -97,6 +106,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL(config.SQL_DELETE_ALERTASVARIAVEL_DATA);
     }
     public void clearIds(){
+        System.out.println("Clearing...");
         getWritableDatabase().execSQL(config.SQL_DELETE_AVAILABLEIDS);
     }
     public void clearCultura(){

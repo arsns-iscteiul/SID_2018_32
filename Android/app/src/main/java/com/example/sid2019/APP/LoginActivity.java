@@ -58,7 +58,9 @@ public class LoginActivity extends AppCompatActivity {
         params.put("username", username.getText().toString());
         params.put("password", password.getText().toString());
         ConnectionHandler jParser = new ConnectionHandler();
+        System.out.println("Starting");
         JSONArray jsonValidacao = jParser.getJSONFromUrl(validateLogin, params);
+        System.out.println("Just called PHP");
         if (jsonValidacao != null) {
             SharedPreferences.Editor editor = myPrefs.edit();
             editor.putString("ip", ip.getText().toString());
@@ -68,13 +70,14 @@ public class LoginActivity extends AppCompatActivity {
             editor.apply();
 
             new UserLogin(ip.getText().toString(), port.getText().toString(), username.getText().toString(), password.getText().toString());
+            System.out.println("Created User");
 
 
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             finish();
-        } else {
-            new AlertDialog.Builder(v.getContext()).setMessage("An error ocurred").show();
+       } else {
+           new AlertDialog.Builder(v.getContext()).setMessage("An error ocurred").show();
 
 
         }
