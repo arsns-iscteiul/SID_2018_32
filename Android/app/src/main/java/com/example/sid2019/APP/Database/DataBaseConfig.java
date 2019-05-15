@@ -33,7 +33,7 @@ public class DataBaseConfig {
     }
 
     public static class AlertasGlobais implements BaseColumns {
-        public static final String TABLE_NAME="AlertasVariavel";
+        public static final String TABLE_NAME="AlertasGlobais";
         public static final String COLUMN_NAME_IDALERTA="idAlerta";
         public static final String COLUMN_NAME_DATAHORAMEDICAO="DataHora";
         public static final String COLUMN_NAME_DESCRICAO="Descricao";
@@ -46,7 +46,7 @@ public class DataBaseConfig {
     }
 
     public static class AlertasVariavel implements BaseColumns {
-        public static final String TABLE_NAME="AlertasGlobais";
+        public static final String TABLE_NAME="AlertasVariavel";
         public static final String COLUMN_NAME_IDALERTA="idAlerta";
         public static final String COLUMN_NAME_NOMEVARIAVEL="NomeVariavel";
         public static final String COLUMN_NAME_DATAHORAALERTA="DataHoraAlerta";
@@ -95,7 +95,7 @@ public class DataBaseConfig {
                     AlertasGlobais.COLUMN_NAME_Limite_Inferior + " DOUBLE," +
                     AlertasGlobais.COLUMN_NAME_Limite_Superior + " DOUBLE," +
                     AlertasGlobais.COLUMN_NAME_VALORMEDICAO + " DOUBLE," +
-                    AlertasGlobais.COLUMN_NAME_DESCRICAO + " TEXT )" +
+                    AlertasGlobais.COLUMN_NAME_DESCRICAO + " TEXT," +
                     AlertasGlobais.COLUMN_NAME_INTENSIDADE + " TEXT )";
 
     protected static final String SQL_CREATE_ALERTASVARIAVEL=
@@ -103,12 +103,12 @@ public class DataBaseConfig {
                     " (" + AlertasVariavel.COLUMN_NAME_IDALERTA + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     AlertasVariavel.COLUMN_NAME_NOMEVARIAVEL + " TEXT, " +
                     AlertasVariavel.COLUMN_NAME_DATAHORAALERTA + " TIMESTAMP," +
-                    AlertasGlobais.COLUMN_NAME_DESCRICAO + " TEXT )" +
-                    AlertasVariavel.COLUMN_NAME_INTENSIDADE + " TEXT )" +
+                    AlertasGlobais.COLUMN_NAME_DESCRICAO + " TEXT," +
+                    AlertasVariavel.COLUMN_NAME_INTENSIDADE + " TEXT," +
                     AlertasVariavel.COLUMN_NAME_DATAHORAMEDICAO + " TIMESTAMP," +
                     AlertasVariavel.COLUMN_NAME_VALORMEDICAO + " DOUBLE," +
                     AlertasVariavel.COLUMN_NAME_Limite_Inferior + " DOUBLE," +
-                    AlertasVariavel.COLUMN_NAME_Limite_Superior + " DOUBLE,";
+                    AlertasVariavel.COLUMN_NAME_Limite_Superior + " DOUBLE)";
 
 
     protected static final String SQL_DELETE_ALERTASGLOBAIS_DATA=

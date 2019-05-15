@@ -6,4 +6,3 @@
 	$json = json_encode($response["valid"]);
 	echo $json;
 	mysqli_close ($conn);
-	?> 
