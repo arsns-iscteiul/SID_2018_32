@@ -215,10 +215,43 @@ public class MongoJDBCMain {
 						System.out.println("Valor do if:" + (LITemperatura + LITemperatura * 0.4));
 
 						// decidir se cria o alerta
-						criaAlertaTemperatura(temperatura, dataHora, connection, stmt);
-						if (luminosidade != 0) {
-							criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt);
+						Statement stmt3 =connection.createStatement();
+						String investigadores = "SELECT * FROM main.investigador";
+						ResultSet inves = stmt3.executeQuery(investigadores);
+						while (inves.next()) {
+							String investEmail = inves.getNString("Email_Investigador");
+							//falta tirar o localhost
+							String perfUti= "Select * FROM main.perfil_user where investigador =+ "+ inves.getInt("Id_Investigador"); 
+							Statement stmt2 =connection.createStatement();
+							ResultSet invesPerf = stmt2.executeQuery(perfUti);
+							if(invesPerf.next()) {
+								int tempoDePico = invesPerf.getInt("tempoDePico");
+								Float vermelho_sup_T = invesPerf.getFloat("vermelhoSupTemp");
+								Float vermelho_inf_T = invesPerf.getFloat("vermelhoInfTemp");
+								Float laranja_sup_T = invesPerf.getFloat("laranjaSupTemp");
+								Float laranja_inf_T = invesPerf.getFloat("laranjaInfTemp");
+								Float laranja_inf_T2 = invesPerf.getFloat("alertaLaranjaInfTemp2");
+								Float laranja_sup_T2 = invesPerf.getFloat("alertaLaranjaSupTemp2");
+								
+								Float laranja_inf_L2 = invesPerf.getFloat("alertaLaranjaInfLum2");
+								Float laranja_sup_L2 = invesPerf.getFloat("alertaLaranjaInfLum2");
+								Float vermelho_sup_L = invesPerf.getFloat("vermelhoSupLum");							
+								Float vermelho_inf_L = invesPerf.getFloat("vermelhoInfLum");
+								Float laranja_sup_L = invesPerf.getFloat("laranjaSupLum");							
+								Float laranja_inf_L = invesPerf.getFloat("laranjaInfLum");
+
+								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, investEmail, tempoDePico,vermelho_sup_T, vermelho_inf_T,  laranja_sup_T,
+										laranja_sup_T2,laranja_inf_T ,laranja_inf_T2 );
+								if (luminosidade != 0) {
+									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, investEmail,  tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L,
+											laranja_sup_L2,laranja_inf_L ,laranja_inf_L2 );
+								}
+							}
+							invesPerf.close();
+							
 						}
+						inves.close();
+						
 					}
 
 					
@@ -266,25 +299,19 @@ public class MongoJDBCMain {
 		rs.close();
 	}
 
-	private void criaAlertaTemperatura(double temperatura, String date, Connection connection, Statement stmt)
+	private void criaAlertaTemperatura(double temperatura, String date, Connection connection, Statement stmt, String email, int TempoDePico, Float vermelhoSup, Float vermelhoInf, Float laranjaSup, Float laranjaSup2, Float laranjaInf, Float laranjaInf2)
 			throws SQLException {
 		// alerta Vermelho Temperatura
 		String existeAlertaVermelhoTemp = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
 				+ date + "\" , interval 1 minute)";
 		ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
 		if (rsVermelhoTemp.next() == false
-				&& ((temperatura <= (LITemperatura + LITemperatura * 0.4)) || (temperatura >= LSTemperatura * 0.9))) {
+				&& ((temperatura <= (LITemperatura + LITemperatura * vermelhoInf)) || (temperatura >= LSTemperatura * vermelhoSup))) {
 			alertaVermelhoTemperatura = true;
 			insertAlerta("temp", "vermelho", date, temperatura,
 					"O valor da temperatura aproxima-se criticamente dos limites", LITemperatura, LSTemperatura);
-			String investigadores = "SELECT * FROM main.investigador";
-			ResultSet inves = stmt.executeQuery(investigadores);
-			while (inves.next()) {
-				String invest = inves.getNString("Email_Investigador");
-				System.out.println("Investigador" + invest);
-				sendEmails(invest, "Alerta Vermelho Temperatura", "Valor da temperatura" + temperatura);
-			}
-			inves.close();
+				sendEmails(email, "Alerta Vermelho Temperatura", "Valor da temperatura" + temperatura);
+		
 
 		} else {
 			alertaVermelhoTemperatura = false;
@@ -294,20 +321,14 @@ public class MongoJDBCMain {
 		String existeAlertaLaranjaTemp = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
 				+ date + "\" , interval 1 minute)";
 		ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
-		if (rsLaranjaTemp.next() == false && (temperatura <= (LITemperatura + LITemperatura * 0.8))
-				&& (temperatura > (LITemperatura + LITemperatura * 0.4))
-				|| (temperatura >= (LSTemperatura * 0.8) && temperatura < LSTemperatura * 0.9)) {
+		if (rsLaranjaTemp.next() == false && (temperatura <= (LITemperatura + LITemperatura * laranjaInf))
+				&& (temperatura > (LITemperatura + LITemperatura * laranjaInf2))
+				|| (temperatura >= (LSTemperatura * laranjaSup2) && temperatura < LSTemperatura * laranjaSup)) {
 			alertaLaranjaTemperatura = true;
 			insertAlerta("temp", "laranja", date, temperatura, "O valor da temperatura aproxima-se dos limites",
 					LITemperatura, LSTemperatura);
-			String investigadores = "SELECT * FROM main.investigador";
-			ResultSet inves = stmt.executeQuery(investigadores);
-			while (inves.next()) {
-				String invest = inves.getNString("Email_Investigador");
-				System.out.println("Investigador" + invest);
-				sendEmails(invest, "Alerta Laranja Temperatura", "Valor da temperatura" + temperatura);
-			}
-			inves.close();
+				sendEmails(email, "Alerta Laranja Temperatura", "Valor da temperatura" + temperatura);
+
 
 		} else {
 			alertaLaranjaTemperatura = false;
@@ -323,7 +344,7 @@ public class MongoJDBCMain {
 				@Override
 				public void run() {
 					try {
-						sleep(time);
+						sleep(TempoDePico);
 						System.out.println("thread        acordada ****************");
 						String mysql = "SELECT Valor_Medicao_Temperatura FROM medicao_temperatura where Id_Medicao_Temperatura =(Select MAX(Id_Medicao_Temperatura) from medicao_temperatura)";
 						ResultSet rs = stmt.executeQuery(mysql);
@@ -340,21 +361,15 @@ public class MongoJDBCMain {
 									+ date + "\" , interval 1 minute)";
 							ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
 							if (rsVermelhoTemp.next() == false
-									&& ((valorAtualTemperatura <= (LITemperatura + LITemperatura * 0.4))
-											|| (valorAtualTemperatura >= LSTemperatura * 0.9))) {
+									&& ((valorAtualTemperatura <= (LITemperatura + LITemperatura * vermelhoInf))
+											|| (valorAtualTemperatura >= LSTemperatura * vermelhoSup))) {
 								alertaVermelhoTemperatura = true;
 								insertAlerta("temp", "vermelho", date, valorAtualTemperatura,
 										"O valor da temperatura aproxima-se criticamente dos limites", LITemperatura,
 										LSTemperatura);
-								String investigadores = "SELECT * FROM main.investigador";
-								ResultSet inves = stmt.executeQuery(investigadores);
-								while (inves.next()) {
-									String invest = inves.getNString("Email_Investigador");
-									System.out.println("Investigador" + invest);
-									sendEmails(invest, "Alerta Vermelho Temperatura",
+									sendEmails(email, "Alerta Vermelho Temperatura",
 											"Valor da temperatura" + valorAtualTemperatura);
-								}
-								inves.close();
+
 
 							} else {
 								alertaVermelhoTemperatura = false;
@@ -364,22 +379,16 @@ public class MongoJDBCMain {
 							String existeAlertaLaranjaTemp = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
 									+ date + "\" , interval 1 minute)";
 							ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
-							if (rsLaranjaTemp.next() == false && (temperatura <= (LITemperatura + LITemperatura * 0.8))
-									&& (valorAtualTemperatura > (LITemperatura + LITemperatura * 0.4))
-									|| (valorAtualTemperatura >= (LSTemperatura * 0.8)
-											&& valorAtualTemperatura < LSTemperatura * 0.9)) {
+							if (rsLaranjaTemp.next() == false && (temperatura <= (LITemperatura + LITemperatura * laranjaInf))
+									&& (valorAtualTemperatura > (LITemperatura + LITemperatura * laranjaInf2))
+									|| (valorAtualTemperatura >= (LSTemperatura * laranjaSup2)
+											&& valorAtualTemperatura < LSTemperatura * laranjaSup)) {
 								alertaLaranjaTemperatura = true;
 								insertAlerta("temp", "laranja", date, valorAtualTemperatura,
 										"O valor da temperatura aproxima-se dos limites", LITemperatura, LSTemperatura);
-								String investigadores = "SELECT * FROM main.investigador";
-								ResultSet inves = stmt.executeQuery(investigadores);
-								while (inves.next()) {
-									String invest = inves.getNString("Email_Investigador");
-									System.out.println("Investigador" + invest);
-									sendEmails(invest, "Alerta Laranja Temperatura",
+									sendEmails(email, "Alerta Laranja Temperatura",
 											"Valor da temperatura" + valorAtualTemperatura);
-								}
-								inves.close();
+
 
 							} else {
 								alertaLaranjaTemperatura = false;
@@ -387,15 +396,9 @@ public class MongoJDBCMain {
 							if (alertaLaranjaTemperatura == false && alertaVermelhoTemperatura == false) {
 								insertAlerta("temp", "amarelo", date, valorAtualTemperatura,
 										"Ocorreu um pico de temperatura", LITemperatura, LSTemperatura);
-								String investigadores = "SELECT * FROM main.investigador";
-								ResultSet inves = stmt.executeQuery(investigadores);
-								while (inves.next()) {
-									String invest = inves.getNString("Email_Investigador");
-									System.out.println("Investigador" + invest);
-									sendEmails(invest, "Alerta Amarelo Temperatura",
+									sendEmails(email, "Alerta Amarelo Temperatura",
 											"Valor da temperatura" + valorAtualTemperatura);
-								}
-								inves.close();
+
 							}
 						} else {
 							picoTemperatura = false;
@@ -415,25 +418,20 @@ public class MongoJDBCMain {
 
 	}
 
-	private void criaAlertaLuminosidade(double luminosidade, String date, Connection connection, Statement stmt)
+	private void criaAlertaLuminosidade(double luminosidade, String date, Connection connection, Statement stmt, String email, int tempoDePico, Float vermelhoSup, Float vermelhoInf, Float laranjaSup, Float laranjaSup2, Float laranjaInf, Float laranjaInf2)
 			throws SQLException {
 		// alerta Vermelho Luminosidade
 		String existeAlertaVermelhoLum = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
 				+ date + "\" , interval 1 minute)";
 		ResultSet rsVermelhoLum = stmt.executeQuery(existeAlertaVermelhoLum);
-		if (rsVermelhoLum.next() == false && (luminosidade <= (LILuminosidade + LILuminosidade * 0.4))
-				|| (luminosidade >= LSLuminosidade * 0.9)) {
+		if (rsVermelhoLum.next() == false && (luminosidade <= (LILuminosidade + LILuminosidade * vermelhoInf))
+				|| (luminosidade >= LSLuminosidade * vermelhoSup)) {
 			alertaVermelhoLuminosidade = true;
 			insertAlerta("lum", "vermelho", date, luminosidade,
 					"O valor da luminosidade aproxima-se criticamente dos limites", LILuminosidade, LSLuminosidade);
-			String investigadores = "SELECT * FROM main.investigador";
-			ResultSet inves = stmt.executeQuery(investigadores);
-			while (inves.next()) {
-				String invest = inves.getNString("Email_Investigador");
-				System.out.println("Investigador" + invest);
-				sendEmails(invest, "Alerta Vermelho Luminosidade", "Valor da luminosidade" + luminosidade);
-			}
-			inves.close();
+
+				sendEmails(email, "Alerta Vermelho Luminosidade", "Valor da luminosidade" + luminosidade);
+
 
 		} else {
 			alertaVermelhoLuminosidade = false;
@@ -443,21 +441,14 @@ public class MongoJDBCMain {
 		String existeAlertaLaranjaLum = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
 				+ date + "\" , interval 1 minute)";
 		ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
-		if (rsLaranjaLum.next() == false && (luminosidade <= (LILuminosidade + LILuminosidade * 0.8))
-				&& (luminosidade > (LILuminosidade + LILuminosidade * 0.4))
-				|| (luminosidade >= (LSLuminosidade * 0.8) && luminosidade < LSLuminosidade * 0.9)) {
+		if (rsLaranjaLum.next() == false && (luminosidade <= (LILuminosidade + LILuminosidade * laranjaInf))
+				&& (luminosidade > (LILuminosidade + LILuminosidade * laranjaInf2))
+				|| (luminosidade >= (LSLuminosidade * laranjaSup2) && luminosidade < LSLuminosidade * laranjaSup)) {
 			alertaLaranjaLuminosidade = true;
 
 			insertAlerta("lum", "laranja", date, luminosidade, "O valor da luminosidade aproxima-se dos limites",
 					LILuminosidade, LSLuminosidade);
-			String investigadores = "SELECT * FROM main.investigador";
-			ResultSet inves = stmt.executeQuery(investigadores);
-			while (inves.next()) {
-				String invest = inves.getNString("Email_Investigador");
-				System.out.println("Investigador" + invest);
-				sendEmails(invest, "Alerta Laranja Luminosidade", "Valor da luminosidade" + luminosidade);
-			}
-			inves.close();
+				sendEmails(email, "Alerta Laranja Luminosidade", "Valor da luminosidade" + luminosidade);
 
 		} else {
 			alertaLaranjaLuminosidade = false;
@@ -473,10 +464,13 @@ public class MongoJDBCMain {
 				@Override
 				public void run() {
 					try {
-						sleep(time);
+						sleep(tempoDePico);
 						String mysql = "SELECT * FROM medicao_luminosidade where Id_Medicao_Luminosidade =(Select MAX(Id_Medicao_Luminosidade) from medicao_luminosidade)";
 						ResultSet rs = stmt.executeQuery(mysql);
-						Double valorAtualLuminosidade = rs.getDouble("Valor_Medicao_Luminosidade");
+						Double valorAtualLuminosidade =0.0;
+						if(rs.next()) {
+							valorAtualLuminosidade = rs.getDouble("Valor_Medicao_Luminosidade");
+						}
 						rs.close();
 						if (Math.abs(valorAtualLuminosidade - valorAntigoLuminosidade) > valorXluminosidade) {
 							// alerta Vermelho Luminosidade
@@ -484,21 +478,14 @@ public class MongoJDBCMain {
 									+ date + "\" , interval 1 minute)";
 							ResultSet rsVermelhoLum = stmt.executeQuery(existeAlertaVermelhoLum);
 							if (rsVermelhoLum.next() == false
-									&& (luminosidade <= (LILuminosidade + LILuminosidade * 0.4))
-									|| (luminosidade >= LSLuminosidade * 0.9)) {
+									&& (luminosidade <= (LILuminosidade + LILuminosidade * vermelhoInf))
+									|| (luminosidade >= LSLuminosidade * vermelhoSup)) {
 								alertaVermelhoLuminosidade = true;
 								insertAlerta("lum", "vermelho", date, valorAtualLuminosidade,
 										"O valor da luminosidade aproxima-se criticamente dos limites", LILuminosidade,
 										LSLuminosidade);
-								String investigadores = "SELECT * FROM main.investigador";
-								ResultSet inves = stmt.executeQuery(investigadores);
-								while (inves.next()) {
-									String invest = inves.getNString("Email_Investigador");
-									System.out.println("Investigador" + invest);
-									sendEmails(invest, "Alerta Vermelho Luminosidade",
+									sendEmails(email, "Alerta Vermelho Luminosidade",
 											"Valor da luminosidade" + luminosidade);
-								}
-								inves.close();
 
 							} else {
 								alertaVermelhoLuminosidade = false;
@@ -509,24 +496,19 @@ public class MongoJDBCMain {
 									+ date + "\" , interval 1 minute)";
 							ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
 							if (rsLaranjaLum.next() == false
-									&& (luminosidade <= (LILuminosidade + LILuminosidade * 0.8))
-									&& (luminosidade > (LILuminosidade + LILuminosidade * 0.4))
-									|| (luminosidade >= (LSLuminosidade * 0.8)
-											&& luminosidade < LSLuminosidade * 0.9)) {
+									&& (luminosidade <= (LILuminosidade + LILuminosidade * laranjaInf))
+									&& (luminosidade > (LILuminosidade + LILuminosidade * laranjaInf2))
+									|| (luminosidade >= (LSLuminosidade * laranjaSup2)
+											&& luminosidade < LSLuminosidade * laranjaSup)) {
 								alertaLaranjaLuminosidade = true;
 
 								insertAlerta("lum", "laranja", date, valorAtualLuminosidade,
 										"O valor da luminosidade aproxima-se dos limites", LILuminosidade,
 										LSLuminosidade);
-								String investigadores = "SELECT * FROM main.investigador";
-								ResultSet inves = stmt.executeQuery(investigadores);
-								while (inves.next()) {
-									String invest = inves.getNString("Email_Investigador");
-									System.out.println("Investigador" + invest);
-									sendEmails(invest, "Alerta Laranja Luminosidade",
+
+									sendEmails(email, "Alerta Laranja Luminosidade",
 											"Valor da luminosidade" + luminosidade);
-								}
-								inves.close();
+	
 
 							} else {
 								alertaLaranjaLuminosidade = false;
@@ -534,16 +516,9 @@ public class MongoJDBCMain {
 							if (alertaLaranjaLuminosidade == false && alertaVermelhoLuminosidade == false) {
 								insertAlerta("lum", "amarelo", date, valorAtualLuminosidade,
 										"Pico de luminosidade dentro dos limites", LILuminosidade, LSLuminosidade);
-								String investigadores = "SELECT * FROM main.investigador";
-								ResultSet inves = stmt.executeQuery(investigadores);
-								while (inves.next()) {
-									String invest = inves.getNString("Email_Investigador");
-									System.out.println("Investigador" + invest);
-									sendEmails(invest, "Alerta Amarelo Luminosidade",
+									sendEmails(email, "Alerta Amarelo Luminosidade",
 											"Valor da luminosidade" + valorAtualLuminosidade);
-								}
-								inves.close();
-
+				
 							}
 						} else {
 							picoLuminosidade = false;
