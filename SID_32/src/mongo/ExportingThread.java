@@ -15,16 +15,11 @@ public class ExportingThread extends Thread{
 			try { 
 				sleep(7000);
 				if (exporter.getConnection() != null) {
-					System.out.println("vou migrar");
-					exporter.migracao(); 
-					System.out.println("migracao acabada");
+					exporter.migracao();
 				}else {
 					System.out.println("ERROR: Unable to make a database connection!");
 					break;
-				
 				}
-
-				System.out.println("Trying to get a list of all entrys in sensor collection...");
 				
 			} catch (InterruptedException | SQLException e) { 
 				e.printStackTrace();  

@@ -44,7 +44,7 @@ public class SensorReader implements MqttCallback{
 	public void mqttReader(){
 		try {
 			client = new MqttClient("wss://iot.eclipse.org:443/ws", "user321");
-		//	client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883","/sid_lab_2019_2");
+			//client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883","/sid_lab_2019_2");
 			MqttConnectOptions options = new MqttConnectOptions();
 			options.setAutomaticReconnect(true);
 			options.setCleanSession(true);

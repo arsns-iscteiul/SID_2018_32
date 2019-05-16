@@ -83,8 +83,8 @@ public class MongoJDBCMain {
 	public void connect() {
 		try {
 			// ligar-se ao mongo
-			MongoClient mongoClient = new MongoClient();
-					//new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
+			MongoClient mongoClient = new MongoClient(
+					new MongoClientURI("mongodb+srv://admin:admin@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true"));
 			mongoClient.getDatabaseNames().forEach(System.out::println);
 			DB db = mongoClient.getDB("sensores");
 			collection = db.getCollection("sensor");
@@ -294,7 +294,7 @@ public class MongoJDBCMain {
 		ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
 		System.out.println(!rsVermelhoTemp.isBeforeFirst() + " data" + date);
 		if (!rsVermelhoTemp.isBeforeFirst() 
-				&& ((temperatura <= (LITemperatura + LITemperatura * vermelhoInf)) || (temperatura >= LSTemperatura * vermelhoSup))) {
+				&& ((temperatura <= (LITemperatura + LITemperatura * (1-vermelhoInf))) || (temperatura >= LSTemperatura * vermelhoSup))) {
 			alertaVermelhoTemperatura = true;
 			insertAlerta("temp", "vermelho", date, temperatura,
 					"O valor da temperatura aproxima-se criticamente dos limites", LITemperatura, LSTemperatura, id);
@@ -309,8 +309,8 @@ public class MongoJDBCMain {
 		String existeAlertaLaranjaTemp = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
 				+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
 		ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
-		if (rsLaranjaTemp.next()==false && (temperatura <= (LITemperatura + LITemperatura * laranjaInf))
-				&& (temperatura > (LITemperatura + LITemperatura * vermelhoInf))
+		if (rsLaranjaTemp.next()==false && (temperatura <= (LITemperatura + LITemperatura *(1- laranjaInf)))
+				&& (temperatura > (LITemperatura + LITemperatura * (1-vermelhoInf)))
 				|| (temperatura >= (LSTemperatura * laranjaSup) && temperatura < LSTemperatura * vermelhoSup)) {
 			
 			alertaLaranjaTemperatura = true;
@@ -347,7 +347,7 @@ public class MongoJDBCMain {
 									+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
 							ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
 							if (!rsVermelhoTemp.isBeforeFirst()
-									&& ((valorAtualTemperatura <= (LITemperatura + LITemperatura * vermelhoInf))
+									&& ((valorAtualTemperatura <= (LITemperatura + LITemperatura *(1- vermelhoInf)))
 											|| (valorAtualTemperatura >= LSTemperatura * vermelhoSup))) {
 								
 								alertaVermelhoTemperatura = true;
@@ -366,8 +366,8 @@ public class MongoJDBCMain {
 							String existeAlertaLaranjaTemp = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
 									+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
 							ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
-							if (!rsLaranjaTemp.isBeforeFirst() && (temperatura <= (LITemperatura + LITemperatura * laranjaInf))
-									&& (valorAtualTemperatura > (LITemperatura + LITemperatura * vermelhoSup))
+							if (!rsLaranjaTemp.isBeforeFirst() && (temperatura <= (LITemperatura + LITemperatura *(1- laranjaInf)))
+									&& (valorAtualTemperatura > (LITemperatura + LITemperatura *(1- vermelhoInf)))
 									|| (valorAtualTemperatura >= (LSTemperatura * laranjaSup)
 											&& valorAtualTemperatura < LSTemperatura * vermelhoSup)) {
 								
@@ -414,7 +414,7 @@ public class MongoJDBCMain {
 				+ date + "\" , interval -1 minute) and idInvestigador=" +id ;
 		ResultSet rsVermelhoLum = stmt.executeQuery(existeAlertaVermelhoLum);
 		System.out.println(!rsVermelhoLum.isBeforeFirst() + " ************************************************--------------");
-		if (!rsVermelhoLum.isBeforeFirst() && ((luminosidade <= (LILuminosidade + LILuminosidade * vermelhoInf))|| (luminosidade >= LSLuminosidade * vermelhoSup))) {
+		if (!rsVermelhoLum.isBeforeFirst() && ((luminosidade <= (LILuminosidade + LILuminosidade * (1-vermelhoInf)))|| (luminosidade >= LSLuminosidade * vermelhoSup))) {
 			System.out.println("alerta vermlho de luminosidade!!!!!!!!");
 			alertaVermelhoLuminosidade = true;
 			insertAlerta("lum", "vermelho", date, luminosidade,
@@ -432,8 +432,8 @@ public class MongoJDBCMain {
 		String existeAlertaLaranjaLum = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
 				+ date + "\" , interval -1 minute) and idInvestigador=" +id ;
 		ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
-		if (!rsLaranjaLum.isBeforeFirst() && (luminosidade <= (LILuminosidade + LILuminosidade * laranjaInf))
-				&& ((luminosidade > (LILuminosidade + LILuminosidade * vermelhoSup))
+		if (!rsLaranjaLum.isBeforeFirst() && (luminosidade <= (LILuminosidade + LILuminosidade * (1-laranjaInf)))
+				&& ((luminosidade > (LILuminosidade + LILuminosidade * (1-vermelhoInf)))
 				|| (luminosidade >= (LSLuminosidade * laranjaSup) && luminosidade < LSLuminosidade * vermelhoSup))) {
 			System.out.println("alerta laranja luz!!!!!!!!!!!");
 			alertaLaranjaLuminosidade = true;
@@ -471,7 +471,7 @@ public class MongoJDBCMain {
 									+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
 							ResultSet rsVermelhoLum = stmt.executeQuery(existeAlertaVermelhoLum);
 							if (!rsVermelhoLum.isBeforeFirst()
-									&& ((luminosidade <= (LILuminosidade + LILuminosidade * vermelhoInf))
+									&& ((luminosidade <= (LILuminosidade + LILuminosidade * (1-vermelhoInf)))
 									|| (luminosidade >= LSLuminosidade * vermelhoSup))) {
 								System.out.println("nao era um pico, alerta vermelho!!!!!! (luz)");
 								alertaVermelhoLuminosidade = true;
@@ -490,8 +490,8 @@ public class MongoJDBCMain {
 									+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
 							ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
 							if (!rsLaranjaLum.isBeforeFirst()
-									&& (((luminosidade <= (LILuminosidade + LILuminosidade * laranjaInf))
-									&& (luminosidade > (LILuminosidade + LILuminosidade * vermelhoInf)))
+									&& (((luminosidade <= (LILuminosidade + LILuminosidade *(1- laranjaInf)))
+									&& (luminosidade > (LILuminosidade + LILuminosidade * (1-vermelhoInf))))
 									|| ((luminosidade >= (LSLuminosidade * laranjaSup)
 											&& luminosidade < LSLuminosidade * vermelhoSup)))) {
 								System.out.println("nao era um pico, alerta laranja!!!!!! (luz)");
