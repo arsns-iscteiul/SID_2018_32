@@ -23,7 +23,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
 
-public class InsertToMongo implements MqttCallback{
+public class SensorReader implements MqttCallback{
 	private MqttClient client;
 //	private DB db;
 //	private DBCollection collection;
@@ -33,7 +33,7 @@ public class InsertToMongo implements MqttCallback{
 	private BlockingQueue<String> msgs;
 	
 //	BasicDBList dbList;
-	public InsertToMongo() {
+	public SensorReader() {
 		msgs = new LinkedBlockingQueue<String>();
 		MongoInsertThread t = new MongoInsertThread(this);
 		t.start();
@@ -41,7 +41,7 @@ public class InsertToMongo implements MqttCallback{
 	
 	
 	
-	public void testeMqtt(){
+	public void mqttReader(){
 		try {
 		//	client = new MqttClient("wss://iot.eclipse.org:443/ws", "user321");
 			client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883","/sid_lab_2019_2");
@@ -162,7 +162,7 @@ public class InsertToMongo implements MqttCallback{
 	
 
 	public static void main(String[] args) {	
-		new InsertToMongo().testeMqtt();
+		new SensorReader().mqttReader();
 	}
 	
 }
