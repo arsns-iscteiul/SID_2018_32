@@ -15,7 +15,9 @@ public class ExportingThread extends Thread{
 			try { 
 				sleep(7000);
 				if (exporter.getConnection() != null) {
+					System.out.println("vou migrar");
 					exporter.migracao(); 
+					System.out.println("migracao acabada");
 				}else {
 					System.out.println("ERROR: Unable to make a database connection!");
 					break;

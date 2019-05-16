@@ -31,7 +31,6 @@ public class MongoInsertThread extends Thread{
 	public void run (){	
 	//	try {
 			while (true){
-				System.out.println("thread is running");
 				String s = mqttClient.pollMessage();
 				//System.out.println( "chegou");
 			/*	System.out.println(s == null  + "------------------------------------- " + s);
@@ -39,7 +38,7 @@ public class MongoInsertThread extends Thread{
 					System.out.println("queue is empty, imma gonna sleep");
 				//	sleep(10000);
 				}else{
-*/					System.out.println("vou guardar no mongo");
+*/					System.out.println(" vou guardar no mongo");
 					DBObject dbObject = (DBObject)JSON.parse(s);
 					collection.insert(dbObject);
 	//			}

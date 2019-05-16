@@ -100,7 +100,6 @@ public class InsertToMongo implements MqttCallback{
 				}
 				
 			}
-			System.out.println(s);
 			System.out.println(msg +"   -----    mensagem recebida");
 			if (checkMsgFormat(msg)){
 					s=s.replace("}", ",\"exported\":0}");

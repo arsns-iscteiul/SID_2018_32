@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: 16-Maio-2019 às 11:37
+-- Generation Time: 16-Maio-2019 às 12:19
 -- Versão do servidor: 10.1.37-MariaDB
 -- versão do PHP: 7.2.12
 
@@ -2225,7 +2225,93 @@ INSERT INTO `alerta_sensor` (`id`, `tipo`, `intensidade`, `datahoraalerta`, `val
 (1681, 'lum', 'vermelho', '2019-05-15 16:07:12', '204.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
 (1682, 'lum', 'vermelho', '2019-05-15 16:07:12', '204.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
 (1683, 'lum', 'vermelho', '2019-05-15 16:07:14', '205.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
-(1684, 'lum', 'vermelho', '2019-05-15 16:07:14', '205.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1);
+(1684, 'lum', 'vermelho', '2019-05-15 16:07:14', '205.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1685, 'temp', 'vermelho', '2019-05-16 10:59:58', '26.80', 'O valor da temperatura aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1686, 'lum', 'vermelho', '2019-05-16 10:59:58', '205.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1687, 'temp', 'vermelho', '2019-05-16 10:59:58', '26.80', 'O valor da temperatura aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1688, 'lum', 'vermelho', '2019-05-16 10:59:58', '205.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1689, 'lum', 'vermelho', '2019-05-16 10:01:48', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1690, 'lum', 'vermelho', '2019-05-16 10:01:48', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1691, 'lum', 'vermelho', '2019-05-16 10:01:50', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1692, 'lum', 'vermelho', '2019-05-16 10:01:50', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1693, 'lum', 'vermelho', '2019-05-16 10:01:52', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1694, 'lum', 'vermelho', '2019-05-16 10:01:52', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1695, 'lum', 'vermelho', '2019-05-16 10:01:53', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1696, 'lum', 'vermelho', '2019-05-16 10:01:53', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1697, 'lum', 'vermelho', '2019-05-16 10:01:55', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1698, 'lum', 'vermelho', '2019-05-16 10:01:55', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1699, 'lum', 'vermelho', '2019-05-16 10:01:57', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1700, 'lum', 'vermelho', '2019-05-16 10:01:57', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1701, 'lum', 'vermelho', '2019-05-16 10:01:59', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1702, 'lum', 'vermelho', '2019-05-16 10:01:59', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1703, 'lum', 'vermelho', '2019-05-16 10:02:01', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1704, 'lum', 'vermelho', '2019-05-16 10:02:01', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1705, 'lum', 'vermelho', '2019-05-16 10:02:03', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1706, 'lum', 'vermelho', '2019-05-16 10:02:03', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1707, 'lum', 'vermelho', '2019-05-16 10:02:04', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1708, 'lum', 'vermelho', '2019-05-16 10:02:04', '151.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1709, 'lum', 'vermelho', '2019-05-16 10:02:06', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1710, 'lum', 'vermelho', '2019-05-16 10:02:06', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1711, 'lum', 'vermelho', '2019-05-16 10:02:08', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1712, 'lum', 'vermelho', '2019-05-16 10:02:08', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1713, 'lum', 'vermelho', '2019-05-16 10:02:10', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1714, 'lum', 'vermelho', '2019-05-16 10:02:10', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1715, 'lum', 'vermelho', '2019-05-16 10:02:12', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1716, 'lum', 'vermelho', '2019-05-16 10:02:12', '152.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1717, 'lum', 'vermelho', '2019-05-16 10:02:13', '153.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1718, 'lum', 'vermelho', '2019-05-16 10:02:13', '153.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1719, 'lum', 'vermelho', '2019-05-16 10:02:15', '153.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1720, 'lum', 'vermelho', '2019-05-16 10:02:15', '153.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1721, 'lum', 'vermelho', '2019-05-16 10:02:17', '154.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1722, 'lum', 'vermelho', '2019-05-16 10:02:17', '154.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1723, 'lum', 'vermelho', '2019-05-16 10:02:19', '154.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1724, 'lum', 'vermelho', '2019-05-16 10:02:19', '154.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1725, 'lum', 'vermelho', '2019-05-16 10:02:21', '154.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1726, 'lum', 'vermelho', '2019-05-16 10:02:21', '154.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1727, 'lum', 'vermelho', '2019-05-16 10:02:23', '155.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1728, 'lum', 'vermelho', '2019-05-16 10:02:23', '155.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1729, 'lum', 'vermelho', '2019-05-16 10:02:25', '156.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1730, 'lum', 'vermelho', '2019-05-16 10:02:25', '156.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1731, 'lum', 'vermelho', '2019-05-16 10:02:27', '155.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1732, 'lum', 'vermelho', '2019-05-16 10:02:27', '155.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1733, 'lum', 'vermelho', '2019-05-16 10:02:28', '156.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1734, 'lum', 'vermelho', '2019-05-16 10:02:28', '156.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1735, 'lum', 'vermelho', '2019-05-16 10:02:30', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1736, 'lum', 'vermelho', '2019-05-16 10:02:30', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1737, 'lum', 'vermelho', '2019-05-16 10:02:32', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1738, 'lum', 'vermelho', '2019-05-16 10:02:32', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1739, 'lum', 'vermelho', '2019-05-16 10:02:34', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1740, 'lum', 'vermelho', '2019-05-16 10:02:34', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1741, 'lum', 'vermelho', '2019-05-16 10:02:36', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1742, 'lum', 'vermelho', '2019-05-16 10:02:36', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1743, 'lum', 'vermelho', '2019-05-16 10:02:37', '160.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1744, 'lum', 'vermelho', '2019-05-16 10:02:37', '160.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1745, 'lum', 'vermelho', '2019-05-16 10:02:39', '160.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1746, 'lum', 'vermelho', '2019-05-16 10:02:39', '160.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1747, 'lum', 'vermelho', '2019-05-16 10:02:41', '160.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1748, 'lum', 'vermelho', '2019-05-16 10:02:41', '160.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1749, 'lum', 'vermelho', '2019-05-16 10:02:43', '160.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1750, 'lum', 'vermelho', '2019-05-16 10:02:43', '160.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1751, 'lum', 'vermelho', '2019-05-16 10:02:45', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1752, 'lum', 'vermelho', '2019-05-16 10:02:45', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1753, 'lum', 'vermelho', '2019-05-16 10:02:47', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1754, 'lum', 'vermelho', '2019-05-16 10:02:47', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1755, 'lum', 'vermelho', '2019-05-16 10:02:48', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1756, 'lum', 'vermelho', '2019-05-16 10:02:48', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1757, 'lum', 'vermelho', '2019-05-16 10:02:50', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1758, 'lum', 'vermelho', '2019-05-16 10:02:50', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1759, 'lum', 'vermelho', '2019-05-16 10:02:52', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1760, 'lum', 'vermelho', '2019-05-16 10:02:52', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1761, 'lum', 'vermelho', '2019-05-16 10:02:54', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1762, 'lum', 'vermelho', '2019-05-16 10:02:54', '159.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1763, 'lum', 'vermelho', '2019-05-16 10:05:02', '156.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1764, 'lum', 'vermelho', '2019-05-16 10:05:02', '156.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1765, 'lum', 'vermelho', '2019-05-16 10:05:04', '157.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1766, 'lum', 'vermelho', '2019-05-16 10:05:04', '157.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1767, 'lum', 'vermelho', '2019-05-16 10:05:06', '157.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1768, 'lum', 'vermelho', '2019-05-16 10:05:06', '157.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1769, 'lum', 'vermelho', '2019-05-16 10:05:08', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1),
+(1770, 'lum', 'vermelho', '2019-05-16 10:05:08', '158.00', 'O valor da luminosidade aproxima-se criticamente dos limites', '0.00', '0.00', 1);
 
 -- --------------------------------------------------------
 
@@ -3335,7 +3421,49 @@ INSERT INTO `medicao_luminosidade` (`Id_Medicao_Luminosidade`, `Data_Hora_Medica
 (908, '2019-05-15 15:07:08', '204.00'),
 (909, '2019-05-15 15:07:10', '206.00'),
 (910, '2019-05-15 15:07:12', '204.00'),
-(911, '2019-05-15 15:07:14', '205.00');
+(911, '2019-05-15 15:07:14', '205.00'),
+(912, '2019-05-16 09:59:58', '205.00'),
+(913, '2019-05-16 09:01:48', '151.00'),
+(914, '2019-05-16 09:01:50', '151.00'),
+(915, '2019-05-16 09:01:52', '151.00'),
+(916, '2019-05-16 09:01:53', '151.00'),
+(917, '2019-05-16 09:01:55', '152.00'),
+(918, '2019-05-16 09:01:57', '151.00'),
+(919, '2019-05-16 09:01:59', '151.00'),
+(920, '2019-05-16 09:02:01', '151.00'),
+(921, '2019-05-16 09:02:03', '151.00'),
+(922, '2019-05-16 09:02:04', '151.00'),
+(923, '2019-05-16 09:02:06', '152.00'),
+(924, '2019-05-16 09:02:08', '152.00'),
+(925, '2019-05-16 09:02:10', '152.00'),
+(926, '2019-05-16 09:02:12', '152.00'),
+(927, '2019-05-16 09:02:13', '153.00'),
+(928, '2019-05-16 09:02:15', '153.00'),
+(929, '2019-05-16 09:02:17', '154.00'),
+(930, '2019-05-16 09:02:19', '154.00'),
+(931, '2019-05-16 09:02:21', '154.00'),
+(932, '2019-05-16 09:02:23', '155.00'),
+(933, '2019-05-16 09:02:25', '156.00'),
+(934, '2019-05-16 09:02:27', '155.00'),
+(935, '2019-05-16 09:02:28', '156.00'),
+(936, '2019-05-16 09:02:30', '158.00'),
+(937, '2019-05-16 09:02:32', '158.00'),
+(938, '2019-05-16 09:02:34', '159.00'),
+(939, '2019-05-16 09:02:36', '159.00'),
+(940, '2019-05-16 09:02:37', '160.00'),
+(941, '2019-05-16 09:02:39', '160.00'),
+(942, '2019-05-16 09:02:41', '160.00'),
+(943, '2019-05-16 09:02:43', '160.00'),
+(944, '2019-05-16 09:02:45', '159.00'),
+(945, '2019-05-16 09:02:47', '159.00'),
+(946, '2019-05-16 09:02:48', '158.00'),
+(947, '2019-05-16 09:02:50', '158.00'),
+(948, '2019-05-16 09:02:52', '158.00'),
+(949, '2019-05-16 09:02:54', '159.00'),
+(950, '2019-05-16 09:05:02', '156.00'),
+(951, '2019-05-16 09:05:04', '157.00'),
+(952, '2019-05-16 09:05:06', '157.00'),
+(953, '2019-05-16 09:05:08', '158.00');
 
 --
 -- Acionadores `medicao_luminosidade`
@@ -4483,7 +4611,49 @@ INSERT INTO `medicao_temperatura` (`Id_Medicao_Temperatura`, `Data_Hora_Medicao`
 (1093, '2019-05-15 15:07:08', '26.80'),
 (1094, '2019-05-15 15:07:10', '26.80'),
 (1095, '2019-05-15 15:07:12', '26.80'),
-(1096, '2019-05-15 15:07:14', '26.80');
+(1096, '2019-05-15 15:07:14', '26.80'),
+(1097, '2019-05-16 09:59:58', '26.80'),
+(1098, '2019-05-16 09:01:48', '27.00'),
+(1099, '2019-05-16 09:01:50', '27.00'),
+(1100, '2019-05-16 09:01:52', '26.90'),
+(1101, '2019-05-16 09:01:53', '26.90'),
+(1102, '2019-05-16 09:01:55', '27.00'),
+(1103, '2019-05-16 09:01:57', '27.00'),
+(1104, '2019-05-16 09:01:59', '27.00'),
+(1105, '2019-05-16 09:02:01', '27.00'),
+(1106, '2019-05-16 09:02:03', '27.00'),
+(1107, '2019-05-16 09:02:04', '27.00'),
+(1108, '2019-05-16 09:02:06', '27.00'),
+(1109, '2019-05-16 09:02:08', '27.00'),
+(1110, '2019-05-16 09:02:10', '27.00'),
+(1111, '2019-05-16 09:02:12', '27.00'),
+(1112, '2019-05-16 09:02:13', '26.90'),
+(1113, '2019-05-16 09:02:15', '26.90'),
+(1114, '2019-05-16 09:02:17', '27.00'),
+(1115, '2019-05-16 09:02:19', '27.00'),
+(1116, '2019-05-16 09:02:21', '27.00'),
+(1117, '2019-05-16 09:02:23', '27.00'),
+(1118, '2019-05-16 09:02:25', '26.90'),
+(1119, '2019-05-16 09:02:27', '26.90'),
+(1120, '2019-05-16 09:02:28', '27.00'),
+(1121, '2019-05-16 09:02:30', '27.00'),
+(1122, '2019-05-16 09:02:32', '27.00'),
+(1123, '2019-05-16 09:02:34', '27.00'),
+(1124, '2019-05-16 09:02:36', '26.90'),
+(1125, '2019-05-16 09:02:37', '26.90'),
+(1126, '2019-05-16 09:02:39', '26.90'),
+(1127, '2019-05-16 09:02:41', '26.90'),
+(1128, '2019-05-16 09:02:43', '27.00'),
+(1129, '2019-05-16 09:02:45', '27.00'),
+(1130, '2019-05-16 09:02:47', '26.90'),
+(1131, '2019-05-16 09:02:48', '26.90'),
+(1132, '2019-05-16 09:02:50', '27.00'),
+(1133, '2019-05-16 09:02:52', '27.00'),
+(1134, '2019-05-16 09:02:54', '27.00'),
+(1135, '2019-05-16 09:05:02', '26.90'),
+(1136, '2019-05-16 09:05:04', '26.90'),
+(1137, '2019-05-16 09:05:06', '26.90'),
+(1138, '2019-05-16 09:05:08', '26.90');
 
 --
 -- Acionadores `medicao_temperatura`
@@ -5746,7 +5916,49 @@ INSERT INTO `[logtemp]medicao_luminosidade` (`idlog`, `Utilizador`, `DataLog`, `
 (908, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 908, '2019-05-15 15:07:08', '204.00'),
 (909, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 909, '2019-05-15 15:07:10', '206.00'),
 (910, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 910, '2019-05-15 15:07:12', '204.00'),
-(911, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 911, '2019-05-15 15:07:14', '205.00');
+(911, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 911, '2019-05-15 15:07:14', '205.00'),
+(912, 'root@localhost', '2019-05-16 09:59:58', 'INSERT', 912, '2019-05-16 09:59:58', '205.00'),
+(913, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 913, '2019-05-16 09:01:48', '151.00'),
+(914, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 914, '2019-05-16 09:01:50', '151.00'),
+(915, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 915, '2019-05-16 09:01:52', '151.00'),
+(916, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 916, '2019-05-16 09:01:53', '151.00'),
+(917, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 917, '2019-05-16 09:01:55', '152.00'),
+(918, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 918, '2019-05-16 09:01:57', '151.00'),
+(919, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 919, '2019-05-16 09:01:59', '151.00'),
+(920, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 920, '2019-05-16 09:02:01', '151.00'),
+(921, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 921, '2019-05-16 09:02:03', '151.00'),
+(922, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 922, '2019-05-16 09:02:04', '151.00'),
+(923, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 923, '2019-05-16 09:02:06', '152.00'),
+(924, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 924, '2019-05-16 09:02:08', '152.00'),
+(925, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 925, '2019-05-16 09:02:10', '152.00'),
+(926, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 926, '2019-05-16 09:02:12', '152.00'),
+(927, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 927, '2019-05-16 09:02:13', '153.00'),
+(928, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 928, '2019-05-16 09:02:15', '153.00'),
+(929, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 929, '2019-05-16 09:02:17', '154.00'),
+(930, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 930, '2019-05-16 09:02:19', '154.00'),
+(931, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 931, '2019-05-16 09:02:21', '154.00'),
+(932, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 932, '2019-05-16 09:02:23', '155.00'),
+(933, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 933, '2019-05-16 09:02:25', '156.00'),
+(934, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 934, '2019-05-16 09:02:27', '155.00'),
+(935, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 935, '2019-05-16 09:02:28', '156.00'),
+(936, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 936, '2019-05-16 09:02:30', '158.00'),
+(937, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 937, '2019-05-16 09:02:32', '158.00'),
+(938, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 938, '2019-05-16 09:02:34', '159.00'),
+(939, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 939, '2019-05-16 09:02:36', '159.00'),
+(940, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 940, '2019-05-16 09:02:37', '160.00'),
+(941, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 941, '2019-05-16 09:02:39', '160.00'),
+(942, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 942, '2019-05-16 09:02:41', '160.00'),
+(943, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 943, '2019-05-16 09:02:43', '160.00'),
+(944, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 944, '2019-05-16 09:02:45', '159.00'),
+(945, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 945, '2019-05-16 09:02:47', '159.00'),
+(946, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 946, '2019-05-16 09:02:48', '158.00'),
+(947, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 947, '2019-05-16 09:02:50', '158.00'),
+(948, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 948, '2019-05-16 09:02:52', '158.00'),
+(949, 'root@localhost', '2019-05-16 10:05:04', 'INSERT', 949, '2019-05-16 09:02:54', '159.00'),
+(950, 'root@localhost', '2019-05-16 10:05:04', 'INSERT', 950, '2019-05-16 09:05:02', '156.00'),
+(951, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 951, '2019-05-16 09:05:04', '157.00'),
+(952, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 952, '2019-05-16 09:05:06', '157.00'),
+(953, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 953, '2019-05-16 09:05:08', '158.00');
 
 -- --------------------------------------------------------
 
@@ -6866,7 +7078,49 @@ INSERT INTO `[logtemp]medicao_temperatura` (`idlog`, `Utilizador`, `DataLog`, `O
 (1093, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1093, '2019-05-15 15:07:08', '26.80'),
 (1094, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1094, '2019-05-15 15:07:10', '26.80'),
 (1095, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1095, '2019-05-15 15:07:12', '26.80'),
-(1096, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1096, '2019-05-15 15:07:14', '26.80');
+(1096, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1096, '2019-05-15 15:07:14', '26.80'),
+(1097, 'root@localhost', '2019-05-16 09:59:58', 'INSERT', 1097, '2019-05-16 09:59:58', '26.80'),
+(1098, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 1098, '2019-05-16 09:01:48', '27.00'),
+(1099, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 1099, '2019-05-16 09:01:50', '27.00'),
+(1100, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 1100, '2019-05-16 09:01:52', '26.90'),
+(1101, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 1101, '2019-05-16 09:01:53', '26.90'),
+(1102, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 1102, '2019-05-16 09:01:55', '27.00'),
+(1103, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 1103, '2019-05-16 09:01:57', '27.00'),
+(1104, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 1104, '2019-05-16 09:01:59', '27.00'),
+(1105, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 1105, '2019-05-16 09:02:01', '27.00'),
+(1106, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 1106, '2019-05-16 09:02:03', '27.00'),
+(1107, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 1107, '2019-05-16 09:02:04', '27.00'),
+(1108, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 1108, '2019-05-16 09:02:06', '27.00'),
+(1109, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 1109, '2019-05-16 09:02:08', '27.00'),
+(1110, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 1110, '2019-05-16 09:02:10', '27.00'),
+(1111, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 1111, '2019-05-16 09:02:12', '27.00'),
+(1112, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 1112, '2019-05-16 09:02:13', '26.90'),
+(1113, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 1113, '2019-05-16 09:02:15', '26.90'),
+(1114, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 1114, '2019-05-16 09:02:17', '27.00'),
+(1115, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 1115, '2019-05-16 09:02:19', '27.00'),
+(1116, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 1116, '2019-05-16 09:02:21', '27.00'),
+(1117, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 1117, '2019-05-16 09:02:23', '27.00'),
+(1118, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 1118, '2019-05-16 09:02:25', '26.90'),
+(1119, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 1119, '2019-05-16 09:02:27', '26.90'),
+(1120, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 1120, '2019-05-16 09:02:28', '27.00'),
+(1121, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 1121, '2019-05-16 09:02:30', '27.00'),
+(1122, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 1122, '2019-05-16 09:02:32', '27.00'),
+(1123, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 1123, '2019-05-16 09:02:34', '27.00'),
+(1124, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 1124, '2019-05-16 09:02:36', '26.90'),
+(1125, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 1125, '2019-05-16 09:02:37', '26.90'),
+(1126, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 1126, '2019-05-16 09:02:39', '26.90'),
+(1127, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 1127, '2019-05-16 09:02:41', '26.90'),
+(1128, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 1128, '2019-05-16 09:02:43', '27.00'),
+(1129, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 1129, '2019-05-16 09:02:45', '27.00'),
+(1130, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 1130, '2019-05-16 09:02:47', '26.90'),
+(1131, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 1131, '2019-05-16 09:02:48', '26.90'),
+(1132, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 1132, '2019-05-16 09:02:50', '27.00'),
+(1133, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 1133, '2019-05-16 09:02:52', '27.00'),
+(1134, 'root@localhost', '2019-05-16 10:05:04', 'INSERT', 1134, '2019-05-16 09:02:54', '27.00'),
+(1135, 'root@localhost', '2019-05-16 10:05:04', 'INSERT', 1135, '2019-05-16 09:05:02', '26.90'),
+(1136, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 1136, '2019-05-16 09:05:04', '26.90'),
+(1137, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 1137, '2019-05-16 09:05:06', '26.90'),
+(1138, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 1138, '2019-05-16 09:05:08', '26.90');
 
 -- --------------------------------------------------------
 
@@ -7977,7 +8231,49 @@ INSERT INTO `[log]medicao_luminosidade` (`idlog`, `Utilizador`, `DataLog`, `Oper
 (908, 'root@localhost', '2019-05-15 16:07:16', '', 908, '2019-05-15 15:07:08', '204.00'),
 (909, 'root@localhost', '2019-05-15 16:07:16', '', 909, '2019-05-15 15:07:10', '206.00'),
 (910, 'root@localhost', '2019-05-15 16:07:16', '', 910, '2019-05-15 15:07:12', '204.00'),
-(911, 'root@localhost', '2019-05-15 16:07:16', '', 911, '2019-05-15 15:07:14', '205.00');
+(911, 'root@localhost', '2019-05-15 16:07:16', '', 911, '2019-05-15 15:07:14', '205.00'),
+(912, 'root@localhost', '2019-05-16 09:59:58', '', 912, '2019-05-16 09:59:58', '205.00'),
+(913, 'root@localhost', '2019-05-16 10:01:56', '', 913, '2019-05-16 09:01:48', '151.00'),
+(914, 'root@localhost', '2019-05-16 10:01:56', '', 914, '2019-05-16 09:01:50', '151.00'),
+(915, 'root@localhost', '2019-05-16 10:01:56', '', 915, '2019-05-16 09:01:52', '151.00'),
+(916, 'root@localhost', '2019-05-16 10:01:56', '', 916, '2019-05-16 09:01:53', '151.00'),
+(917, 'root@localhost', '2019-05-16 10:02:03', '', 917, '2019-05-16 09:01:55', '152.00'),
+(918, 'root@localhost', '2019-05-16 10:02:03', '', 918, '2019-05-16 09:01:57', '151.00'),
+(919, 'root@localhost', '2019-05-16 10:02:03', '', 919, '2019-05-16 09:01:59', '151.00'),
+(920, 'root@localhost', '2019-05-16 10:02:03', '', 920, '2019-05-16 09:02:01', '151.00'),
+(921, 'root@localhost', '2019-05-16 10:02:10', '', 921, '2019-05-16 09:02:03', '151.00'),
+(922, 'root@localhost', '2019-05-16 10:02:10', '', 922, '2019-05-16 09:02:04', '151.00'),
+(923, 'root@localhost', '2019-05-16 10:02:10', '', 923, '2019-05-16 09:02:06', '152.00'),
+(924, 'root@localhost', '2019-05-16 10:02:10', '', 924, '2019-05-16 09:02:08', '152.00'),
+(925, 'root@localhost', '2019-05-16 10:02:18', '', 925, '2019-05-16 09:02:10', '152.00'),
+(926, 'root@localhost', '2019-05-16 10:02:18', '', 926, '2019-05-16 09:02:12', '152.00'),
+(927, 'root@localhost', '2019-05-16 10:02:18', '', 927, '2019-05-16 09:02:13', '153.00'),
+(928, 'root@localhost', '2019-05-16 10:02:18', '', 928, '2019-05-16 09:02:15', '153.00'),
+(929, 'root@localhost', '2019-05-16 10:02:25', '', 929, '2019-05-16 09:02:17', '154.00'),
+(930, 'root@localhost', '2019-05-16 10:02:25', '', 930, '2019-05-16 09:02:19', '154.00'),
+(931, 'root@localhost', '2019-05-16 10:02:25', '', 931, '2019-05-16 09:02:21', '154.00'),
+(932, 'root@localhost', '2019-05-16 10:02:25', '', 932, '2019-05-16 09:02:23', '155.00'),
+(933, 'root@localhost', '2019-05-16 10:02:32', '', 933, '2019-05-16 09:02:25', '156.00'),
+(934, 'root@localhost', '2019-05-16 10:02:32', '', 934, '2019-05-16 09:02:27', '155.00'),
+(935, 'root@localhost', '2019-05-16 10:02:32', '', 935, '2019-05-16 09:02:28', '156.00'),
+(936, 'root@localhost', '2019-05-16 10:02:32', '', 936, '2019-05-16 09:02:30', '158.00'),
+(937, 'root@localhost', '2019-05-16 10:02:39', '', 937, '2019-05-16 09:02:32', '158.00'),
+(938, 'root@localhost', '2019-05-16 10:02:39', '', 938, '2019-05-16 09:02:34', '159.00'),
+(939, 'root@localhost', '2019-05-16 10:02:39', '', 939, '2019-05-16 09:02:36', '159.00'),
+(940, 'root@localhost', '2019-05-16 10:02:39', '', 940, '2019-05-16 09:02:37', '160.00'),
+(941, 'root@localhost', '2019-05-16 10:02:46', '', 941, '2019-05-16 09:02:39', '160.00'),
+(942, 'root@localhost', '2019-05-16 10:02:46', '', 942, '2019-05-16 09:02:41', '160.00'),
+(943, 'root@localhost', '2019-05-16 10:02:46', '', 943, '2019-05-16 09:02:43', '160.00'),
+(944, 'root@localhost', '2019-05-16 10:02:46', '', 944, '2019-05-16 09:02:45', '159.00'),
+(945, 'root@localhost', '2019-05-16 10:02:53', '', 945, '2019-05-16 09:02:47', '159.00'),
+(946, 'root@localhost', '2019-05-16 10:02:53', '', 946, '2019-05-16 09:02:48', '158.00'),
+(947, 'root@localhost', '2019-05-16 10:02:53', '', 947, '2019-05-16 09:02:50', '158.00'),
+(948, 'root@localhost', '2019-05-16 10:02:53', '', 948, '2019-05-16 09:02:52', '158.00'),
+(949, 'root@localhost', '2019-05-16 10:05:04', '', 949, '2019-05-16 09:02:54', '159.00'),
+(950, 'root@localhost', '2019-05-16 10:05:04', '', 950, '2019-05-16 09:05:02', '156.00'),
+(951, 'root@localhost', '2019-05-16 10:05:11', '', 951, '2019-05-16 09:05:04', '157.00'),
+(952, 'root@localhost', '2019-05-16 10:05:11', '', 952, '2019-05-16 09:05:06', '157.00'),
+(953, 'root@localhost', '2019-05-16 10:05:11', '', 953, '2019-05-16 09:05:08', '158.00');
 
 -- --------------------------------------------------------
 
@@ -9097,7 +9393,49 @@ INSERT INTO `[log]medicao_temperatura` (`idlog`, `Utilizador`, `DataLog`, `Opera
 (1093, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1093, '2019-05-15 15:07:08', '26.80'),
 (1094, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1094, '2019-05-15 15:07:10', '26.80'),
 (1095, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1095, '2019-05-15 15:07:12', '26.80'),
-(1096, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1096, '2019-05-15 15:07:14', '26.80');
+(1096, 'root@localhost', '2019-05-15 16:07:16', 'INSERT', 1096, '2019-05-15 15:07:14', '26.80'),
+(1097, 'root@localhost', '2019-05-16 09:59:58', 'INSERT', 1097, '2019-05-16 09:59:58', '26.80'),
+(1098, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 1098, '2019-05-16 09:01:48', '27.00'),
+(1099, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 1099, '2019-05-16 09:01:50', '27.00'),
+(1100, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 1100, '2019-05-16 09:01:52', '26.90'),
+(1101, 'root@localhost', '2019-05-16 10:01:56', 'INSERT', 1101, '2019-05-16 09:01:53', '26.90'),
+(1102, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 1102, '2019-05-16 09:01:55', '27.00'),
+(1103, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 1103, '2019-05-16 09:01:57', '27.00'),
+(1104, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 1104, '2019-05-16 09:01:59', '27.00'),
+(1105, 'root@localhost', '2019-05-16 10:02:03', 'INSERT', 1105, '2019-05-16 09:02:01', '27.00'),
+(1106, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 1106, '2019-05-16 09:02:03', '27.00'),
+(1107, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 1107, '2019-05-16 09:02:04', '27.00'),
+(1108, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 1108, '2019-05-16 09:02:06', '27.00'),
+(1109, 'root@localhost', '2019-05-16 10:02:10', 'INSERT', 1109, '2019-05-16 09:02:08', '27.00'),
+(1110, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 1110, '2019-05-16 09:02:10', '27.00'),
+(1111, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 1111, '2019-05-16 09:02:12', '27.00'),
+(1112, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 1112, '2019-05-16 09:02:13', '26.90'),
+(1113, 'root@localhost', '2019-05-16 10:02:18', 'INSERT', 1113, '2019-05-16 09:02:15', '26.90'),
+(1114, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 1114, '2019-05-16 09:02:17', '27.00'),
+(1115, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 1115, '2019-05-16 09:02:19', '27.00'),
+(1116, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 1116, '2019-05-16 09:02:21', '27.00'),
+(1117, 'root@localhost', '2019-05-16 10:02:25', 'INSERT', 1117, '2019-05-16 09:02:23', '27.00'),
+(1118, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 1118, '2019-05-16 09:02:25', '26.90'),
+(1119, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 1119, '2019-05-16 09:02:27', '26.90'),
+(1120, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 1120, '2019-05-16 09:02:28', '27.00'),
+(1121, 'root@localhost', '2019-05-16 10:02:32', 'INSERT', 1121, '2019-05-16 09:02:30', '27.00'),
+(1122, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 1122, '2019-05-16 09:02:32', '27.00'),
+(1123, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 1123, '2019-05-16 09:02:34', '27.00'),
+(1124, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 1124, '2019-05-16 09:02:36', '26.90'),
+(1125, 'root@localhost', '2019-05-16 10:02:39', 'INSERT', 1125, '2019-05-16 09:02:37', '26.90'),
+(1126, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 1126, '2019-05-16 09:02:39', '26.90'),
+(1127, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 1127, '2019-05-16 09:02:41', '26.90'),
+(1128, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 1128, '2019-05-16 09:02:43', '27.00'),
+(1129, 'root@localhost', '2019-05-16 10:02:46', 'INSERT', 1129, '2019-05-16 09:02:45', '27.00'),
+(1130, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 1130, '2019-05-16 09:02:47', '26.90'),
+(1131, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 1131, '2019-05-16 09:02:48', '26.90'),
+(1132, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 1132, '2019-05-16 09:02:50', '27.00'),
+(1133, 'root@localhost', '2019-05-16 10:02:53', 'INSERT', 1133, '2019-05-16 09:02:52', '27.00'),
+(1134, 'root@localhost', '2019-05-16 10:05:04', 'INSERT', 1134, '2019-05-16 09:02:54', '27.00'),
+(1135, 'root@localhost', '2019-05-16 10:05:04', 'INSERT', 1135, '2019-05-16 09:05:02', '26.90'),
+(1136, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 1136, '2019-05-16 09:05:04', '26.90'),
+(1137, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 1137, '2019-05-16 09:05:06', '26.90'),
+(1138, 'root@localhost', '2019-05-16 10:05:11', 'INSERT', 1138, '2019-05-16 09:05:08', '26.90');
 
 -- --------------------------------------------------------
 
@@ -9407,7 +9745,7 @@ ALTER TABLE `[log]variavel_medida`
 -- AUTO_INCREMENT for table `alerta_sensor`
 --
 ALTER TABLE `alerta_sensor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1685;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1771;
 
 --
 -- AUTO_INCREMENT for table `categoria_profissional`
@@ -9437,13 +9775,13 @@ ALTER TABLE `medicao`
 -- AUTO_INCREMENT for table `medicao_luminosidade`
 --
 ALTER TABLE `medicao_luminosidade`
-  MODIFY `Id_Medicao_Luminosidade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=912;
+  MODIFY `Id_Medicao_Luminosidade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=954;
 
 --
 -- AUTO_INCREMENT for table `medicao_temperatura`
 --
 ALTER TABLE `medicao_temperatura`
-  MODIFY `Id_Medicao_Temperatura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1097;
+  MODIFY `Id_Medicao_Temperatura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1139;
 
 --
 -- AUTO_INCREMENT for table `sistema`
@@ -9497,13 +9835,13 @@ ALTER TABLE `[logtemp]medicao`
 -- AUTO_INCREMENT for table `[logtemp]medicao_luminosidade`
 --
 ALTER TABLE `[logtemp]medicao_luminosidade`
-  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=912;
+  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=954;
 
 --
 -- AUTO_INCREMENT for table `[logtemp]medicao_temperatura`
 --
 ALTER TABLE `[logtemp]medicao_temperatura`
-  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1097;
+  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1139;
 
 --
 -- AUTO_INCREMENT for table `[logtemp]tipo_cultura`
@@ -9551,13 +9889,13 @@ ALTER TABLE `[log]medicao`
 -- AUTO_INCREMENT for table `[log]medicao_luminosidade`
 --
 ALTER TABLE `[log]medicao_luminosidade`
-  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=912;
+  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=954;
 
 --
 -- AUTO_INCREMENT for table `[log]medicao_temperatura`
 --
 ALTER TABLE `[log]medicao_temperatura`
-  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1097;
+  MODIFY `idlog` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1139;
 
 --
 -- AUTO_INCREMENT for table `[log]tipo_cultura`
