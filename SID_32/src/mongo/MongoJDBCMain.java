@@ -230,21 +230,15 @@ public class MongoJDBCMain {
 								Float vermelho_inf_T = invesPerf.getFloat("vermelhoInfTemp");
 								Float laranja_sup_T = invesPerf.getFloat("laranjaSupTemp");
 								Float laranja_inf_T = invesPerf.getFloat("laranjaInfTemp");
-								Float laranja_inf_T2 = invesPerf.getFloat("alertaLaranjaInfTemp2");
-								Float laranja_sup_T2 = invesPerf.getFloat("alertaLaranjaSupTemp2");
 								
-								Float laranja_inf_L2 = invesPerf.getFloat("alertaLaranjaInfLum2");
-								Float laranja_sup_L2 = invesPerf.getFloat("alertaLaranjaInfLum2");
 								Float vermelho_sup_L = invesPerf.getFloat("vermelhoSupLum");							
 								Float vermelho_inf_L = invesPerf.getFloat("vermelhoInfLum");
 								Float laranja_sup_L = invesPerf.getFloat("laranjaSupLum");							
 								Float laranja_inf_L = invesPerf.getFloat("laranjaInfLum");
 
-								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, investEmail, tempoDePico,vermelho_sup_T, vermelho_inf_T,  laranja_sup_T,
-										laranja_sup_T2,laranja_inf_T ,laranja_inf_T2 );
+								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, investEmail, tempoDePico,vermelho_sup_T, vermelho_inf_T,  laranja_sup_T, laranja_inf_T  );
 								if (luminosidade != 0) {
-									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, investEmail,  tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L,
-											laranja_sup_L2,laranja_inf_L ,laranja_inf_L2 );
+									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, investEmail,  tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
 								}
 							}
 							invesPerf.close();
@@ -299,7 +293,7 @@ public class MongoJDBCMain {
 		rs.close();
 	}
 
-	private void criaAlertaTemperatura(double temperatura, String date, Connection connection, Statement stmt, String email, int TempoDePico, Float vermelhoSup, Float vermelhoInf, Float laranjaSup, Float laranjaSup2, Float laranjaInf, Float laranjaInf2)
+	private void criaAlertaTemperatura(double temperatura, String date, Connection connection, Statement stmt, String email, int TempoDePico, Float vermelhoSup, Float vermelhoInf, Float laranjaSup, Float laranjaInf)
 			throws SQLException {
 		// alerta Vermelho Temperatura
 		String existeAlertaVermelhoTemp = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
@@ -322,8 +316,8 @@ public class MongoJDBCMain {
 				+ date + "\" , interval 1 minute)";
 		ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
 		if (rsLaranjaTemp.next() == false && (temperatura <= (LITemperatura + LITemperatura * laranjaInf))
-				&& (temperatura > (LITemperatura + LITemperatura * laranjaInf2))
-				|| (temperatura >= (LSTemperatura * laranjaSup2) && temperatura < LSTemperatura * laranjaSup)) {
+				&& (temperatura > (LITemperatura + LITemperatura * vermelhoInf))
+				|| (temperatura >= (LSTemperatura * laranjaSup) && temperatura < LSTemperatura * vermelhoSup)) {
 			alertaLaranjaTemperatura = true;
 			insertAlerta("temp", "laranja", date, temperatura, "O valor da temperatura aproxima-se dos limites",
 					LITemperatura, LSTemperatura);
@@ -380,9 +374,9 @@ public class MongoJDBCMain {
 									+ date + "\" , interval 1 minute)";
 							ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
 							if (rsLaranjaTemp.next() == false && (temperatura <= (LITemperatura + LITemperatura * laranjaInf))
-									&& (valorAtualTemperatura > (LITemperatura + LITemperatura * laranjaInf2))
-									|| (valorAtualTemperatura >= (LSTemperatura * laranjaSup2)
-											&& valorAtualTemperatura < LSTemperatura * laranjaSup)) {
+									&& (valorAtualTemperatura > (LITemperatura + LITemperatura * vermelhoSup))
+									|| (valorAtualTemperatura >= (LSTemperatura * laranjaSup)
+											&& valorAtualTemperatura < LSTemperatura * vermelhoSup)) {
 								alertaLaranjaTemperatura = true;
 								insertAlerta("temp", "laranja", date, valorAtualTemperatura,
 										"O valor da temperatura aproxima-se dos limites", LITemperatura, LSTemperatura);
@@ -418,7 +412,7 @@ public class MongoJDBCMain {
 
 	}
 
-	private void criaAlertaLuminosidade(double luminosidade, String date, Connection connection, Statement stmt, String email, int tempoDePico, Float vermelhoSup, Float vermelhoInf, Float laranjaSup, Float laranjaSup2, Float laranjaInf, Float laranjaInf2)
+	private void criaAlertaLuminosidade(double luminosidade, String date, Connection connection, Statement stmt, String email, int tempoDePico, Float vermelhoSup, Float vermelhoInf, Float laranjaSup, Float laranjaInf)
 			throws SQLException {
 		// alerta Vermelho Luminosidade
 		String existeAlertaVermelhoLum = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
@@ -442,8 +436,8 @@ public class MongoJDBCMain {
 				+ date + "\" , interval 1 minute)";
 		ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
 		if (rsLaranjaLum.next() == false && (luminosidade <= (LILuminosidade + LILuminosidade * laranjaInf))
-				&& (luminosidade > (LILuminosidade + LILuminosidade * laranjaInf2))
-				|| (luminosidade >= (LSLuminosidade * laranjaSup2) && luminosidade < LSLuminosidade * laranjaSup)) {
+				&& (luminosidade > (LILuminosidade + LILuminosidade * vermelhoSup))
+				|| (luminosidade >= (LSLuminosidade * laranjaSup) && luminosidade < LSLuminosidade * vermelhoSup)) {
 			alertaLaranjaLuminosidade = true;
 
 			insertAlerta("lum", "laranja", date, luminosidade, "O valor da luminosidade aproxima-se dos limites",
@@ -497,9 +491,9 @@ public class MongoJDBCMain {
 							ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
 							if (rsLaranjaLum.next() == false
 									&& (luminosidade <= (LILuminosidade + LILuminosidade * laranjaInf))
-									&& (luminosidade > (LILuminosidade + LILuminosidade * laranjaInf2))
-									|| (luminosidade >= (LSLuminosidade * laranjaSup2)
-											&& luminosidade < LSLuminosidade * laranjaSup)) {
+									&& (luminosidade > (LILuminosidade + LILuminosidade * vermelhoInf))
+									|| (luminosidade >= (LSLuminosidade * laranjaSup)
+											&& luminosidade < LSLuminosidade * vermelhoSup)) {
 								alertaLaranjaLuminosidade = true;
 
 								insertAlerta("lum", "laranja", date, valorAtualLuminosidade,
