@@ -83,8 +83,8 @@ public class MongoJDBCMain {
 	public void connect() {
 		try {
 			// ligar-se ao mongo
-			MongoClient mongoClient = new MongoClient(
-					new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
+			MongoClient mongoClient = new MongoClient();
+					//new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
 			mongoClient.getDatabaseNames().forEach(System.out::println);
 			DB db = mongoClient.getDB("sensores");
 			collection = db.getCollection("sensor");
@@ -161,18 +161,19 @@ public class MongoJDBCMain {
 					BasicDBObject theObj = (BasicDBObject) cursor.next();
 					String content = theObj.toString();
 					
-					String dataHora = verificarData(theObj);
-			
-					int luminosidade = 0;
-					if (content.contains("cell")) {
-						luminosidade = Integer.parseInt((theObj).getString("cell"));
-					}
 					
-					double temperatura = Double.parseDouble((theObj).getString("tmp"));
-					String id = (theObj).getString("_id");
 					int foiExportado = Integer.parseInt((theObj).getString("exported"));
 					// se ainda nao foi exportado, foiExportado=0
 					if (foiExportado == 0) {
+						String dataHora = verificarData(theObj);
+						
+						int luminosidade = 0;
+						if (content.contains("cell")) {
+							luminosidade = Integer.parseInt((theObj).getString("cell"));
+						}
+						
+						double temperatura = Double.parseDouble((theObj).getString("tmp"));
+						String id = (theObj).getString("_id");
 						// criar a medicacao_luminosidade
 						if (luminosidade != 0) {
 							String query1 = " insert into medicao_luminosidade (Data_Hora_Medicao, Valor_Medicao_Luminosidade)"
@@ -288,17 +289,15 @@ public class MongoJDBCMain {
 	private void criaAlertaTemperatura(double temperatura, String date, Connection connection, Statement stmt, int id, String email, int TempoDePico, Float vermelhoSup, Float vermelhoInf, Float laranjaSup, Float laranjaInf)
 			throws SQLException {
 		// alerta Vermelho Temperatura
-		
 		String existeAlertaVermelhoTemp = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
 				+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
 		ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
-		if (!rsVermelhoTemp.isBeforeFirst()
+		System.out.println(!rsVermelhoTemp.isBeforeFirst() + " data" + date);
+		if (!rsVermelhoTemp.isBeforeFirst() 
 				&& ((temperatura <= (LITemperatura + LITemperatura * vermelhoInf)) || (temperatura >= LSTemperatura * vermelhoSup))) {
-
-
 			alertaVermelhoTemperatura = true;
 			insertAlerta("temp", "vermelho", date, temperatura,
-					"O valor da temperatura aproxima-se criticamente dos limites", LITemperatura, LSTemperatura);
+					"O valor da temperatura aproxima-se criticamente dos limites", LITemperatura, LSTemperatura, id);
 				sendEmails(email, "Alerta Vermelho Temperatura", "Valor da temperatura" + temperatura);
 		
 
@@ -310,13 +309,13 @@ public class MongoJDBCMain {
 		String existeAlertaLaranjaTemp = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
 				+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
 		ResultSet rsLaranjaTemp = stmt.executeQuery(existeAlertaLaranjaTemp);
-		if (!rsLaranjaTemp.isBeforeFirst() && (temperatura <= (LITemperatura + LITemperatura * laranjaInf))
+		if (rsLaranjaTemp.next()==false && (temperatura <= (LITemperatura + LITemperatura * laranjaInf))
 				&& (temperatura > (LITemperatura + LITemperatura * vermelhoInf))
 				|| (temperatura >= (LSTemperatura * laranjaSup) && temperatura < LSTemperatura * vermelhoSup)) {
 			
 			alertaLaranjaTemperatura = true;
 			insertAlerta("temp", "laranja", date, temperatura, "O valor da temperatura aproxima-se dos limites",
-					LITemperatura, LSTemperatura);
+					LITemperatura, LSTemperatura,id);
 				sendEmails(email, "Alerta Laranja Temperatura", "Valor da temperatura" + temperatura);
 
 
@@ -341,8 +340,6 @@ public class MongoJDBCMain {
 						if (rs.next()) {
 							valorAtualTemperatura=rs.getDouble("Valor_Medicao_Temperatura");
 						}
-						
-					 
 						rs.close();
 						if (Math.abs(valorAtualTemperatura - valorAntigoTemperatura) > valorXtemperatura) {
 							// alerta Vermelho Temperatura
@@ -356,7 +353,7 @@ public class MongoJDBCMain {
 								alertaVermelhoTemperatura = true;
 								insertAlerta("temp", "vermelho", date, valorAtualTemperatura,
 										"O valor da temperatura aproxima-se criticamente dos limites", LITemperatura,
-										LSTemperatura);
+										LSTemperatura,id);
 									sendEmails(email, "Alerta Vermelho Temperatura",
 											"Valor da temperatura" + valorAtualTemperatura);
 
@@ -376,7 +373,7 @@ public class MongoJDBCMain {
 								
 								alertaLaranjaTemperatura = true;
 								insertAlerta("temp", "laranja", date, valorAtualTemperatura,
-										"O valor da temperatura aproxima-se dos limites", LITemperatura, LSTemperatura);
+										"O valor da temperatura aproxima-se dos limites", LITemperatura, LSTemperatura, id);
 									sendEmails(email, "Alerta Laranja Temperatura",
 											"Valor da temperatura" + valorAtualTemperatura);
 
@@ -386,7 +383,7 @@ public class MongoJDBCMain {
 							}
 							if (alertaLaranjaTemperatura == false && alertaVermelhoTemperatura == false) {
 								insertAlerta("temp", "amarelo", date, valorAtualTemperatura,
-										"Ocorreu um pico de temperatura", LITemperatura, LSTemperatura);
+										"Ocorreu um pico de temperatura", LITemperatura, LSTemperatura,id);
 									sendEmails(email, "Alerta Amarelo Temperatura",
 											"Valor da temperatura" + valorAtualTemperatura);
 
@@ -421,7 +418,7 @@ public class MongoJDBCMain {
 			System.out.println("alerta vermlho de luminosidade!!!!!!!!");
 			alertaVermelhoLuminosidade = true;
 			insertAlerta("lum", "vermelho", date, luminosidade,
-					"O valor da luminosidade aproxima-se criticamente dos limites", LILuminosidade, LSLuminosidade);
+					"O valor da luminosidade aproxima-se criticamente dos limites", LILuminosidade, LSLuminosidade,id);
 
 				sendEmails(email, "Alerta Vermelho Luminosidade", "Valor da luminosidade" + luminosidade);
 
@@ -442,7 +439,7 @@ public class MongoJDBCMain {
 			alertaLaranjaLuminosidade = true;
 
 			insertAlerta("lum", "laranja", date, luminosidade, "O valor da luminosidade aproxima-se dos limites",
-					LILuminosidade, LSLuminosidade);
+					LILuminosidade, LSLuminosidade,id);
 				sendEmails(email, "Alerta Laranja Luminosidade", "Valor da luminosidade" + luminosidade);
 
 		} else {
@@ -480,7 +477,7 @@ public class MongoJDBCMain {
 								alertaVermelhoLuminosidade = true;
 								insertAlerta("lum", "vermelho", date, valorAtualLuminosidade,
 										"O valor da luminosidade aproxima-se criticamente dos limites", LILuminosidade,
-										LSLuminosidade);
+										LSLuminosidade,id);
 									sendEmails(email, "Alerta Vermelho Luminosidade",
 											"Valor da luminosidade" + luminosidade);
 
@@ -502,7 +499,7 @@ public class MongoJDBCMain {
 
 								insertAlerta("lum", "laranja", date, valorAtualLuminosidade,
 										"O valor da luminosidade aproxima-se dos limites", LILuminosidade,
-										LSLuminosidade);
+										LSLuminosidade,id);
 
 									sendEmails(email, "Alerta Laranja Luminosidade",
 											"Valor da luminosidade" + luminosidade);
@@ -513,7 +510,7 @@ public class MongoJDBCMain {
 							}
 							if (alertaLaranjaLuminosidade == false && alertaVermelhoLuminosidade == false) {
 								insertAlerta("lum", "amarelo", date, valorAtualLuminosidade,
-										"Pico de luminosidade dentro dos limites", LILuminosidade, LSLuminosidade);
+										"Pico de luminosidade dentro dos limites", LILuminosidade, LSLuminosidade,id);
 									sendEmails(email, "Alerta Amarelo Luminosidade",
 											"Valor da luminosidade" + valorAtualLuminosidade);
 				
@@ -539,7 +536,7 @@ public class MongoJDBCMain {
 	}
 
 	public void insertAlerta(String tipo, String intensidade, String datahora, double medicao, String descricao,
-			double li, double ls) throws SQLException {
+			double li, double ls, int id) throws SQLException {
 		System.out.println("a inserir alerta na tabela!");
 		String alerta = " insert into alerta_sensor (tipo, intensidade, datahoraalerta, valormedicao,descricao,limiteinferior,limitesuperior,idInvestigador )"
 				+ " values (?, ?, ?, ?, ?, ?, ?,?)";
@@ -552,7 +549,7 @@ public class MongoJDBCMain {
 		preparedStmt.setString(5, descricao);
 		preparedStmt.setDouble(6, li);
 		preparedStmt.setDouble(7, ls);
-		preparedStmt.setInt(8, 1);
+		preparedStmt.setInt(8, id);
 
 		// execute the preparedstatement
 		preparedStmt.execute();

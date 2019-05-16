@@ -15,8 +15,8 @@ public class MongoInsertThread extends Thread{
 	
 	public MongoInsertThread (SensorReader a){
 		mqttClient = a;
-		MongoClient mongoClient = new MongoClient(
-				new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
+		MongoClient mongoClient = new MongoClient();
+				//new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
 		
 		db = mongoClient.getDB("sensores");
 		collection = db.getCollection("sensor");
