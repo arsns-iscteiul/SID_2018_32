@@ -75,7 +75,6 @@ public class Connector {
 
 		for (Investigador investigador : getInvestigadorTable()) {
 			if (investigador.getEmail_investigador().equals(username) && investigador.getPwd().equals(password)) {
-				System.out.println(investigador.getId_investigador());
 				return investigador.getId_investigador();
 			}
 		}
@@ -558,7 +557,7 @@ public class Connector {
 				+ ".utilizador, " + tableName + ".dataLog, " + tableName + ".operacao FROM " + tableName);
 		return createLog(resultSet);
 	}
-	
+
 	/**
 	 * Function that creates Log objects from a resultset and places in a
 	 * linkedlist<Log>.

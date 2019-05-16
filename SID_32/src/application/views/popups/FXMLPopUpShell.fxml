@@ -10,30 +10,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="popup_shell" fx:id="popup_shell"
-	pickOnBounds="false" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="popup_shell" fx:id="popup_shell" pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<AnchorPane id="root" fx:id="root" layoutX="2.0"
-			layoutY="3.0" pickOnBounds="false" prefHeight="220.0"
-			prefWidth="460.0" AnchorPane.bottomAnchor="4.0"
-			AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0"
-			AnchorPane.topAnchor="4.0">
+		<AnchorPane id="root" fx:id="root" layoutX="2.0" layoutY="3.0" pickOnBounds="false" prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
 			<children>
-				<AnchorPane id="top" fx:id="top" maxHeight="26.0"
-					minHeight="26.0" onMouseDragged="#setOnMouseDragged_DragableStage"
-					onMousePressed="#setOnMousePressed_DragableStage"
-					pickOnBounds="false" prefHeight="26.0" AnchorPane.leftAnchor="0.0"
-					AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+				<AnchorPane id="top" fx:id="top" maxHeight="26.0" minHeight="26.0" onMouseDragged="#setOnMouseDragged_DragableStage" onMousePressed="#setOnMousePressed_DragableStage" pickOnBounds="false" prefHeight="26.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					<children>
-						<HBox alignment="TOP_RIGHT" AnchorPane.rightAnchor="0.0"
-							AnchorPane.topAnchor="0.0">
+						<HBox alignment="TOP_RIGHT" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 							<children>
-								<Button id="close_btn" fx:id="close_btn"
-									mnemonicParsing="false" onAction="#close">
+								<Button id="close_btn" fx:id="close_btn" mnemonicParsing="false" onAction="#close">
 									<graphic>
-										<ImageView fitHeight="20.0" fitWidth="20.0"
-											pickOnBounds="true" preserveRatio="true">
+										<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
 											<image>
 												<Image url="@../../media/icons/close_white_20px.png" />
 											</image>
@@ -45,14 +32,10 @@
 								</Button>
 							</children>
 						</HBox>
-						<Label fx:id="title_name_label" layoutX="7.0" layoutY="6.0"
-							text="title_name_label" textFill="WHITE"
-							AnchorPane.leftAnchor="4.0" />
+						<Label fx:id="title_name_label" layoutX="7.0" layoutY="6.0" text="title_name_label" textFill="WHITE" AnchorPane.leftAnchor="4.0" />
 					</children>
 				</AnchorPane>
-				<AnchorPane fx:id="display" pickOnBounds="false"
-					AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-					AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
+				<AnchorPane fx:id="display" pickOnBounds="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
 			</children>
 		</AnchorPane>
 	</children>

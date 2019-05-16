@@ -25,7 +25,8 @@
 						<Font name="System Bold" size="24.0" />
 					</font>
 				</Label>
-				<Label fx:id="alert_message_label" text="This'll be the alert" />
+				<Label id="alert_message_label" fx:id="alert_message_label"
+					text="This'll be the alert" />
 				<VBox alignment="CENTER" layoutX="28.0" layoutY="12.0"
 					spacing="10.0" AnchorPane.bottomAnchor="40.0"
 					AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0"

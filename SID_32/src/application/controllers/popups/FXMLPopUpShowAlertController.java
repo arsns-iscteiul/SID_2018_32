@@ -18,7 +18,7 @@ public class FXMLPopUpShowAlertController extends FXMLController implements Init
 	private FXMLMainController fxmlMainController = null;
 	private Connector connector = null;
 	private String investigador_id;
-	private String color;
+	private String color = null;;
 
 	@FXML
 	private Label alert_message_label;
