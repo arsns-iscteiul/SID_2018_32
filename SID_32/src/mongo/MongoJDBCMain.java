@@ -219,6 +219,7 @@ public class MongoJDBCMain {
 						ResultSet inves = stmt3.executeQuery(investigadores);
 						while (inves.next()) {
 							String investEmail = inves.getNString("Email_Investigador");
+							investEmail.replaceAll("@localhost","");
 							//falta tirar o localhost
 							String perfUti= "Select * FROM main.perfil_user where investigador =+ "+ inves.getInt("Id_Investigador"); 
 							Statement stmt2 =connection.createStatement();
