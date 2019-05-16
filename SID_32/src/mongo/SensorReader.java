@@ -139,7 +139,7 @@ public class SensorReader implements MqttCallback{
 	public synchronized String pollMessage() {
 		if (msgs.isEmpty()){
 			try {
-				System.out.println("não há mensagens, esperando");
+				System.out.println("no messages");
 				wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
