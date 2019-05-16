@@ -76,7 +76,7 @@ public class FXMLLoginController extends FXMLController implements Initializable
 				} else {
 					FXMLLoader main_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLMain.fxml"));
 					FXMLMainController main_controller = new FXMLMainController(fxmlShellController, connector,
-							id_investigador);
+							id_investigador, email_field.getText());
 					fxmlShellController.setDisplay("Main", main_loader, main_controller, true);
 				}
 			} else {

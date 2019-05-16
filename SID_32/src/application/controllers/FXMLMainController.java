@@ -16,6 +16,8 @@ import application.controllers.popups.FXMLPopUpAddCultureController;
 import application.controllers.popups.FXMLPopUpAddManualMeasurementController;
 import application.controllers.popups.FXMLPopUpAddVariableToMonitorizeController;
 import application.controllers.popups.FXMLPopUpShellController;
+import application.controllers.popups.FXMLPopUpShowAlertController;
+import application.controllers.popups.FXMLPopUpShowUserProfileController;
 import application.support.StageResizeHelper;
 import javafx.animation.ScaleTransition;
 import javafx.beans.value.ChangeListener;
@@ -53,6 +55,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private FXMLShellController fxmlShellController = null;
 	private Connector connector = null;
 	private String id_investigador = null;
+	private String email_investigador = null;
 
 	private ObservableList<Cultura> cultura_observablelist = FXCollections.observableArrayList();
 
@@ -62,6 +65,8 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private AnchorPane init_display;
 	@FXML
 	private AnchorPane center_display;
+	@FXML
+	private Label user_email_label;
 	@FXML
 	private Label cultura_name_label;
 	@FXML
@@ -77,10 +82,12 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	@FXML
 	private TableView<Medicao> table_view;
 
-	public FXMLMainController(FXMLShellController fxmlShellController, Connector connector, String id_investigador) {
+	public FXMLMainController(FXMLShellController fxmlShellController, Connector connector, String id_investigador,
+			String email_investigador) {
 		this.fxmlShellController = fxmlShellController;
 		this.connector = connector;
 		this.id_investigador = id_investigador;
+		this.email_investigador = email_investigador;
 	}
 
 	@Override
@@ -92,6 +99,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	}
 
 	private void buildLeftPane() {
+		user_email_label.setText(email_investigador);
 		cultura_listview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Cultura>() {
 			public void changed(ObservableValue<? extends Cultura> ov, Cultura old_val, Cultura new_val) {
 				refreshCentralPane(cultura_listview.getSelectionModel().getSelectedItem());
@@ -360,5 +368,24 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@FXML
+	private void showUserInfo() {
+		FXMLLoader popup_show_user_profile_loader = new FXMLLoader(
+				getClass().getResource("/application/views/popups/FXMLPopUpShowUserProfile.fxml"));
+		FXMLPopUpShowUserProfileController popup_show_user_profile_controller = new FXMLPopUpShowUserProfileController(
+				this, connector, id_investigador);
+		buildPopPup("User profile info", "PopUpShowUserProfile", popup_show_user_profile_loader,
+				popup_show_user_profile_controller);
+	}
+
+	@FXML
+	private void showAlert() {
+		FXMLLoader popup_show_alert_loader = new FXMLLoader(
+				getClass().getResource("/application/views/popups/FXMLPopUpShowAlert.fxml"));
+		FXMLPopUpShowAlertController popup_show_alert_controller = new FXMLPopUpShowAlertController(this, connector,
+				id_investigador, "red");
+		buildPopPup("Alert", "PopUpShowAlert", popup_show_alert_loader, popup_show_alert_controller);
 	}
 }

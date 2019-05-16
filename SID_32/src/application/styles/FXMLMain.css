@@ -2,6 +2,11 @@
 	-fx-background-color: #252525;
 }
 
+#user_email_label {
+	-fx-background-color: transparent;
+	-fx-text-fill: #ffffff;
+}
+
 #center_scrollpane {
 	-fx-background-color: #ffffff;
 }
@@ -28,6 +33,12 @@
 #remove_simple_btn{
 	-fx-background-color: transparent;
 	-fx-graphic: url("/application/media/icons/remove_black_20px.png");
+}
+
+#notifications_simple_btn {
+	-fx-background-color: transparent;
+	-fx-text-fill: #000000;
+	-fx-graphic: url("/application/media/icons/notification_black_20px.png");
 }
 
 

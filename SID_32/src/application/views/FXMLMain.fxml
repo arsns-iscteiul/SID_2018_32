@@ -18,9 +18,9 @@
 			<left>
 				<AnchorPane id="left" fx:id="left" pickOnBounds="false" prefHeight="480.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 					<children>
-						<VBox alignment="CENTER" layoutX="82.0" layoutY="47.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+						<VBox alignment="CENTER" layoutX="82.0" layoutY="47.0" spacing="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
 							<children>
-								<Button id="profile_image_btn" mnemonicParsing="false" onAction="#logout">
+								<Button id="profile_image_btn" mnemonicParsing="false">
 									<graphic>
 										<ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
 											<image>
@@ -29,7 +29,23 @@
 										</ImageView>
 									</graphic>
 								</Button>
-								<Label text="Investigator" textFill="WHITE" />
+                        <HBox alignment="CENTER">
+                           <children>
+      								<Label id="user_email_label" fx:id="user_email_label" contentDisplay="RIGHT" text="user_email_label" textFill="WHITE" />
+                              <Button id="profile_image_btn" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#showUserInfo">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../media/icons/configuration_white_20px.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
 							</children>
 						</VBox>
 						<VBox alignment="TOP_CENTER" layoutX="67.0" layoutY="231.0" prefHeight="249.0" prefWidth="188.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="180.0">
@@ -68,14 +84,29 @@
 									<children>
 										<VBox layoutX="40.0" layoutY="30.0" spacing="10.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
 											<children>
-                                    <HBox alignment="CENTER_LEFT">
-                                       <children>
-      												<Label id="cultura_name_label" fx:id="cultura_name_label" text="cultura_name_label">
-      													<font>
-      														<Font name="System Bold" size="24.0" />
-      													</font>
-      												</Label>
-                                          <Button id="remove_simple_btn" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#removeCulture" textFill="WHITE">
+												<HBox alignment="CENTER_LEFT">
+													<children>
+														<Label id="cultura_name_label" fx:id="cultura_name_label" text="cultura_name_label">
+															<font>
+																<Font name="System Bold" size="24.0" />
+															</font>
+														</Label>
+														<Button id="remove_simple_btn" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#removeCulture" textFill="WHITE">
+															<cursor>
+																<Cursor fx:constant="HAND" />
+															</cursor>
+															<graphic>
+																<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+																	<cursor>
+																		<Cursor fx:constant="HAND" />
+																	</cursor>
+																	<image>
+																		<Image url="@../media/icons/remove_black_20px.png" />
+																	</image>
+																</ImageView>
+															</graphic>
+														</Button>
+                                          <Button id="notifications_simple_btn" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="226.0" layoutY="14.0" mnemonicParsing="false" onAction="#showAlert" text="Notifications" textFill="WHITE">
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
@@ -85,18 +116,18 @@
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor>
                                                    <image>
-                                                      <Image url="@../media/icons/remove_black_20px.png" />
+                                                      <Image url="@../media/icons/notification_black_20px.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>
                                           </Button>
-                                       </children>
-                                    </HBox>
-                                    <TextArea id="cultura_description" fx:id="cultura_description_text_area" prefHeight="31.0" promptText="This culture has no description">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextArea>
+													</children>
+												</HBox>
+												<TextArea id="cultura_description" fx:id="cultura_description_text_area" prefHeight="31.0" promptText="This culture has no description">
+													<font>
+														<Font size="14.0" />
+													</font>
+												</TextArea>
 												<Label layoutX="30.0" layoutY="73.0" text="Sensor Analytics Overview" AnchorPane.leftAnchor="40.0">
 													<font>
 														<Font name="System Bold" size="18.0" />
@@ -199,21 +230,21 @@
 																		</ImageView>
 																	</graphic>
 																</Button>
-                                                <Button id="remove_simple_btn" alignment="CENTER_RIGHT" layoutX="185.0" layoutY="10.0" mnemonicParsing="false" onAction="#removeVariableToBeMonitorized" textFill="WHITE">
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor>
-                                                   <graphic>
-                                                      <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                         <cursor>
-                                                            <Cursor fx:constant="HAND" />
-                                                         </cursor>
-                                                         <image>
-                                                            <Image url="@../media/icons/remove_black_20px.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                   </graphic>
-                                                </Button>
+																<Button id="remove_simple_btn" alignment="CENTER_RIGHT" layoutX="185.0" layoutY="10.0" mnemonicParsing="false" onAction="#removeVariableToBeMonitorized" textFill="WHITE">
+																	<cursor>
+																		<Cursor fx:constant="HAND" />
+																	</cursor>
+																	<graphic>
+																		<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+																			<cursor>
+																				<Cursor fx:constant="HAND" />
+																			</cursor>
+																			<image>
+																				<Image url="@../media/icons/remove_black_20px.png" />
+																			</image>
+																		</ImageView>
+																	</graphic>
+																</Button>
 															</children>
 														</HBox>
 														<HBox id="monitorized_variables_hbox" fx:id="monitorized_variables_hbox" alignment="CENTER_LEFT" spacing="20.0" />
