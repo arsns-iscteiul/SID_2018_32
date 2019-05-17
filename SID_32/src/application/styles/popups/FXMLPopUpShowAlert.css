@@ -8,12 +8,24 @@
     -fx-background-color: transparent;
 }
 
-#orange {
-	-fx-text-fill: orange;
+#amarelo {
+	-fx-text-fill: #ffcc00;
 }
 
-#red {
-	-fx-text-fill: red;
+#laranja {
+	-fx-text-fill: #ff9500;
+}
+
+#vermelho {
+	-fx-text-fill: #ff3b30;
+}
+
+#temp {
+	-fx-graphic: url("/application/media/icons/temperature_green_64px.png");
+}
+
+#lum {
+	-fx-graphic: url("/application/media/icons/illumination_yellow_64px.png");
 }
 
 #alert_close_btn {

@@ -41,6 +41,13 @@
 	-fx-graphic: url("/application/media/icons/notification_black_20px.png");
 }
 
+#configurations_simple_btn {
+	-fx-background-color: transparent;
+	-fx-text-fill: #000000;
+	-fx-graphic: url("/application/media/icons/configuration_black_20px.png");
+}
+
+
 
 #cultura_description {
 	-fx-background-insets: 0.0;
@@ -100,6 +107,7 @@
 
 /* <VARIABLES> */
 #pH {
+	-fx-background-color: transparent;
 	-fx-graphic: url("/application/media/icons/variablepH_pink_32px.png");
 }
 
@@ -109,6 +117,7 @@
 }
 
 #CO2 {
+	-fx-background-color: transparent;
 	-fx-graphic: url("/application/media/icons/variableCO2_orange_32px.png");
 }
 
@@ -118,6 +127,7 @@
 }
 
 #H2O {
+	-fx-background-color: transparent;
 	-fx-graphic: url("/application/media/icons/variableH2O_blue_32px.png");
 }
 
@@ -127,6 +137,7 @@
 }
 
 #O2 {
+	-fx-background-color: transparent;
 	-fx-graphic: url("/application/media/icons/variableO2_lightblue_32px.png");
 }
 

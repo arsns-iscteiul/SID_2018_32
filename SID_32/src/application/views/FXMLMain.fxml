@@ -29,23 +29,11 @@
 										</ImageView>
 									</graphic>
 								</Button>
-                        <HBox alignment="CENTER">
-                           <children>
-      								<Label id="user_email_label" fx:id="user_email_label" contentDisplay="RIGHT" text="user_email_label" textFill="WHITE" />
-                              <Button id="profile_image_btn" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#showUserInfo">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../media/icons/configuration_white_20px.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                        </HBox>
+								<HBox alignment="CENTER">
+									<children>
+										<Label id="user_email_label" fx:id="user_email_label" contentDisplay="RIGHT" text="user_email_label" textFill="WHITE" />
+									</children>
+								</HBox>
 							</children>
 						</VBox>
 						<VBox alignment="TOP_CENTER" layoutX="67.0" layoutY="231.0" prefHeight="249.0" prefWidth="188.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="180.0">
@@ -84,6 +72,40 @@
 									<children>
 										<VBox layoutX="40.0" layoutY="30.0" spacing="10.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0">
 											<children>
+												<HBox alignment="CENTER_RIGHT" spacing="20.0">
+													<children>
+														<Button id="notifications_simple_btn" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Notifications" textFill="WHITE">
+															<cursor>
+																<Cursor fx:constant="HAND" />
+															</cursor>
+															<graphic>
+																<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+																	<cursor>
+																		<Cursor fx:constant="HAND" />
+																	</cursor>
+																	<image>
+																		<Image url="@../media/icons/notification_black_20px.png" />
+																	</image>
+																</ImageView>
+															</graphic>
+														</Button>
+														<Button id="configurations_simple_btn" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#showUserInfo" text="Definitions">
+															<cursor>
+																<Cursor fx:constant="HAND" />
+															</cursor>
+															<graphic>
+																<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+																	<image>
+																		<Image url="@../media/icons/configuration_black_20px.png" />
+																	</image>
+																</ImageView>
+															</graphic>
+														</Button>
+													</children>
+													<VBox.margin>
+														<Insets right="20.0" />
+													</VBox.margin>
+												</HBox>
 												<HBox alignment="CENTER_LEFT">
 													<children>
 														<Label id="cultura_name_label" fx:id="cultura_name_label" text="cultura_name_label">
@@ -106,21 +128,6 @@
 																</ImageView>
 															</graphic>
 														</Button>
-                                          <Button id="notifications_simple_btn" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="226.0" layoutY="14.0" mnemonicParsing="false" onAction="#showAlert" text="Notifications" textFill="WHITE">
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                             <graphic>
-                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor>
-                                                   <image>
-                                                      <Image url="@../media/icons/notification_black_20px.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </Button>
 													</children>
 												</HBox>
 												<TextArea id="cultura_description" fx:id="cultura_description_text_area" prefHeight="31.0" promptText="This culture has no description">

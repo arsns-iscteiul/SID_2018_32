@@ -170,26 +170,9 @@ class Connector_JUnit {
 	}
 
 	@Test
-	void insertMedicao() {
-		try {
-			b.insertMedicao(5, 1);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test
 	void insertVariavel() {
 		try {
 			b.insertVariavel("Pretty");
-		} catch (SQLException e) {
-		}
-	}
-
-	@Test
-	void insertVariavelMedida() {
-		try {
-			b.insertVariavelMedida(3, 15, 20, 1);
 		} catch (SQLException e) {
 		}
 	}
@@ -202,11 +185,6 @@ class Connector_JUnit {
 	@Test
 	void deleteCultura() throws NumberFormatException, SQLException {
 		b.deleteCultura(Integer.parseInt(b.getCulturaTable().getLast().getId_cultura()));
-	}
-
-	@Test
-	void deleteVariavelMedida() throws NumberFormatException, SQLException {
-		b.deleteVariavelMedida(Integer.parseInt(b.getVariavelMedidaTable().getLast().getVariavel_medida_id()));
 	}
 
 	@Test

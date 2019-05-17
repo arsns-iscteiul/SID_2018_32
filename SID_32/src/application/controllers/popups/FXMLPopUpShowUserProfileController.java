@@ -1,6 +1,7 @@
 package application.controllers.popups;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.connector.Connector;
@@ -53,7 +54,17 @@ public class FXMLPopUpShowUserProfileController extends FXMLController implement
 	@FXML
 	public void updateUserInfo(ActionEvent event) {
 		try {
-
+			connector.updateAlerta(Integer.parseInt(time_field.getText()),
+					Float.parseFloat(temperature_red_up_field.getText()),
+					Float.parseFloat(temperature_red_down_field.getText()),
+					Float.parseFloat(temperature_orange_up_field.getText()),
+					Float.parseFloat(temperature_orange_down_field.getText()),
+					Float.parseFloat(luminosity_red_up_field.getText()),
+					Float.parseFloat(luminosity_red_down_field.getText()),
+					Float.parseFloat(luminosity_orange_up_field.getText()),
+					Float.parseFloat(luminosity_orange_down_field.getText()), Integer.parseInt(investigador_id));
+		} catch (NumberFormatException | SQLException e) {
+			e.printStackTrace();
 		} finally {
 			close(event);
 		}
