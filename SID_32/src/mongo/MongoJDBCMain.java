@@ -209,16 +209,18 @@ public class MongoJDBCMain {
 						Statement stmt3 =connection.createStatement();
 						String investigadores = "SELECT * FROM main.investigador";
 						ResultSet inves = stmt3.executeQuery(investigadores);
-						while (inves.next()) {
-							String investEmail = inves.getNString("Email_Investigador");
+						while (inves.next()) { //ciclo para percorrer investigadores
+							//obter email
+							String investEmail = inves.getNString("Email_Investigador");  
+							investEmail.replaceAll("@localhost","");
+							//obter id e perfil de utilizador
 							int idI = inves.getInt("Id_Investigador");
 							System.out.println("id:" +idI);
-							investEmail.replaceAll("@localhost","");
-							//falta tirar o localhost
 							String perfUti= "Select * FROM main.perfil_user where investigador =+ "+ inves.getInt("Id_Investigador"); 
 							Statement stmt2 =connection.createStatement();
 							ResultSet invesPerf = stmt2.executeQuery(perfUti);
 							if(invesPerf.next()) {
+								//obter valores do perfil de utilizador
 								int tempoDePico = invesPerf.getInt("tempoDePico");
 								Float vermelho_sup_T = invesPerf.getFloat("vermelhoSupTemp");
 								Float vermelho_inf_T = invesPerf.getFloat("vermelhoInfTemp");
@@ -228,10 +230,12 @@ public class MongoJDBCMain {
 								Float vermelho_inf_L = invesPerf.getFloat("vermelhoInfLum");
 								Float laranja_sup_L = invesPerf.getFloat("laranjaSupLum");							
 								Float laranja_inf_L = invesPerf.getFloat("laranjaInfLum");
-
-								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, idI,investEmail, tempoDePico,vermelho_sup_T, vermelho_inf_T,  laranja_sup_T, laranja_inf_T  );
+								//verificação da existencia de alertas
+								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, idI,investEmail, tempoDePico,vermelho_sup_T,
+										vermelho_inf_T,  laranja_sup_T, laranja_inf_T  );
 								if (luminosidade != 0) {
-									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, idI, investEmail,  tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
+									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, idI, investEmail, 
+											tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
 								}
 							}
 							invesPerf.close();
