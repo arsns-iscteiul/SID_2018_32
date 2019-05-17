@@ -1,0 +1,35 @@
+#container {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+#field {
+    -fx-background-color: transparent;
+}
+
+#amarelo {
+	-fx-text-fill: #ffcc00;
+}
+
+#laranja {
+	-fx-text-fill: #ff9500;
+}
+
+#vermelho {
+	-fx-text-fill: #ff3b30;
+}
+
+#temp {
+	-fx-graphic: url("/application/media/icons/temperature_green_64px.png");
+}
+
+#lum {
+	-fx-graphic: url("/application/media/icons/illumination_yellow_64px.png");
+}
+
+#alert_close_btn {
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}

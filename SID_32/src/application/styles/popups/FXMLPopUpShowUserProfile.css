@@ -1,0 +1,32 @@
+#container {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+#red_container {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 60.0;
+	-fx-border-color: #ff3b30;
+	-fx-border-radius: 60.0;
+	-fx-border-width: 2.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+#orange_container {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 60.0;
+	-fx-border-color: #ff9500;
+	-fx-border-radius: 60.0;
+	-fx-border-width: 2.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}
+
+#field {
+    -fx-background-color: transparent;
+}
+
+#ok_btn {
+	-fx-background-color: linear-gradient(to right, #11998e 40.0%, #38ef7d 100.0%);
+	-fx-background-radius: 60.0;
+    -fx-effect: dropshadow(three-pass-box, rgba(140.0,140.0,140.0,0.6), 8.0, 0.0, 0.0, 0.0);
+}

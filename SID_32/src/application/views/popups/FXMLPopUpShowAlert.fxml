@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<VBox alignment="CENTER" layoutX="32.0" layoutY="112.0" prefHeight="176.0" prefWidth="380.0" spacing="20.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+			<children>
+            <VBox alignment="CENTER">
+               <children>
+      				<Label text="Alert">
+      					<font>
+      						<Font name="System Bold" size="24.0" />
+      					</font>
+      				</Label>
+                  <Label fx:id="date_hour_alert" text="date_hour" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" spacing="20.0">
+               <children>
+                  <Label fx:id="type_image_view_label">
+                     <graphic>
+                        <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </Label>
+      				<Label id="alert_message_label" fx:id="alert_message_label" text="This'll be the alert" />
+               </children>
+            </HBox>
+				<VBox alignment="CENTER" layoutX="28.0" layoutY="12.0" spacing="10.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+					<children>
+						<Button id="alert_close_btn" alignment="CENTER" maxWidth="300.0" mnemonicParsing="false" onAction="#close" prefWidth="300.0" text="Close" textAlignment="CENTER" textFill="WHITE">
+							<cursor>
+								<Cursor fx:constant="HAND" />
+							</cursor>
+						</Button>
+					</children>
+				</VBox>
+			</children>
+		</VBox>
+	</children>
+</AnchorPane>

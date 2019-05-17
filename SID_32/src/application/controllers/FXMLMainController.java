@@ -7,22 +7,32 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import application.connector.Connector;
+import application.connector.objects.AlertaSensor;
+import application.connector.objects.AlertaVariavel;
 import application.connector.objects.Cultura;
 import application.connector.objects.Medicao;
 import application.connector.objects.MedicaoLuminosidade;
 import application.connector.objects.MedicaoTemperatura;
 import application.connector.objects.Variavel;
+import application.connector.objects.VariavelMedida;
 import application.controllers.popups.FXMLPopUpAddCultureController;
 import application.controllers.popups.FXMLPopUpAddManualMeasurementController;
 import application.controllers.popups.FXMLPopUpAddVariableToMonitorizeController;
+import application.controllers.popups.FXMLPopUpEditVariableMesuredController;
 import application.controllers.popups.FXMLPopUpShellController;
+import application.controllers.popups.FXMLPopUpShowAlertController;
+import application.controllers.popups.FXMLPopUpShowUserProfileController;
+import application.support.ManualMesurementAlertThread;
+import application.support.SensorAlertThread;
 import application.support.StageResizeHelper;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,6 +44,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -53,8 +64,12 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private FXMLShellController fxmlShellController = null;
 	private Connector connector = null;
 	private String id_investigador = null;
+	private String email_investigador = null;
 
 	private ObservableList<Cultura> cultura_observablelist = FXCollections.observableArrayList();
+
+	private SensorAlertThread sensor_alert_thread;
+	private ManualMesurementAlertThread manual_mesurement_alert_thread;
 
 	@FXML
 	private ListView<Cultura> cultura_listview;
@@ -62,6 +77,8 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	private AnchorPane init_display;
 	@FXML
 	private AnchorPane center_display;
+	@FXML
+	private Label user_email_label;
 	@FXML
 	private Label cultura_name_label;
 	@FXML
@@ -77,10 +94,12 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	@FXML
 	private TableView<Medicao> table_view;
 
-	public FXMLMainController(FXMLShellController fxmlShellController, Connector connector, String id_investigador) {
+	public FXMLMainController(FXMLShellController fxmlShellController, Connector connector, String id_investigador,
+			String email_investigador) {
 		this.fxmlShellController = fxmlShellController;
 		this.connector = connector;
 		this.id_investigador = id_investigador;
+		this.email_investigador = email_investigador;
 	}
 
 	@Override
@@ -89,12 +108,24 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		buildWelcomingPane();
 		buildLineChart();
 		buildTableView();
+		startThreads();
+	}
+
+	private void startThreads() {
+		sensor_alert_thread = new SensorAlertThread(connector, this, Integer.parseInt(id_investigador));
+		sensor_alert_thread.start();
+		manual_mesurement_alert_thread = new ManualMesurementAlertThread(connector, this,
+				Integer.parseInt(id_investigador));
+		manual_mesurement_alert_thread.start();
 	}
 
 	private void buildLeftPane() {
+		user_email_label.setText(email_investigador);
 		cultura_listview.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Cultura>() {
 			public void changed(ObservableValue<? extends Cultura> ov, Cultura old_val, Cultura new_val) {
-				refreshCentralPane(cultura_listview.getSelectionModel().getSelectedItem());
+				if (!cultura_listview.getSelectionModel().isEmpty()) {
+					refreshCentralPane(cultura_listview.getSelectionModel().getSelectedItem());
+				}
 			}
 		});
 		refreshLeftPane();
@@ -154,6 +185,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		FXMLLoader login_loader = new FXMLLoader(getClass().getResource("/application/views/FXMLLogin.fxml"));
 		FXMLLoginController login_controller = new FXMLLoginController(fxmlShellController, connector);
 		fxmlShellController.setDisplay("Login", login_loader, login_controller, true);
+		sensor_alert_thread.interrupt();
 	}
 
 	private void refreshCentralPane(Cultura cultura_selected) {
@@ -177,26 +209,31 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		try {
 			LinkedList<MedicaoTemperatura> medicoes_temperatura = connector.getMedicoesTemperatura();
 			LinkedList<MedicaoLuminosidade> medicoes_luminosidade = connector.getMedicoesLuminosidade();
-
-			temperature_label.setText(medicoes_temperatura.getLast().getValor_medicao_temperatura());
-			luminosity_label.setText(medicoes_luminosidade.getLast().getValor_medicao_luminosidade());
-
-			if (Double.parseDouble(
-					medicoes_temperatura.get(medicoes_temperatura.size() - 1).getValor_medicao_temperatura()) <= Double
-							.parseDouble(medicoes_temperatura.getLast().getValor_medicao_temperatura())) {
-				temperature_label.setId("up");
+			if (!medicoes_temperatura.isEmpty()) {
+				temperature_label.setText(medicoes_temperatura.getLast().getValor_medicao_temperatura());
+				if (Double.parseDouble(medicoes_temperatura.get(medicoes_temperatura.size() - 1)
+						.getValor_medicao_temperatura()) <= Double
+								.parseDouble(medicoes_temperatura.getLast().getValor_medicao_temperatura())) {
+					temperature_label.setId("up");
+				} else {
+					temperature_label.setId("down");
+				}
 			} else {
-				temperature_label.setId("down");
+				System.out.println("Não existem medições nos sensores de temperatura");
 			}
-			if (Double.parseDouble(medicoes_luminosidade.get(medicoes_luminosidade.size() - 1)
-					.getValor_medicao_luminosidade()) <= Double
-							.parseDouble(medicoes_luminosidade.getLast().getValor_medicao_luminosidade())) {
-				luminosity_label.setId("up");
+			if (!medicoes_luminosidade.isEmpty()) {
+				luminosity_label.setText(medicoes_luminosidade.getLast().getValor_medicao_luminosidade());
+				if (Double.parseDouble(medicoes_luminosidade.get(medicoes_luminosidade.size() - 1)
+						.getValor_medicao_luminosidade()) <= Double
+								.parseDouble(medicoes_luminosidade.getLast().getValor_medicao_luminosidade())) {
+					luminosity_label.setId("up");
+				} else {
+					luminosity_label.setId("down");
+				}
 			} else {
-				luminosity_label.setId("down");
+				System.out.println("Não existem medições nos sensores de luminosidade");
 			}
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 		}
 	}
@@ -205,11 +242,21 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		monitorized_variables_hbox.getChildren().clear();
 		try {
 			for (Variavel variavel : connector.getVariaveisCultura(Integer.parseInt(cultura_selected_id))) {
-				Label variavel_label = new Label(variavel.getNome_variavel());
-				variavel_label.setContentDisplay(ContentDisplay.TOP);
-				variavel_label.setCursor(Cursor.HAND);
-				variavel_label.setId(variavel.getNome_variavel());
-				monitorized_variables_hbox.getChildren().add(variavel_label);
+				for (VariavelMedida variavel_medida : connector.getVariavelMedidaTable()) {
+					if (variavel_medida.getVariavel_fk().equalsIgnoreCase(variavel.getId_variavel())) {
+						Button variavel_label = new Button(variavel.getNome_variavel());
+						variavel_label.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent e) {
+								showMesuredVariableInfo(variavel_medida.getVariavel_medida_id());
+							}
+						});
+						variavel_label.setContentDisplay(ContentDisplay.TOP);
+						variavel_label.setCursor(Cursor.HAND);
+						variavel_label.setId(variavel.getNome_variavel());
+						monitorized_variables_hbox.getChildren().add(variavel_label);
+					}
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -243,8 +290,10 @@ public class FXMLMainController extends FXMLController implements Initializable 
 	public void refreshLineChart(String cultura_selected_id, String cultura_selected_name) {
 		line_chart.getData().clear();
 		try {
-			System.out.println("SIZE: " + connector.getMedicoesDaCulturaByVariable(cultura_selected_id).size());
 			for (LinkedList<Medicao> list_medicoes : connector.getMedicoesDaCulturaByVariable(cultura_selected_id)) {
+				if (list_medicoes.isEmpty()) {
+					break;
+				}
 				XYChart.Series series = new XYChart.Series();
 				series.setName(list_medicoes.getFirst().getMore_info());
 				for (Medicao medicao : list_medicoes) {
@@ -298,9 +347,10 @@ public class FXMLMainController extends FXMLController implements Initializable 
 					Integer.parseInt(cultura_listview.getSelectionModel().getSelectedItem().getId_cultura()));
 		} catch (NumberFormatException | SQLException e) {
 			e.printStackTrace();
-//		} finally {
-//			buildWelcomingPane();
-//			refreshLeftPane();
+		} finally {
+			cultura_listview.getSelectionModel().clearSelection();
+			buildWelcomingPane();
+			refreshLeftPane();
 		}
 	}
 
@@ -309,7 +359,8 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		FXMLLoader popup_add_variable_to_monitorize_loader = new FXMLLoader(
 				getClass().getResource("/application/views/popups/FXMLPopUpAddVariableToMonitorize.fxml"));
 		FXMLPopUpAddVariableToMonitorizeController popup_add_variable_to_monitorize_controller = new FXMLPopUpAddVariableToMonitorizeController(
-				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura(), true);
+				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura(),
+				id_investigador, true);
 		buildPopPup("Add variable to monitorize", "PopUpAddVariableToMonitorize",
 				popup_add_variable_to_monitorize_loader, popup_add_variable_to_monitorize_controller);
 	}
@@ -319,7 +370,8 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		FXMLLoader popup_add_variable_to_monitorize_loader = new FXMLLoader(
 				getClass().getResource("/application/views/popups/FXMLPopUpAddVariableToMonitorize.fxml"));
 		FXMLPopUpAddVariableToMonitorizeController popup_add_variable_to_monitorize_controller = new FXMLPopUpAddVariableToMonitorizeController(
-				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura(), false);
+				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura(),
+				id_investigador, false);
 		buildPopPup("Remove variable being monitorize", "PopUpAddVariableToMonitorize",
 				popup_add_variable_to_monitorize_loader, popup_add_variable_to_monitorize_controller);
 	}
@@ -330,7 +382,7 @@ public class FXMLMainController extends FXMLController implements Initializable 
 				getClass().getResource("/application/views/popups/FXMLPopUpAddManualMeasurement.fxml"));
 		FXMLPopUpAddManualMeasurementController popup_add_manual_measurement_controller = new FXMLPopUpAddManualMeasurementController(
 				this, connector, cultura_listview.getSelectionModel().getSelectedItem().getId_cultura(),
-				cultura_listview.getSelectionModel().getSelectedItem().getNome_cultura());
+				cultura_listview.getSelectionModel().getSelectedItem().getNome_cultura(), id_investigador);
 		buildPopPup("Add manual mesurement", "PopUpAddManualMeasurement", popup_add_manual_measurement_loader,
 				popup_add_manual_measurement_controller);
 	}
@@ -360,5 +412,52 @@ public class FXMLMainController extends FXMLController implements Initializable 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@FXML
+	private void showUserInfo() {
+		FXMLLoader popup_show_user_profile_loader = new FXMLLoader(
+				getClass().getResource("/application/views/popups/FXMLPopUpShowUserProfile.fxml"));
+		FXMLPopUpShowUserProfileController popup_show_user_profile_controller = new FXMLPopUpShowUserProfileController(
+				this, connector, id_investigador);
+		buildPopPup("User profile info", "PopUpShowUserProfile", popup_show_user_profile_loader,
+				popup_show_user_profile_controller);
+	}
+
+	public void showAlert(AlertaSensor sensor_alert) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				FXMLLoader popup_show_alert_loader = new FXMLLoader(
+						getClass().getResource("/application/views/popups/FXMLPopUpShowAlert.fxml"));
+				FXMLPopUpShowAlertController popup_show_alert_controller = new FXMLPopUpShowAlertController(
+						sensor_alert);
+				buildPopPup("Alert", "PopUpShowAlert", popup_show_alert_loader, popup_show_alert_controller);
+
+			}
+		});
+	}
+
+	public void showAlert(AlertaVariavel manual_mesurement_alert) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				FXMLLoader popup_show_alert_loader = new FXMLLoader(
+						getClass().getResource("/application/views/popups/FXMLPopUpShowAlert.fxml"));
+				FXMLPopUpShowAlertController popup_show_alert_controller = new FXMLPopUpShowAlertController(
+						manual_mesurement_alert);
+				buildPopPup("Alert", "PopUpShowAlert", popup_show_alert_loader, popup_show_alert_controller);
+
+			}
+		});
+	}
+
+	public void showMesuredVariableInfo(String mesured_variable_id) {
+		FXMLLoader popup_show_mesured_variable_edit_loader = new FXMLLoader(
+				getClass().getResource("/application/views/popups/FXMLPopUpEditVariableMesured.fxml"));
+		FXMLPopUpEditVariableMesuredController popup_show_mesured_variable_edit_controller = new FXMLPopUpEditVariableMesuredController(
+				connector, mesured_variable_id);
+		buildPopPup("Mesured Variable info", "PopUpEditVariableMesured", popup_show_mesured_variable_edit_loader,
+				popup_show_mesured_variable_edit_controller);
 	}
 }

@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.LinkedList;
 
+import application.connector.objects.AlertaSensor;
+import application.connector.objects.AlertaVariavel;
 import application.connector.objects.Cultura;
 import application.connector.objects.Investigador;
 import application.connector.objects.Log;
@@ -58,7 +60,7 @@ public class Connector {
 	 */
 	public String login(String database, String username, String password) throws SQLException {
 
-		this.username = username;
+		this.username = username + "@localhost";
 		this.password = password;
 
 		if (database.equals("auditor")) {
@@ -74,8 +76,7 @@ public class Connector {
 		}
 
 		for (Investigador investigador : getInvestigadorTable()) {
-			if (investigador.getEmail_investigador().equals(username) && investigador.getPwd().equals(password)) {
-				System.out.println(investigador.getId_investigador());
+			if (investigador.getEmail_investigador().equals(this.username) && investigador.getPwd().equals(password)) {
 				return investigador.getId_investigador();
 			}
 		}
@@ -280,7 +281,12 @@ public class Connector {
 			String variavel_fk = variaveis_medidas[2].get(i);
 			String limite_superior = variaveis_medidas[3].get(i);
 			String limite_inferior = variaveis_medidas[4].get(i);
-			list.add(new VariavelMedida(variavel_medida_id, cultura_fk, variavel_fk, limite_superior, limite_inferior));
+			String limiteInferiorLaranja = variaveis_medidas[5].get(i);
+			String limiteInferiorVermelho = variaveis_medidas[6].get(i);
+			String limiteSuperiorLaranja = variaveis_medidas[7].get(i);
+			String limiteSuperiorVermelho = variaveis_medidas[8].get(i);
+			list.add(new VariavelMedida(variavel_medida_id, cultura_fk, variavel_fk, limite_superior, limite_inferior,
+					limiteInferiorLaranja, limiteInferiorVermelho, limiteSuperiorLaranja, limiteSuperiorVermelho));
 		}
 		return list;
 	}
@@ -389,14 +395,15 @@ public class Connector {
 	 * @throws SQLException - if a database access error occurs or this method is
 	 *                      called on a closed connection
 	 */
-	public void insertVariavelMedida(int idCultura, int upperLimit, int lowerLimit, int idVariavel)
+	public void insertVariavelMedida(int idCultura, int idVariavel, int upperLimit, int lowerLimit, int id_investigador)
 			throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaINSERT(?,?,?,?)}");
+		PreparedStatement ps = connection.prepareStatement("{call `VariavelMedida[INSERT]` (?,?,?,?,?)}");
 		ps.setEscapeProcessing(true);
 		ps.setInt(1, idCultura);
-		ps.setInt(2, upperLimit);
-		ps.setInt(3, lowerLimit);
-		ps.setInt(4, idVariavel);
+		ps.setInt(2, idVariavel);
+		ps.setInt(3, upperLimit);
+		ps.setInt(4, lowerLimit);
+		ps.setInt(5, id_investigador);
 		ps.executeUpdate();
 	}
 
@@ -408,7 +415,7 @@ public class Connector {
 	 *                      called on a closed connection
 	 */
 	public void insertVariavel(String name) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call VariavelINSERT(?)}");
+		PreparedStatement ps = connection.prepareStatement("{call `Variavel[INSERT]` (?)}");
 		ps.setEscapeProcessing(true);
 		ps.setString(1, name);
 		ps.executeUpdate();
@@ -422,12 +429,13 @@ public class Connector {
 	 * @throws SQLException - if a database access error occurs or this method is
 	 *                      called on a closed connection
 	 */
-	public void insertMedicao(int value, int variavelMedidaFK) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call MedicaoINSERT(?,?,?)}");
+	public void insertMedicao(int value, int variavelMedidaFK, int investigador) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call `Medicao[INSERT]` (?,?,?,?)}");
 		ps.setEscapeProcessing(true);
 		ps.setInt(1, value);
 		ps.setInt(2, variavelMedidaFK);
 		ps.setTimestamp(3, new Timestamp(Calendar.getInstance().getTimeInMillis()));
+		ps.setInt(4, investigador);
 		ps.executeUpdate();
 	}
 
@@ -444,7 +452,7 @@ public class Connector {
 
 	public void insertCultura(String culturaName, String description, int type, int id_investigador)
 			throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call culturaINSERT(?,?,?,?)}");
+		PreparedStatement ps = connection.prepareStatement("{call `Cultura[INSERT]` (?,?,?,?)}");
 		ps.setEscapeProcessing(true);
 		ps.setString(1, culturaName);
 		ps.setString(2, description);
@@ -454,11 +462,42 @@ public class Connector {
 	}
 
 	public void insertInvestigador(String nome, String email, String categoria, String pwd) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call investigadorINSERT(?,?,?,?)}");
+		PreparedStatement ps = connection.prepareStatement("{call `Investigador[INSERT]` (?,?,?,?)}");
 		ps.setString(1, nome);
 		ps.setString(2, email);
 		ps.setString(3, categoria);
 		ps.setString(4, pwd);
+		ps.executeUpdate();
+	}
+
+	public void updateAlerta(int tempoDePico, float temperaturaSuperiorVermelho, float temperaturaInferiorVermelho,
+			float temperaturaSuperiorAmarelo, float temperaturaInferiorAmarelo, float luminosidadeSuperiorVermelho,
+			float luminosidadeInferiorVermelho, float luminosidadeSuperiorAmarelo, float luminosidadeInferiorAmarelo,
+			int investigador) throws SQLException {
+
+		PreparedStatement ps = connection.prepareStatement("{call `PerfilUser[UPDATE]` (?,?,?,?,?,?,?,?,?,?)}");
+		ps.setInt(1, tempoDePico);
+		ps.setFloat(2, temperaturaSuperiorVermelho);
+		ps.setFloat(3, temperaturaInferiorVermelho);
+		ps.setFloat(4, temperaturaSuperiorAmarelo);
+		ps.setFloat(5, temperaturaInferiorAmarelo);
+		ps.setFloat(6, luminosidadeSuperiorVermelho);
+		ps.setFloat(7, luminosidadeInferiorVermelho);
+		ps.setFloat(8, luminosidadeSuperiorAmarelo);
+		ps.setFloat(9, luminosidadeInferiorAmarelo);
+		ps.setInt(10, investigador);
+		ps.executeUpdate();
+	}
+
+	public void updateVariableMesuredInfo(int id, float limite_Superior_Lar, float limite_Inferior_Lar,
+			float limite_Superior_Ver, float limite_Inferior_Ver) throws SQLException {
+
+		PreparedStatement ps = connection.prepareStatement("{call `VariavelMedidaPreferencias[UPDATE]` (?,?,?,?,?)}");
+		ps.setInt(1, id);
+		ps.setFloat(2, limite_Superior_Lar);
+		ps.setFloat(3, limite_Inferior_Lar);
+		ps.setFloat(4, limite_Superior_Ver);
+		ps.setFloat(5, limite_Inferior_Ver);
 		ps.executeUpdate();
 	}
 
@@ -469,9 +508,10 @@ public class Connector {
 	 * @throws SQLException - if a database access error occurs or this method is
 	 *                      called on a closed connection
 	 */
-	public void deleteVariavelMedida(int idVariavelMedida) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call VariavelMedidaDELETE(?)}");
-		ps.setInt(1, idVariavelMedida);
+	public void deleteVariavelMedida(int idCultura, int idVariavel) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call `VariavelMedida[DELETE]`(?,?)}");
+		ps.setInt(1, idCultura);
+		ps.setInt(2, idVariavel);
 		ps.executeUpdate();
 	}
 
@@ -483,7 +523,7 @@ public class Connector {
 	 *                      called on a closed connection
 	 */
 	public void deleteVariavel(int idVariavel) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call VariavelDELETE(?)}");
+		PreparedStatement ps = connection.prepareStatement("{call `Variavel[DELETE]`(?)}");
 		ps.setInt(1, idVariavel);
 		ps.executeUpdate();
 
@@ -497,7 +537,7 @@ public class Connector {
 	 *                      called on a closed connection
 	 */
 	public void deleteMedicao(int idMedicao) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call MedicaoDELETE(?)}");
+		PreparedStatement ps = connection.prepareStatement("{call `Medicao[DELETE]`(?)}");
 		ps.setInt(1, idMedicao);
 		ps.executeUpdate();
 
@@ -511,13 +551,20 @@ public class Connector {
 	 *                      called on a closed connection
 	 */
 	public void deleteCultura(int idCultura) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call CulturaDELETE(?)}");
+		PreparedStatement ps = connection.prepareStatement("{call `Cultura[DELETE]`(?)}");
 		ps.setInt(1, idCultura);
 		ps.executeUpdate();
 	}
 
 	public void deleteInvestigador(int idInvestigador) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("{call InvestigadorDELETE(?)}");
+		deletePerfil(idInvestigador);
+		PreparedStatement ps = connection.prepareStatement("{call `Investigador[DELETE]`(?)}");
+		ps.setInt(1, idInvestigador);
+		ps.executeUpdate();
+	}
+
+	private void deletePerfil(int idInvestigador) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("{call `PerfilUser[DELETE]`(?)}");
 		ps.setInt(1, idInvestigador);
 		ps.executeUpdate();
 	}
@@ -558,7 +605,7 @@ public class Connector {
 				+ ".utilizador, " + tableName + ".dataLog, " + tableName + ".operacao FROM " + tableName);
 		return createLog(resultSet);
 	}
-	
+
 	/**
 	 * Function that creates Log objects from a resultset and places in a
 	 * linkedlist<Log>.
@@ -639,7 +686,8 @@ public class Connector {
 		LinkedList<VariavelMedida> table = new LinkedList<VariavelMedida>();
 		while (resultSet.next()) {
 			table.add(new VariavelMedida(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
-					resultSet.getString(4), resultSet.getString(5)));
+					resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7),
+					resultSet.getString(8), resultSet.getString(9)));
 		}
 		return table;
 	}
@@ -657,6 +705,25 @@ public class Connector {
 		while (resultSet.next()) {
 			list.add(new Cultura(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
 					resultSet.getString(4), resultSet.getString(5)));
+		}
+		return list;
+	}
+
+	private LinkedList<AlertaSensor> createAlertaSensor(ResultSet resultSet) throws SQLException {
+		LinkedList<AlertaSensor> list = new LinkedList<AlertaSensor>();
+		while (resultSet.next()) {
+			list.add(new AlertaSensor(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+					resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7),
+					resultSet.getString(8), resultSet.getString(9)));
+		}
+		return list;
+	}
+
+	private LinkedList<AlertaVariavel> createAlertaVariavel(ResultSet resultSet) throws SQLException {
+		LinkedList<AlertaVariavel> list = new LinkedList<AlertaVariavel>();
+		while (resultSet.next()) {
+			list.add(new AlertaVariavel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+					resultSet.getInt(4), resultSet.getString(5), resultSet.getInt(6)));
 		}
 		return list;
 	}
@@ -699,6 +766,18 @@ public class Connector {
 	 */
 	public String getPassword() {
 		return password;
+	}
+
+	public LinkedList<AlertaSensor> getSensorAlertTable(int id_investigador) throws SQLException {
+		ResultSet resultSet = connection.createStatement()
+				.executeQuery("SELECT * FROM  alerta_sensor WHERE idInvestigador = " + id_investigador);
+		return createAlertaSensor(resultSet);
+	}
+
+	public LinkedList<AlertaVariavel> getVariableAlertTable(int id_investigador) throws SQLException {
+		ResultSet resultSet = connection.createStatement()
+				.executeQuery("SELECT * FROM  alerta_variavel WHERE id_investigador = " + id_investigador);
+		return createAlertaVariavel(resultSet);
 	}
 
 }

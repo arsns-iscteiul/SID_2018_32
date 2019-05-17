@@ -24,6 +24,7 @@ public class FXMLPopUpAddManualMeasurementController extends FXMLController impl
 	private Connector connector = null;
 	private String cultura_id;
 	private String cultura_nome;
+	private String id_investigador;
 
 	private ObservableList<Variavel> variables_observablelist = FXCollections.observableArrayList();
 
@@ -33,11 +34,12 @@ public class FXMLPopUpAddManualMeasurementController extends FXMLController impl
 	private TextField value_field;
 
 	public FXMLPopUpAddManualMeasurementController(FXMLMainController fxmlMainController, Connector connector,
-			String cultura_id, String cultura_nome) {
+			String cultura_id, String cultura_nome, String id_investigador) {
 		this.fxmlMainController = fxmlMainController;
 		this.connector = connector;
 		this.cultura_id = cultura_id;
 		this.cultura_nome = cultura_nome;
+		this.id_investigador = id_investigador;
 	}
 
 	@Override
@@ -55,7 +57,14 @@ public class FXMLPopUpAddManualMeasurementController extends FXMLController impl
 	public void addManualMeasurement(ActionEvent event) {
 		try {
 			connector.insertMedicao(Integer.parseInt(value_field.getText()),
-					Integer.parseInt(variable_choice_box.getSelectionModel().getSelectedItem().getId_variavel()));
+					Integer.parseInt(variable_choice_box.getSelectionModel().getSelectedItem().getId_variavel()),
+					Integer.parseInt(id_investigador));
+			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
+			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
+			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
+			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
+			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
+			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
