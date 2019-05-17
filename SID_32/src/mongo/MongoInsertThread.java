@@ -1,5 +1,9 @@
 package mongo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
@@ -26,10 +30,26 @@ public class MongoInsertThread extends Thread{
 	public void run (){	
 		while (true){
 			String s = mqttClient.pollMessage();
-			System.out.println(" vou guardar no mongo");
+			System.out.println(" vou guardar no mongo ");
+			
+			if(s == null || s.isEmpty() || !verificarFormatoJSON(s))
+				continue;
+				
 			DBObject dbObject = (DBObject)JSON.parse(s);
 			collection.insert(dbObject);
 		}
+	}
+	
+	public boolean verificarFormatoJSON(String s) {
+		try {
+			DBObject dbObject = (DBObject)JSON.parse(s);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+
 	}
 }
 
