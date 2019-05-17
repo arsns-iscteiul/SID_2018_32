@@ -209,6 +209,11 @@ public class MongoJDBCMain {
 						Statement stmt3 =connection.createStatement();
 						String investigadores = "SELECT * FROM main.investigador";
 						ResultSet inves = stmt3.executeQuery(investigadores);
+						while (inves.next()) { //ciclo para percorrer investigadores
+							//obter email
+							String investEmail = inves.getNString("Email_Investigador");  
+							investEmail.replaceAll("@localhost","");
+							//obter id e perfil de utilizador
 							int idI = inves.getInt("Id_Investigador");
 							System.out.println("id:" +idI);
 							String perfUti= "Select * FROM main.perfil_user where investigador =+ "+ inves.getInt("Id_Investigador"); 
@@ -233,6 +238,12 @@ public class MongoJDBCMain {
 									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, idI,
 											investEmail,  tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
 =======
+								//verificação da existencia de alertas
+								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, idI,investEmail, tempoDePico,vermelho_sup_T,
+										vermelho_inf_T,  laranja_sup_T, laranja_inf_T  );
+								if (luminosidade != 0) {
+									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, idI, investEmail, 
+											tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
 >>>>>>> 19332d235337afbbf372e10672db9826eccacea3
 								}
 							}
