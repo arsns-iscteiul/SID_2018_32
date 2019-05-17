@@ -229,9 +229,11 @@ public class MongoJDBCMain {
 								Float laranja_sup_L = invesPerf.getFloat("laranjaSupLum");							
 								Float laranja_inf_L = invesPerf.getFloat("laranjaInfLum");
 
-								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, idI,investEmail, tempoDePico,vermelho_sup_T, vermelho_inf_T,  laranja_sup_T, laranja_inf_T  );
+								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, idI,investEmail, 
+										tempoDePico,vermelho_sup_T, vermelho_inf_T,  laranja_sup_T, laranja_inf_T  );
 								if (luminosidade != 0) {
-									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, idI, investEmail,  tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
+									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, idI,
+											investEmail,  tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
 								}
 							}
 							invesPerf.close();
@@ -333,24 +335,27 @@ public class MongoJDBCMain {
 				@Override
 				public void run() {
 					try {
+						//esperar o tempo definido pelo investigador para ver se considera o pico anomalia ou alerta
 						sleep(TempoDePico);
-						String mysql = "SELECT Valor_Medicao_Temperatura FROM medicao_temperatura where Id_Medicao_Temperatura =(Select MAX(Id_Medicao_Temperatura) from medicao_temperatura)";
+						String mysql = "SELECT Valor_Medicao_Temperatura FROM medicao_temperatura where Id_Medicao_Temperatura "
+								+ "=(Select MAX(Id_Medicao_Temperatura) from medicao_temperatura)";
 						ResultSet rs = stmt.executeQuery(mysql);
 						Double valorAtualTemperatura=0.0;
 						if (rs.next()) {
 							valorAtualTemperatura=rs.getDouble("Valor_Medicao_Temperatura");
 						}
 						rs.close();
+						//verifica se foi de facto uma anomalia ou se a condição ainda se mantêm
 						if (Math.abs(valorAtualTemperatura - valorAntigoTemperatura) > valorXtemperatura) {
-							// alerta Vermelho Temperatura
+							// alerta Vermelho Temperatura, verifica se já existe um alerta no ultimo minuto para esse investigador
 							String existeAlertaVermelhoTemp = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='temp' AND datahoraalerta > DATE_ADD( \""
 									+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
 							ResultSet rsVermelhoTemp = stmt.executeQuery(existeAlertaVermelhoTemp);
 							if (!rsVermelhoTemp.isBeforeFirst()
 									&& ((valorAtualTemperatura <= (LITemperatura + LITemperatura *(1- vermelhoInf)))
 											|| (valorAtualTemperatura >= LSTemperatura * vermelhoSup))) {
-								
 								alertaVermelhoTemperatura = true;
+								//insere na tabela alerta_sensor
 								insertAlerta("temp", "vermelho", date, valorAtualTemperatura,
 										"O valor da temperatura aproxima-se criticamente dos limites", LITemperatura,
 										LSTemperatura,id);
