@@ -230,21 +230,14 @@ public class MongoJDBCMain {
 								Float vermelho_inf_L = invesPerf.getFloat("vermelhoInfLum");
 								Float laranja_sup_L = invesPerf.getFloat("laranjaSupLum");							
 								Float laranja_inf_L = invesPerf.getFloat("laranjaInfLum");
-<<<<<<< HEAD
+
 
 								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, idI,investEmail, 
 										tempoDePico,vermelho_sup_T, vermelho_inf_T,  laranja_sup_T, laranja_inf_T  );
 								if (luminosidade != 0) {
 									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, idI,
 											investEmail,  tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
-=======
-								//verificação da existencia de alertas
-								criaAlertaTemperatura(temperatura, dataHora, connection, stmt, idI,investEmail, tempoDePico,vermelho_sup_T,
-										vermelho_inf_T,  laranja_sup_T, laranja_inf_T  );
-								if (luminosidade != 0) {
-									criaAlertaLuminosidade(luminosidade, dataHora, connection, stmt, idI, investEmail, 
-											tempoDePico,vermelho_sup_L, vermelho_inf_L,  laranja_sup_L, laranja_inf_L );
->>>>>>> 19332d235337afbbf372e10672db9826eccacea3
+
 								}
 							}
 							invesPerf.close();
