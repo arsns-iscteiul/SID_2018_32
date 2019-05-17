@@ -11,19 +11,14 @@ import com.mongodb.util.JSON;
 public class MongoInsertThread extends Thread{
 	
 	private DB db;
-	private MongoDatabase db1;
 	private DBCollection collection;
 	private SensorReader mqttClient;
 	
 	public MongoInsertThread (SensorReader a){
 		mqttClient = a;
-		MongoClientURI uri = new MongoClientURI("mongodb+srv://admin:admin@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true");
-	
-		MongoClient mongoClient = new MongoClient(uri);
-				//new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
-		
-//		db1= mongoClient.getDatabase("sensores");
-//		collection = db1.getCollection("sensor");
+		MongoClient mongoClient = new MongoClient(
+				new MongoClientURI("mongodb+srv://admin:admin@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true"));
+
 		db = mongoClient.getDB("sensores");
 		collection = db.getCollection("sensor");
 	}
@@ -37,3 +32,9 @@ public class MongoInsertThread extends Thread{
 		}
 	}
 }
+
+
+//new MongoClientURI("mongodb://localhost:27017,localhost:25017,localhost:23017/?replicaSet=replicas"));
+
+//db1= mongoClient.getDatabase("sensores");
+//collection = db1.getCollection("sensor");
