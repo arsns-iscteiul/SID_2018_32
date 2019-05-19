@@ -51,6 +51,7 @@ public class MongoJDBCMain {
 	private Statement stmt = null;
 	private Connection connection = null;
 	private DBCollection collection;
+	Conf cfg;
 
 	public MongoJDBCMain() {
 		valorAntigoTemperatura = 0;
@@ -63,7 +64,8 @@ public class MongoJDBCMain {
 		picoLuminosidade = false;	
 		
 		
-		
+		cfg = new Conf("mongo/conf1.properties");
+		System.out.println(cfg.toString());
 		try {
 			connect();
 			if (connection != null) {
@@ -81,16 +83,17 @@ public class MongoJDBCMain {
 	public void connect() {
 		try {
 			// ligar-se ao mongo
+			System.out.println(cfg.getProperty("password_sql"));
 			MongoClient mongoClient = new MongoClient(
-					new MongoClientURI("mongodb+srv://user1:pass@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true"));
+					new MongoClientURI("mongodb+srv://"+cfg.getProperty("user_mongo")+":"+cfg.getProperty("password_mongo")+cfg.getProperty("cluster_mongo")));
 			mongoClient.getDatabaseNames().forEach(System.out::println);
 			DB db = mongoClient.getDB("sensores");
 			collection = db.getCollection("sensor");
 
 			// ligar-se � base de dados Main
-			String database_url = "jdbc:mysql://localhost:3307/main";
-			String username = "root";
-			String password = "teste123";
+			String database_url = "jdbc:mysql://localhost:"+cfg.getProperty("port_sql")+"/"+cfg.getProperty("databasename_sql");
+			String username = cfg.getProperty("user_sql");
+			String password = cfg.getProperty("password_sql");
 
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
