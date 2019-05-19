@@ -82,7 +82,7 @@ public class MongoJDBCMain {
 		try {
 			// ligar-se ao mongo
 			MongoClient mongoClient = new MongoClient(
-					new MongoClientURI("mongodb+srv://admin:admin@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true"));
+					new MongoClientURI("mongodb+srv://user1:pass@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true"));
 			mongoClient.getDatabaseNames().forEach(System.out::println);
 			DB db = mongoClient.getDB("sensores");
 			collection = db.getCollection("sensor");
@@ -277,7 +277,7 @@ public class MongoJDBCMain {
 						s="O valor da temperatura ultrapassou os limites";
 					}
 					insertAlerta("temp", "vermelho", date, temperatura, s, LITemperatura, LSTemperatura, id);
-						sendEmails(email, "Alerta Vermelho Temperatura", "Valor da temperatura" + temperatura);
+					sendEmails(email, " Alerta Vermelho Temperatura ", "Valor da temperatura: " + temperatura);
 				
 
 				} else {
@@ -333,16 +333,13 @@ public class MongoJDBCMain {
 			throws SQLException {
 		// alerta Vermelho Temperatura
 		criaAlertaTemperatura_Vermelho( temperatura,  date,  connection,  stmt,  id,  email,  TempoDePico,  vermelhoSup,  vermelhoInf,  laranjaSup,  laranjaInf);
-
 		// alerta Laranja Temperatura
 		criaAlertaTemperatura_laranja( temperatura,  date,  connection,  stmt,  id,  email,  TempoDePico,  vermelhoSup,  vermelhoInf,  laranjaSup,  laranjaInf);
-
 		// Detetar picos
 		if (Math.abs(temperatura - valorAntigoTemperatura) > valorXtemperatura && picoTemperatura == false
 				&& valorAntigoTemperatura != 0) {
 			picoTemperatura = true;
 			new Thread() {
-
 				@Override
 				public void run() {
 					try {

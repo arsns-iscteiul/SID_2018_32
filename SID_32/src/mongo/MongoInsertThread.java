@@ -21,7 +21,7 @@ public class MongoInsertThread extends Thread{
 	public MongoInsertThread (SensorReader a){
 		mqttClient = a;
 		MongoClient mongoClient = new MongoClient(
-				new MongoClientURI("mongodb+srv://admin:admin@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true"));
+				new MongoClientURI("mongodb+srv://user2:pass@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true"));
 
 		db = mongoClient.getDB("sensores");
 		collection = db.getCollection("sensor");
@@ -31,7 +31,6 @@ public class MongoInsertThread extends Thread{
 		while (true){
 			String s = mqttClient.pollMessage();
 			System.out.println(" vou guardar no mongo ");
-			
 			if(s == null || s.isEmpty() || !verificarFormatoJSON(s))
 				continue;
 				
