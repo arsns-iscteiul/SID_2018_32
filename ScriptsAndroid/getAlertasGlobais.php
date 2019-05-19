@@ -1,8 +1,9 @@
 <?php
 	$url="127.0.0.1";
 	$database="main"; //nameDB//
+	$date=$_POST['date'];
     $conn = mysqli_connect($url,$_POST['username'],$_POST['password'],$database); //username and password are input arguments//
-	$sql = "select tipo,datahoraalerta,descricao,intensidade,valormedicao,limiteinferior,limitesuperior from variavel, alerta_sensor where datahoraalerta =(igual ao dia) date";
+	$sql = "select tipo,datahoraalerta,descricao,intensidade,valormedicao,limiteinferior,limitesuperior from alerta_sensor , investigador where investigador.Email_Investigador = currentUser() and alerta_sensor.id_investigador=investigador.id_investigador and (select SUBSTRING((select alerta_sensor.datahoraalerta),1,10) = '$date') order by alerta_sensor.datahoraalerta asc";
 	$result = mysqli_query($conn, $sql);
 	$response["alertas_globais"] = array();
 	if ($result){
@@ -10,12 +11,12 @@
 			while($r=mysqli_fetch_assoc($result)){
 				$ad = array();
 				$ad["nomeVariavel"] = $r['tipo'];
-				$ad["dataHoraAlerta"] = $r['dataHoraAlerta'];
+				$ad["dataHoraAlerta"] = $r['datahoraalerta'];
 				$ad["descricao"] = $r['descricao'];
 				$ad["intensidade"] = $r['intensidade'];
-				$ad["valorMedicao"] = $r['valorMedicao'];
-				$ad["limiteInferior"] = $r['limiteInferior'];
-				$ad["limiteSuperior"] = $r['limiteSuperior'];
+				$ad["valorMedicao"] = $r['valormedicao'];
+				$ad["limiteInferior"] = $r['limiteinferior'];
+				$ad["limiteSuperior"] = $r['limitesuperior'];
 				array_push($response["alertas_globais"], $ad);
 			}
 		}	
