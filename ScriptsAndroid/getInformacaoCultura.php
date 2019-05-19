@@ -1,8 +1,9 @@
 	<?php
 	$url="127.0.0.1";
-	$database="sid2019"; //dbName//
+	$database="main"; //dbName//
+	$idCultura=$_POST['idCultura'];
     $conn = mysqli_connect($url,$_POST['username'],$_POST['password'],$database);
-	$sql = "select Nome_Cultura,Descricao_Cultura from cultura where Id_Cultura = {$idcultura}";
+	$sql = "select Nome_Cultura,Descricao_Cultura from cultura where Id_Cultura =$idCultura";
 	$result = mysqli_query($conn, $sql);
 	$response["infocultura"] = array();
 	if ($result){

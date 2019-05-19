@@ -1,8 +1,8 @@
 	<?php
 	$url="127.0.0.1";
-	$database="sid2019";
+	$database="main";
     $conn = mysqli_connect($url,$_POST['username'],$_POST['password'],$database);
-	$sql = "select Data_Hora_Medicao,Valor_Medicao_Luminosidade from medicao_luminosidade where Data_Hora_Medicao >= now() - interval 5 minute";
+	$sql = "select Data_Hora_Medicao,Valor_Medicao_Luminosidade from medicao_luminosidade where Data_Hora_Medicao >= now() - interval 5 minute order by Data_Hora_Medicao asc";
 	$result = mysqli_query($conn, $sql);
 	$response["medicoes"] = array();
 	if ($result){
