@@ -272,8 +272,11 @@ public class MongoJDBCMain {
 				if (!rsVermelhoTemp.isBeforeFirst() 
 						&& ((temperatura <= (LITemperatura + LITemperatura * (1-vermelhoInf))) || (temperatura >= LSTemperatura * vermelhoSup))) {
 					alertaVermelhoTemperatura = true;
-					insertAlerta("temp", "vermelho", date, temperatura,
-							"O valor da temperatura aproxima-se criticamente dos limites ou ultrapassou os limites", LITemperatura, LSTemperatura, id);
+					String s = "O valor da temperatura aproxima-se criticamente dos limites";
+					if (temperatura <= LITemperatura||temperatura >= LSTemperatura) {
+						s="O valor da temperatura ultrapassou os limites";
+					}
+					insertAlerta("temp", "vermelho", date, temperatura, s, LITemperatura, LSTemperatura, id);
 						sendEmails(email, "Alerta Vermelho Temperatura", "Valor da temperatura" + temperatura);
 				
 
@@ -396,8 +399,11 @@ public class MongoJDBCMain {
 		if (!rsVermelhoLum.isBeforeFirst() && ((luminosidade <= (LILuminosidade + LILuminosidade * (1-vermelhoInf)))|| (luminosidade >= LSLuminosidade * vermelhoSup))) {
 			System.out.println("alerta vermlho de luminosidade!!!!!!!!");
 			alertaVermelhoLuminosidade = true;
-			insertAlerta("lum", "vermelho", date, luminosidade,
-					"O valor da luminosidade aproxima-se criticamente dos limites ou já ultrapassou", LILuminosidade, LSLuminosidade,id);
+			String s="O valor da luminosidade aproxima-se criticamente dos limites";
+			if (luminosidade<=LILuminosidade|| luminosidade >= LSLuminosidade) {
+			s="O valor da luminosidade ultrapassou os limites";
+			}
+			insertAlerta("lum", "vermelho", date, luminosidade, s , LILuminosidade, LSLuminosidade,id);
 
 				sendEmails(email, "Alerta Vermelho Luminosidade", "Valor da luminosidade" + luminosidade);
 
@@ -438,42 +444,7 @@ public class MongoJDBCMain {
 		// alerta Laranja luminosidade
 		criaAlertaLuminosidade_laranja( luminosidade,  date,  connection,  stmt,  id,  email,  tempoDePico,  vermelhoSup,  vermelhoInf,  laranjaSup,  laranjaInf);
 
-//		String existeAlertaVermelhoLum = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
-//				+ date + "\" , interval -1 minute) and idInvestigador=" +id ;
-//		ResultSet rsVermelhoLum = stmt.executeQuery(existeAlertaVermelhoLum);
-//		System.out.println(!rsVermelhoLum.isBeforeFirst() + " ************************************************--------------");
-//		if (!rsVermelhoLum.isBeforeFirst() && ((luminosidade <= (LILuminosidade + LILuminosidade * (1-vermelhoInf)))|| (luminosidade >= LSLuminosidade * vermelhoSup))) {
-//			System.out.println("alerta vermlho de luminosidade!!!!!!!!");
-//			alertaVermelhoLuminosidade = true;
-//			insertAlerta("lum", "vermelho", date, luminosidade,
-//					"O valor da luminosidade aproxima-se criticamente dos limites", LILuminosidade, LSLuminosidade,id);
-//
-//				sendEmails(email, "Alerta Vermelho Luminosidade", "Valor da luminosidade" + luminosidade);
-//
-//
-//		} else {
-//			System.out.println("aqui não ha alerta vermelho l:" + luminosidade);
-//			alertaVermelhoLuminosidade = false;
-//		}
 
-		// alerta Laranja Luminosidade
-//		String existeAlertaLaranjaLum = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
-//				+ date + "\" , interval -1 minute) and idInvestigador=" +id ;
-//		ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
-//		if (!rsLaranjaLum.isBeforeFirst() && (luminosidade <= (LILuminosidade + LILuminosidade * (1-laranjaInf)))
-//				&& ((luminosidade > (LILuminosidade + LILuminosidade * (1-vermelhoInf)))
-//				|| (luminosidade >= (LSLuminosidade * laranjaSup) && luminosidade < LSLuminosidade * vermelhoSup))) {
-//			System.out.println("alerta laranja luz!!!!!!!!!!!");
-//			alertaLaranjaLuminosidade = true;
-//
-//			insertAlerta("lum", "laranja", date, luminosidade, "O valor da luminosidade aproxima-se dos limites",
-//					LILuminosidade, LSLuminosidade,id);
-//				sendEmails(email, "Alerta Laranja Luminosidade", "Valor da luminosidade" + luminosidade);
-//
-//		} else {
-//			System.out.println("aqui não ha alerta laranja + l:" + luminosidade);
-//			alertaLaranjaLuminosidade = false;
-//		}
 
 		// Detetar picos
 		if (Math.abs(luminosidade - valorAntigoLuminosidade) > valorXluminosidade && picoLuminosidade == false
@@ -497,49 +468,11 @@ public class MongoJDBCMain {
 							// alerta Vermelho Luminosidade
 							criaAlertaLuminosidade_vermelho( valorAtualLuminosidade,  date,  connection,  stmt,  id,  email,  tempoDePico,  vermelhoSup,  vermelhoInf,  laranjaSup,  laranjaInf);
 
-//							String existeAlertaVermelhoLum = "SELECT id FROM alerta_sensor WHERE intensidade='vermelho' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
-//									+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
-//							ResultSet rsVermelhoLum = stmt.executeQuery(existeAlertaVermelhoLum);
-//							if (!rsVermelhoLum.isBeforeFirst()
-//									&& ((luminosidade <= (LILuminosidade + LILuminosidade * (1-vermelhoInf)))
-//									|| (luminosidade >= LSLuminosidade * vermelhoSup))) {
-//								System.out.println("nao era um pico, alerta vermelho!!!!!! (luz)");
-//								alertaVermelhoLuminosidade = true;
-//								insertAlerta("lum", "vermelho", date, valorAtualLuminosidade,
-//										"O valor da luminosidade aproxima-se criticamente dos limites", LILuminosidade,
-//										LSLuminosidade,id);
-//									sendEmails(email, "Alerta Vermelho Luminosidade",
-//											"Valor da luminosidade" + luminosidade);
-//
-//							} else {
-//								alertaVermelhoLuminosidade = false;
-//							}
 
 							// alerta Laranja Luminosidade
 							criaAlertaLuminosidade_laranja( valorAtualLuminosidade,  date,  connection,  stmt,  id,  email,  tempoDePico,  vermelhoSup,  vermelhoInf,  laranjaSup,  laranjaInf);
 
-//							String existeAlertaLaranjaLum = "SELECT id FROM alerta_sensor WHERE intensidade='laranja' and tipo='lum' AND datahoraalerta > DATE_ADD( \""
-//									+ date + "\" , interval -1 minute)  and idInvestigador=" +id ;
-//							ResultSet rsLaranjaLum = stmt.executeQuery(existeAlertaLaranjaLum);
-//							if (!rsLaranjaLum.isBeforeFirst()
-//									&& (((luminosidade <= (LILuminosidade + LILuminosidade *(1- laranjaInf)))
-//									&& (luminosidade > (LILuminosidade + LILuminosidade * (1-vermelhoInf))))
-//									|| ((luminosidade >= (LSLuminosidade * laranjaSup)
-//											&& luminosidade < LSLuminosidade * vermelhoSup)))) {
-//								System.out.println("nao era um pico, alerta laranja!!!!!! (luz)");
-//								alertaLaranjaLuminosidade = true;
-//
-//								insertAlerta("lum", "laranja", date, valorAtualLuminosidade,
-//										"O valor da luminosidade aproxima-se dos limites", LILuminosidade,
-//										LSLuminosidade,id);
-//
-//									sendEmails(email, "Alerta Laranja Luminosidade",
-//											"Valor da luminosidade" + luminosidade);
-//	
-//
-//							} else {
-//								alertaLaranjaLuminosidade = false;
-//							}
+
 							if (alertaLaranjaLuminosidade == false && alertaVermelhoLuminosidade == false) {
 								insertAlerta("lum", "amarelo", date, valorAtualLuminosidade,
 										"Pico de luminosidade dentro dos limites", LILuminosidade, LSLuminosidade,id);

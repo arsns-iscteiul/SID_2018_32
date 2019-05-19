@@ -176,8 +176,6 @@ public class SensorReader implements MqttCallback{
 	}
 	
 
-	public static void main(String[] args) {	
-		new SensorReader().mqttReader();
-	}
+
 	
 }
