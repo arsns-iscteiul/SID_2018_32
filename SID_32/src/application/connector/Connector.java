@@ -28,8 +28,8 @@ import application.connector.objects.VariavelMedida;
  */
 public class Connector {
 
-	private final static String MAIN_DATABASE_URL = "jdbc:mysql://localhost:3307/main";
-	private final static String AUDITOR_DATABASE_URL = "jdbc:mysql://localhost:3307/auditor";
+	private final static String MAIN_DATABASE_URL = "jdbc:mysql://localhost:3306/main";
+	private final static String AUDITOR_DATABASE_URL = "jdbc:mysql://localhost:3306/auditor";
 	private String username;
 	private String password;
 	private Connection connection;
@@ -64,9 +64,9 @@ public class Connector {
 		this.password = password;
 
 		if (database.equals("auditor")) {
-			connection = DriverManager.getConnection(AUDITOR_DATABASE_URL, "root", "");
+			connection = DriverManager.getConnection(AUDITOR_DATABASE_URL, "root", "teste124");
 		} else if (database.equals("main")) {
-			connection = DriverManager.getConnection(MAIN_DATABASE_URL, "root", "");
+			connection = DriverManager.getConnection(MAIN_DATABASE_URL, "root", "teste124");
 		}
 
 		if (username.equals("auditor") && password.equals("auditor")) {

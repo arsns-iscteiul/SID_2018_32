@@ -59,12 +59,6 @@ public class FXMLPopUpAddManualMeasurementController extends FXMLController impl
 			connector.insertMedicao(Integer.parseInt(value_field.getText()),
 					Integer.parseInt(variable_choice_box.getSelectionModel().getSelectedItem().getId_variavel()),
 					Integer.parseInt(id_investigador));
-			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
-			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
-			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
-			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
-			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
-			System.out.println("INSHVFSHLVFLASGFULASGFUSAGFL");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
