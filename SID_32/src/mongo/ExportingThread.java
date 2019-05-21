@@ -5,15 +5,20 @@ import java.sql.SQLException;
 public class ExportingThread extends Thread{
 	
 	private MongoJDBCMain exporter;
+	private Conf cfg;
+	private final int time;
 	
 	public ExportingThread() {
-		this.exporter = new MongoJDBCMain();
+		cfg = new Conf("mongo/conf1.properties");
+		this.exporter = new MongoJDBCMain(cfg);
+		time=Integer.parseInt(cfg.getProperty("periodicity")) * 1000;
+		System.out.println(time + "is the time imma gonna sleep");
 	}
 
 	public void run() {
 		while(true) {
 			try { 
-				sleep(7000);
+				sleep(time);
 				if (exporter.getConnection() != null) {
 					exporter.migracao();
 				}else {

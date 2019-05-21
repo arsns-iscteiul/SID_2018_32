@@ -27,6 +27,7 @@ import com.mongodb.util.JSON;
 
 public class SensorReader implements MqttCallback{
 	private MqttClient client;
+	private Conf cfg;
 //	private DB db;
 //	private DBCollection collection;
 	
@@ -36,6 +37,7 @@ public class SensorReader implements MqttCallback{
 	
 //	BasicDBList dbList;
 	public SensorReader() {
+		cfg = new Conf("mongo/conf2.properties");
 		msgs = new LinkedBlockingQueue<String>();
 		MongoInsertThread t = new MongoInsertThread(this);
 		t.start();
@@ -45,7 +47,8 @@ public class SensorReader implements MqttCallback{
 	
 	public void mqttReader(){
 		try {
-			client = new MqttClient("wss://iot.eclipse.org:443/ws", "user321");
+			client = new MqttClient(cfg.getProperty("broker") , "/sid_lab_2019");
+			//client = new MqttClient("wss://iot.eclipse.org:443/ws", "user321");
 			//client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883","/sid_lab_2019_2");
 			MqttConnectOptions options = new MqttConnectOptions();
 			options.setAutomaticReconnect(true);
@@ -54,7 +57,7 @@ public class SensorReader implements MqttCallback{
 			client.connect(options);
 			
 		    client.setCallback(this);
-		    client.subscribe("/sid_lab_2019");
+		    client.subscribe(cfg.getProperty("topic"));
 		} catch (MqttException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -176,6 +179,8 @@ public class SensorReader implements MqttCallback{
 	}
 	
 
-
+	public Conf getCfg () {
+		return cfg;
+	}
 	
 }

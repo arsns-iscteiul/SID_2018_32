@@ -53,7 +53,7 @@ public class MongoJDBCMain {
 	private DBCollection collection;
 	Conf cfg;
 
-	public MongoJDBCMain() {
+	public MongoJDBCMain(Conf c) {
 		valorAntigoTemperatura = 0;
 		valorAntigoLuminosidade = 0;
 		alertaLaranjaTemperatura = false;
@@ -64,7 +64,7 @@ public class MongoJDBCMain {
 		picoLuminosidade = false;	
 		
 		
-		cfg = new Conf("mongo/conf1.properties");
+		cfg =c;
 		try {
 			connect();
 			if (connection != null) {
@@ -543,7 +543,5 @@ public class MongoJDBCMain {
 	public Connection getConnection() {
 		return connection;
 	}
-	public static void main(String[] args) throws SQLException {
-		new MongoJDBCMain();
-	}
+
 }

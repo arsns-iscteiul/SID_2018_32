@@ -17,11 +17,13 @@ public class MongoInsertThread extends Thread{
 	private DB db;
 	private DBCollection collection;
 	private SensorReader mqttClient;
+	Conf cfg;
 	
 	public MongoInsertThread (SensorReader a){
 		mqttClient = a;
+		cfg = a.getCfg();
 		MongoClient mongoClient = new MongoClient(
-				new MongoClientURI("mongodb+srv://user2:pass@sid-clustergrupo32-sdfdf.mongodb.net/test?retryWrites=true"));
+				new MongoClientURI("mongodb+srv://"+cfg.getProperty("user_mongo")+":"+cfg.getProperty("pass_mongo")+cfg.getProperty("cluster_mongo")));
 
 		db = mongoClient.getDB("sensores");
 		collection = db.getCollection("sensor");
